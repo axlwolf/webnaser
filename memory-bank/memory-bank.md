@@ -65,6 +65,29 @@ Create additional files/folders within memory-bank/ when they help organize:
 - Testing strategies
 - Deployment procedures
 
+---
+
+## Future Improvement: CMS Migration Options (2025-06-20)
+
+Se evaluó la migración del sitio a un CMS para facilitar la edición de contenido y mantenimiento. Opciones consideradas:
+
+### Alternativas sencillas:
+- **Netlify CMS**: Fácil integración con sitios estáticos y edición vía interfaz web. No requiere backend propio.
+- **Publii**: App de escritorio para sitios estáticos, sin servidor, genera HTML listo para subir.
+- **Grav**: CMS flat-file, solo requiere PHP, edición markdown, panel opcional.
+
+### CMS propio (desarrollo personalizado):
+- Permite control total y personalización, pero requiere desarrollo y mantenimiento.
+- Se debe implementar autenticación, edición, seguridad y publicación manualmente.
+
+### Batch 1 sugerido para migración (sin cambios en código):
+1. Definir nivel de facilidad y control requerido (solución existente vs. propio).
+2. Listar funcionalidades mínimas (edición, usuarios, formularios, imágenes, etc.).
+3. Evaluar flujo de actualización y quién editará el contenido.
+4. Decidir entre CMS sencillo existente o desarrollo propio, y definir stack si aplica.
+
+No se harán cambios hasta que el usuario apruebe cada batch.
+
 ## Core Workflows
 
 ### Plan Mode
