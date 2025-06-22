@@ -1,40 +1,25 @@
-## Product Context
+# Product Context
 
-### Project Overview
+## Propósito del Proyecto
 
-This project is the official website for "Grupo Naser - Servicios Funerarios y Previsión Funeraria". The primary goal of the website is to provide information about funeral services and pre-need funeral plans, catering to both immediate needs and future planning. The site emphasizes a compassionate and high-quality approach to services during difficult times.
+Grupo Naser es un sitio web dedicado a ofrecer servicios funerarios y planes de previsión, dirigido principalmente a trabajadores y pensionados ISSSTE. El objetivo principal es brindar información clara, contacto inmediato y atención personalizada en momentos difíciles.
 
-### Key Features and Offerings
+## Cambios recientes (2025-06-22)
+- Mejoras de accesibilidad y formato en los archivos HTML principales.
+- Limpieza y remoción de formularios y secciones comentadas innecesarias.
+- Ajuste en la estructura del footer y presentación de datos de contacto.
+- Mejor legibilidad en scripts y estilos.
 
-- **Immediate Need Services**: Information and contact options for urgent funeral service requirements.
-- **Pre-Need Funeral Plans**: Detailed information on pre-arranged funeral services, with a specific focus on benefits for retired and pensioned federal government employees (ISSSTE) and active ISSSTE workers.
-- **Comprehensive Service Portfolio**: Sections detailing various services offered by Grupo Naser.
-- **Obituary Section**: A dedicated page for obituaries.
-- **Contact Information**: Clear channels for communication, including email (info@naser.com.mx) and phone (55 5688 7866).
-- **About Us**: Information about Grupo Naser's history and mission.
-- **Coverage Areas**: Details on the geographical coverage of their services.
-- **Social Media Integration**: Links to Facebook, Instagram, and LinkedIn for broader engagement.
-- **Live Chat Support**: Integration of Crisp chat for immediate customer assistance.
+## Experiencia de Usuario
+- Navegación clara y accesible.
+- Contacto directo por email, teléfono, WhatsApp y chat en vivo (Crisp).
+- Información relevante organizada en páginas independientes.
 
-### Target Audience
+## Características Clave
+- Presentación de servicios y beneficios.
+- Integración de chat en línea para atención inmediata.
+- Acceso a redes sociales y múltiples canales de contacto.
 
-The website targets individuals and families in need of funeral services, both immediately and for future planning. A significant segment of the target audience includes federal government employees (retired, pensioned, and active) affiliated with ISSSTE, due to specific benefits offered to them.
-
-### Sitemap Structure
-
-The sitemap (`sitemap.xml`) ensures comprehensive indexing by search engines, covering the following main pages:
-- `index.html` (Home)
-- `necesidad-inmediata.html` (Immediate Need)
-- `prevision.html` (Pre-Need Plans)
-- `servicios.html` (Services)
-- `obituario.html` (Obituary)
-- `contacto.html` (Contact)
-- `nosotros.html` (About Us)
-- `cobertura.html` (Coverage)
-- `historia.html` (History)
-- `one-page.html` (Potentially a landing page or simplified view)
-- Location-specific pages: `naser_aragon.html`, `naser_morelos.html`, `naser_oaxaca.html`, `naser_oaxaca_.html`, `naser_tlalpan.html` (indicating specific branch or service locations).
-
-### Technologies and Design
-
-The website utilizes Bootstrap for its responsive design and includes custom CSS (`assets/css/styles.css`, `assets/css/fontawesome.css`, `assets/css/owl.css`). It incorporates Google Fonts (Poppins) for typography and features a preloader for a smoother user experience. The site also uses a slider for prominent content display.
+## Sitemap y Estructura
+- El sitio está organizado en archivos HTML independientes para cada sección.
+- El sitemap se mantiene actualizado y refleja todos los cambios recientes.
