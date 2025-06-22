@@ -1,8 +1,17 @@
 ## Active Context
 
+### Cambios recientes (2025-06-22)
+
+- Se mejoró la accesibilidad y el formato en los archivos HTML principales (`index.html`, `contacto.html`, `necesidad-inmediata.html`, `obituario.html`, `prevision.html`, `servicios.html`).
+- Se eliminaron formularios y secciones comentadas innecesarias para limpiar el código y optimizar la experiencia de usuario.
+- Se ajustó la estructura y presentación del footer, datos de contacto y enlaces sociales.
+- Se mejoró la legibilidad de scripts y estilos en los HTML.
+
+#### Proceso de documentación
+- Se actualizó la política de documentación: tras cada feature, se deben actualizar los archivos de `memory-bank/`, `memory-bank.md`, `README.md` y cerrar el commit para mantener la trazabilidad y calidad documental.
 ### Sitemap Information
 
-The sitemap (`sitemap.xml`) has been successfully generated and includes the following key pages:
+El sitemap (`sitemap.xml`) sigue incluyendo las páginas clave:
 - `index.html` (Inicio)
 - `necesidad-inmediata.html` (Necesidad Inmediata)
 - `prevision.html` (Previsión)
@@ -21,4 +30,4 @@ The sitemap (`sitemap.xml`) has been successfully generated and includes the fol
 
 ### Website Purpose (from index.html)
 
-The website, "Grupo Naser - Servicios Funerarios y Previsión Funeraria", aims to provide funeral services with warmth and quality during difficult times. It also highlights pre-need funeral services, specifically targeting retired and pensioned federal government employees (ISSSTE) and active ISSSTE workers, offering benefits and protection for their loved ones. The site includes contact information (email: info@naser.com.mx, phone: 55 5688 7866) and social media links (Facebook, Instagram, LinkedIn). A live chat feature (Crisp) is integrated for immediate assistance.
+El sitio "Grupo Naser - Servicios Funerarios y Previsión Funeraria" provee servicios funerarios con calidez y calidad, y destaca los servicios de previsión para trabajadores y pensionados ISSSTE. Incluye contacto directo (email, teléfono) y atención en línea vía Crisp.

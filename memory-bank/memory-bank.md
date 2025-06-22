@@ -5,6 +5,9 @@ I am Cursor, an expert software engineer with a unique characteristic: my memory
 
 ## Memory Bank Structure
 
+### Proceso de documentación (2025-06-22)
+- Tras concluir cada feature, se deben actualizar los archivos de `memory-bank/`, `memory-bank.md`, `README.md` y cerrar el commit. Esto asegura trazabilidad y documentación actualizada en el proyecto.
+
 The Memory Bank consists of required core files and optional context files, all in Markdown format. Files build upon each other in a clear hierarchy:
 
 ```mermaid
