@@ -26,6 +26,8 @@ Grupo Naser es un sitio web moderno dedicado a servicios funerarios y previsión
 - Eliminación de formularios y secciones comentadas innecesarias.
 - Mejor legibilidad en scripts y estilos.
 - Se formalizó el proceso de documentación: tras cada feature, se deben actualizar los archivos de `memory-bank/`, `memory-bank.md`, `README.md` y cerrar el commit.
+- [FIX] Corregido error en custom.js (protección contra offset undefined en función visible).
+- [FIX] Solucionado problema en index.html donde algunas imágenes no cargaban correctamente.
 
 ## Arquitectura y Estructura
 

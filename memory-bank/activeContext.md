@@ -9,6 +9,8 @@
 
 #### Proceso de documentación
 - Se actualizó la política de documentación: tras cada feature, se deben actualizar los archivos de `memory-bank/`, `memory-bank.md`, `README.md` y cerrar el commit para mantener la trazabilidad y calidad documental.
+- [2025-06-22] Se corrigió un error de JavaScript en custom.js (protección contra offset undefined en función visible).
+- [2025-06-22] Se resolvió un problema en index.html donde algunas imágenes no cargaban correctamente.
 ### Sitemap Information
 
 El sitemap (`sitemap.xml`) sigue incluyendo las páginas clave:
