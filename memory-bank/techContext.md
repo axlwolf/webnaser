@@ -1,5 +1,12 @@
 ## Tech Context
 
+### Backend Technologies (Nuevo 2025-06-24)
+-   **PHP**: Utilizado para el procesamiento del formulario de contacto (`form-handler.php`).
+    - Validación de datos
+    - Sanitización de entradas
+    - Envío de correos electrónicos
+    - Manejo de errores y redirecciones
+
 ### Frontend Technologies
 -   **HTML5**: Standard markup language for creating web pages.
 -   **CSS3**: Styling language, including custom styles (`assets/css/styles.css`), Font Awesome for icons (`assets/css/fontawesome.css`), and Owl Carousel styles (`assets/css/owl.css`).

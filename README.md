@@ -14,7 +14,8 @@ Grupo Naser es un sitio web moderno dedicado a servicios funerarios y previsión
 ## Características
 
 - **Información de Servicios**: Presentación clara de los servicios funerarios y planes de previsión.
-- **Contacto Inmediato**: Datos directos de correo, teléfono y WhatsApp (footer). Se eliminó el formulario de contacto para simplificar la comunicación.
+- **Formulario de Contacto**: Formulario funcional con procesamiento PHP, validación y envío de correos.
+- **Contacto Inmediato**: Datos directos de correo, teléfono y WhatsApp (footer).
 - **Chat en Vivo**: Integración con Crisp Chat para atención al cliente.
 - **UI Moderna y Responsive**: Basado en Bootstrap 5, con componentes interactivos y diseño adaptable.
 - **Preloader y Animaciones**: Experiencia de usuario fluida al navegar por el sitio.

@@ -196,7 +196,7 @@
           </div>
           <div class="col-md-12">
             <div class="contact-form">
-              <form id="contact" action="" method="get">
+              <form id="contact" action="form-handler.php" method="post">
                 <div class="row">
                   <div class="col-lg-4 col-md-12 col-sm-12">
                     <fieldset>
@@ -238,10 +238,10 @@
                   <div class="col-lg-4 col-md-12 col-sm-12">
                     <fieldset>
                       <input
-                        name="subject"
+                        name="location"
                         type="text"
                         class="form-control"
-                        id="subject"
+                        id="location"
                         placeholder="Localidad"
                         required=""
                       />
@@ -395,6 +395,50 @@
           t.style.color = "#fff";
         }
       }
+
+      // Form submission feedback
+      document.addEventListener('DOMContentLoaded', function() {
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+          name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+          var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+          var results = regex.exec(location.search);
+          return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Check for status parameter
+        var status = getUrlParameter('status');
+        var error = getUrlParameter('error');
+        var formSection = document.querySelector('.callback-form');
+        
+        if (status === 'success') {
+          // Create success message element
+          var successDiv = document.createElement('div');
+          successDiv.className = 'alert alert-success';
+          successDiv.style.marginBottom = '20px';
+          successDiv.innerHTML = '<strong>¡Mensaje enviado!</strong> Gracias por contactarnos. Nos comunicaremos con usted a la brevedad.';
+          
+          // Insert before the form
+          var sectionHeading = formSection.querySelector('.section-heading');
+          sectionHeading.parentNode.insertBefore(successDiv, sectionHeading.nextSibling);
+          
+          // Scroll to the message
+          successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else if (status === 'error' && error) {
+          // Create error message element
+          var errorDiv = document.createElement('div');
+          errorDiv.className = 'alert alert-danger';
+          errorDiv.style.marginBottom = '20px';
+          errorDiv.innerHTML = '<strong>Error:</strong> ' + error;
+          
+          // Insert before the form
+          var sectionHeading = formSection.querySelector('.section-heading');
+          sectionHeading.parentNode.insertBefore(errorDiv, sectionHeading.nextSibling);
+          
+          // Scroll to the message
+          errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
     </script>
   </body>
 </html>

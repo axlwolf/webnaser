@@ -1,5 +1,15 @@
 # Progress Log
 
+## [2025-06-24] Implementación de formulario de contacto con PHP
+
+- Se creó un archivo PHP (`form-handler.php`) para procesar el formulario de contacto.
+- Se actualizó el formulario en `contacto.html` para enviar datos mediante POST al handler PHP.
+- Se implementó validación de campos, sanitización de datos y envío de correo electrónico.
+- Se agregó manejo de errores y mensajes de éxito/error para mejorar la experiencia del usuario.
+- Se corrigió un problema con campos duplicados en el formulario (dos campos con el mismo nombre "subject").
+
+---
+
 ## [2025-06-22] Mejoras de accesibilidad, formato y limpieza en HTML
 
 - Se mejoró la accesibilidad y el formato en los archivos `index.html`, `contacto.html`, `necesidad-inmediata.html`, `obituario.html`, `prevision.html` y `servicios.html`.

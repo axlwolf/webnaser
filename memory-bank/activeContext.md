@@ -1,5 +1,13 @@
 ## Active Context
 
+### Cambios recientes (2025-06-24)
+
+- Se implementó un sistema de procesamiento de formularios PHP para el formulario de contacto.
+- Se creó el archivo `form-handler.php` que maneja la validación, sanitización y envío de correos electrónicos.
+- Se actualizó `contacto.html` para utilizar el método POST y apuntar al nuevo handler PHP.
+- Se agregó feedback visual para el usuario con mensajes de éxito o error después del envío del formulario.
+- Se corrigió un problema con campos duplicados en el formulario de contacto.
+
 ### Cambios recientes (2025-06-22)
 
 - Se mejoró la accesibilidad y el formato en los archivos HTML principales (`index.html`, `contacto.html`, `necesidad-inmediata.html`, `obituario.html`, `prevision.html`, `servicios.html`).
