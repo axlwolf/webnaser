@@ -15,6 +15,7 @@ $config = [
     'error_redirect' => 'contacto.html?status=error', // Redirect on error
     'allowed_origin' => $_SERVER['HTTP_HOST'], // Prevent cross-site submissions
     'required_fields' => ['name', 'email', 'subject', 'message'], // Required form fields
+    'log_file' => __DIR__ . '/form_submissions.log', // Log file path
 ];
 
 // Initialize response array
@@ -50,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($errors)) {
         $response['errors'] = $errors;
         $response['message'] = 'Por favor corrija los errores en el formulario.';
+        logMessage('ERROR: Validation failed - ' . implode('; ', $errors), $config['log_file']);
         redirectWithError($config['error_redirect'], implode(' ', $errors));
     }
     
@@ -115,16 +117,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Success
         $response['success'] = true;
         $response['message'] = 'Mensaje enviado correctamente. Nos pondremos en contacto pronto.';
+        logMessage('SUCCESS: Email sent from ' . $email . ' to ' . $config['recipient_email'], $config['log_file']);
         redirectWithSuccess($config['success_redirect']);
     } else {
         // Email sending failed
         $response['message'] = 'Error al enviar el mensaje. Por favor intente más tarde o contáctenos directamente por teléfono.';
+        logMessage('ERROR: Email failed to send from ' . $email . ' to ' . $config['recipient_email'] . ' - ' . $response['message'], $config['log_file']);
         redirectWithError($config['error_redirect'], $response['message']);
     }
 } else {
     // Not a POST request
     $response['message'] = 'Método de solicitud no válido.';
+    logMessage('ERROR: Invalid request method - Not a POST request.', $config['log_file']);
     redirectWithError($config['error_redirect'], $response['message']);
+}
+
+/**
+ * Log messages to a specified file.
+ *
+ * @param string $message The message to log.
+ * @param string $logFile The path to the log file.
+ */
+function logMessage($message, $logFile) {
+    $timestamp = date('Y-m-d H:i:s');
+    $logEntry = "[$timestamp] $message\n";
+    file_put_contents($logFile, $logEntry, FILE_APPEND);
 }
 
 /**

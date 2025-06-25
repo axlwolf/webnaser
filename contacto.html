@@ -384,60 +384,29 @@
     <script src="assets/js/slick.js"></script>
     <script src="assets/js/accordions.js"></script>
 
-    <script language="text/Javascript">
-      cleared[0] = cleared[1] = cleared[2] = 0; //set a cleared flag for each field
+    <script language="text/javascript">
+      cleared[0] = cleared[1] = cleared[2] = 0; // set a cleared flag for each field
       function clearField(t) {
-        //declaring the array outside of the
+        // declaring the array outside of the function would be a better way if you have many input fields
         if (!cleared[t.id]) {
-          // function makes it static and global
-          cleared[t.id] = 1; // you could use true and false, but that's more typing
-          t.value = ""; // with more chance of typos
+          // check this input field has not been cleared
+          cleared[t.id] = 1;
+          t.value = "";
           t.style.color = "#fff";
         }
       }
 
-      // Form submission feedback
-      document.addEventListener('DOMContentLoaded', function() {
-        // Function to get URL parameters
-        function getUrlParameter(name) {
-          name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-          var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-          var results = regex.exec(location.search);
-          return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
+      // Check URL for status parameter and display alert
+      $(document).ready(function() {
+          const urlParams = new URLSearchParams(window.location.search);
+          const status = urlParams.get('status');
+          const errorMessage = urlParams.get('error');
 
-        // Check for status parameter
-        var status = getUrlParameter('status');
-        var error = getUrlParameter('error');
-        var formSection = document.querySelector('.callback-form');
-        
-        if (status === 'success') {
-          // Create success message element
-          var successDiv = document.createElement('div');
-          successDiv.className = 'alert alert-success';
-          successDiv.style.marginBottom = '20px';
-          successDiv.innerHTML = '<strong>¡Mensaje enviado!</strong> Gracias por contactarnos. Nos comunicaremos con usted a la brevedad.';
-          
-          // Insert before the form
-          var sectionHeading = formSection.querySelector('.section-heading');
-          sectionHeading.parentNode.insertBefore(successDiv, sectionHeading.nextSibling);
-          
-          // Scroll to the message
-          successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else if (status === 'error' && error) {
-          // Create error message element
-          var errorDiv = document.createElement('div');
-          errorDiv.className = 'alert alert-danger';
-          errorDiv.style.marginBottom = '20px';
-          errorDiv.innerHTML = '<strong>Error:</strong> ' + error;
-          
-          // Insert before the form
-          var sectionHeading = formSection.querySelector('.section-heading');
-          sectionHeading.parentNode.insertBefore(errorDiv, sectionHeading.nextSibling);
-          
-          // Scroll to the message
-          errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+          if (status === 'success') {
+              alert('¡Mensaje enviado correctamente! Nos pondremos en contacto pronto.');
+          } else if (status === 'error') {
+              alert('Error al enviar el mensaje. Por favor intente más tarde o contáctenos directamente. Detalles: ' + (errorMessage || 'Desconocido'));
+          }
       });
     </script>
   </body>
