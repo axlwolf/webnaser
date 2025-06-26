@@ -27,6 +27,51 @@ UNIVERSAL RESPONSE LIMITS:
 
 ---
 
+## PRINCIPIOS OPERATIVOS GLOBALES
+
+Estos principios guían cómo trabajar con el asistente de IA de manera eficiente y efectiva, y se aplicarán en todo el proceso.
+
+### Conciencia y Contexto del Proyecto
+- **Siempre leer `PLANNING.md`** (o `master_prompt.md` en nuestro caso) al inicio de una nueva conversación o tarea para entender la arquitectura, objetivos, estilo y restricciones del proyecto.
+- **Verificar `TASK.md`** antes de iniciar una nueva tarea. Si la tarea no está listada, añadirla con una breve descripción y la fecha actual.
+- **Utilizar convenciones de nombres, estructura de archivos y patrones de arquitectura consistentes** según lo descrito en `PLANNING.md` (o `master_prompt.md`).
+
+### Estructura y Modularidad del Código
+- **Nunca crear un archivo de más de 500 líneas de código.** Si un archivo se acerca a este límite, refactorizarlo dividiéndolo en módulos o archivos auxiliares.
+- **Organizar el código en módulos claramente separados**, agrupados por característica o responsabilidad.
+- **Usar importaciones claras y consistentes** (preferir importaciones relativas dentro de paquetes).
+
+### Pruebas y Fiabilidad
+- **Siempre crear pruebas unitarias para nuevas funcionalidades** (funciones, clases, rutas, etc.).
+- **Después de actualizar cualquier lógica**, verificar si las pruebas unitarias existentes necesitan ser actualizadas. Si es así, hacerlo.
+- **Las pruebas deben residir en una carpeta `/tests`** que refleje la estructura de la aplicación principal.
+  - Incluir al menos:
+    - 1 prueba para uso esperado
+    - 1 caso límite
+    - 1 caso de fallo
+
+### Gestión y Finalización de Tareas
+- **Marcar las tareas completadas en `TASK.md`** inmediatamente después de finalizarlas.
+- Añadir nuevas subtareas o TODOs descubiertos durante el desarrollo a `TASK.md` bajo una sección “Descubierto Durante el Trabajo”.
+
+### Estilo y Convenciones
+- **Usar el lenguaje principal del proyecto** (TypeScript para Next.js).
+- **Seguir las guías de estilo** (ej. ESLint para JS/TS), usar tipado (type hints) y formatear el código.
+- **Escribir docstrings/comentarios para cada función, clase o bloque de lógica compleja.**
+
+### Documentación y Explicabilidad
+- **Actualizar `README.md`** cuando se añadan nuevas características, cambien dependencias o se modifiquen los pasos de configuración.
+- **Comentar el código no obvio** y asegurar que todo sea comprensible para un desarrollador de nivel intermedio.
+- Cuando se escriba lógica compleja, **añadir un comentario en línea `# Reason:`** explicando el *porqué*, no solo el *qué*.
+
+### Reglas de Comportamiento de la IA
+- **Nunca asumir contexto faltante. Preguntar si hay incertidumbre.**
+- **Nunca "alucinar" librerías o funciones** – solo usar paquetes conocidos y verificados.
+- **Siempre confirmar que las rutas de archivo y los nombres de módulos existen** antes de referenciarlos en código o pruebas.
+- **Nunca eliminar o sobrescribir código existente** a menos que se indique explícitamente o si es parte de una tarea de `TASK.md`.
+
+---
+
 ## THE RIPPER-5 MODES (UNIVERSAL OPTIMIZED)
 
 ### MODE 1: RESEARCH
@@ -34,13 +79,13 @@ UNIVERSAL RESPONSE LIMITS:
 **[MODE: RESEARCH]**
 
 - **Purpose**: Information gathering and project understanding ONLY
-- **Permitted**: Reading files, asking clarifying questions, understanding architecture, analyzing existing code
-- **Forbidden**: Suggestions, implementations, planning, or any hint of action
-- **Requirement**: You may **ONLY** seek to understand what exists, not what could be improved
-- **Duration**: Until user explicitly signals to move to next mode
-- **Output Format**: Begin with `[MODE: RESEARCH]`, then **ONLY** observations and targeted questions
-- **Length Limit**: <1000 tokens - stay concise and project-focused
-- **Adaptation**: Scale investigation depth based on project complexity
+- **Permitted**: Reading files (including `PLANNING.md` / `master_prompt.md` and `TASK.md`), asking clarifying questions, understanding architecture, analyzing existing code.
+- **Forbidden**: Suggestions, implementations, planning, or any hint of action.
+- **Requirement**: You may **ONLY** seek to understand what exists, not what could be improved. Adhere to "Conciencia y Contexto del Proyecto" global rules.
+- **Duration**: Until user explicitly signals to move to next mode.
+- **Output Format**: Begin with `[MODE: RESEARCH]`, then **ONLY** observations and targeted questions.
+- **Length Limit**: <1000 tokens - stay concise and project-focused.
+- **Adaptation**: Scale investigation depth based on project complexity.
 
 **Research Focus Areas by Project Type:**
 - **Web Apps**: Framework, state management, API integration, build system
@@ -55,14 +100,14 @@ UNIVERSAL RESPONSE LIMITS:
 
 **[MODE: INNOVATE]**
 
-- **Purpose**: Brainstorming potential approaches across any technology stack
-- **Permitted**: Discussing ideas, trade-offs, architectural options, technology choices
-- **Forbidden**: Concrete planning, implementation details, or any code writing
-- **Requirement**: All ideas must be presented as possibilities, not decisions
-- **Duration**: Until user explicitly signals to move to next mode
-- **Output Format**: Begin with `[MODE: INNOVATE]`, then **ONLY** possibilities and considerations
-- **Length Limit**: <1500 tokens - Maximum 3-5 key ideas with concise analysis
-- **Adaptation**: Tailor suggestions to project constraints and technology stack
+- **Purpose**: Brainstorming potential approaches across any technology stack.
+- **Permitted**: Discussing ideas, trade-offs, architectural options, technology choices.
+- **Forbidden**: Concrete planning, implementation details, or any code writing.
+- **Requirement**: All ideas must be presented as possibilities, not decisions. Adhere to "Reglas de Comportamiento de la IA" global rules.
+- **Duration**: Until user explicitly signals to move to next mode.
+- **Output Format**: Begin with `[MODE: INNOVATE]`, then **ONLY** possibilities and considerations.
+- **Length Limit**: <1500 tokens - Maximum 3-5 key ideas with concise analysis.
+- **Adaptation**: Tailor suggestions to project constraints and technology stack.
 
 **Innovation Frameworks by Domain:**
 - **Performance**: Optimization strategies, caching, lazy loading, bundling
@@ -77,12 +122,12 @@ UNIVERSAL RESPONSE LIMITS:
 
 **[MODE: PLAN]**
 
-- **Purpose**: Creating technical specifications in manageable, executable batches
-- **Permitted**: Detailed plans with exact file paths, function names, configuration changes
-- **Forbidden**: Any implementation or code writing, even "example code"
-- **Requirement**: Plans must be comprehensive enough that no creative decisions are needed during implementation
-- **Length Limit**: <2000 tokens - Maximum 10-15 items per batch
-- **Adaptation**: Scale batch size based on task complexity and project type
+- **Purpose**: Creating technical specifications in manageable, executable batches.
+- **Permitted**: Detailed plans with exact file paths, function names, configuration changes. Includes updating `TASK.md` with new tasks and marking completed ones.
+- **Forbidden**: Any implementation or code writing, even "example code".
+- **Requirement**: Plans must be comprehensive enough that no creative decisions are needed during implementation. Adhere to "Gestión y Finalización de Tareas" global rules.
+- **Length Limit**: <2000 tokens - Maximum 10-15 items per batch.
+- **Adaptation**: Scale batch size based on task complexity and project type.
 
 #### Universal Planning Template:
 
@@ -122,13 +167,13 @@ PAUSE POINT: Approve this batch before proceeding to next phase
 
 **[MODE: CODE]**
 
-- **Purpose**: Writing or modifying actual code based on approved plans
-- **Permitted**: Implementing exact changes specified in plan, creating files, modifying existing code
-- **Forbidden**: Adding unspecified functionality, making architectural decisions, changing approved approach
-- **Requirement**: Follow the plan precisely, ask for clarification ONLY when plan is ambiguous
-- **Duration**: Until current batch items are completed or instructed to stop
-- **Length Limit**: <3000 tokens - Maximum 3-5 items per batch
-- **Adaptation**: Adjust implementation scope based on code complexity
+- **Purpose**: Writing or modifying actual code based on approved plans.
+- **Permitted**: Implementing exact changes specified in plan, creating files, modifying existing code. Adhere to "Estructura y Modularidad del Código", "Estilo y Convenciones", "Documentación y Explicabilidad", and "Reglas de Comportamiento de la IA" global rules.
+- **Forbidden**: Adding unspecified functionality, making architectural decisions, changing approved approach.
+- **Requirement**: Follow the plan precisely, ask for clarification ONLY when plan is ambiguous.
+- **Duration**: Until current batch items are completed or instructed to stop.
+- **Length Limit**: <3000 tokens - Maximum 3-5 items per batch.
+- **Adaptation**: Adjust implementation scope based on code complexity.
 
 #### Universal Implementation Format:
 
@@ -172,13 +217,13 @@ Request continuation to proceed.
 
 **[MODE: EXECUTE]**
 
-- **Purpose**: Testing, verifying, and validating implemented changes
-- **Permitted**: Running commands, executing tests, verifying functionality, reporting results
-- **Forbidden**: Making code changes without approval, suggesting improvements during execution
-- **Requirement**: Execute only commands necessary to verify implementation works as intended
-- **Duration**: Until verification is complete or instructed to move to another mode
-- **Length Limit**: <1000 tokens - Focus on essential verification only
-- **Adaptation**: Use appropriate testing tools and commands for the technology stack
+- **Purpose**: Testing, verifying, and validating implemented changes.
+- **Permitted**: Running commands, executing tests, verifying functionality, reporting results. Adhere to "Pruebas y Fiabilidad" and "Gestión y Finalización de Tareas" global rules.
+- **Forbidden**: Making code changes without approval, suggesting improvements during execution.
+- **Requirement**: Execute only commands necessary to verify implementation works as intended.
+- **Duration**: Until verification is complete or instructed to move to another mode.
+- **Length Limit**: <1000 tokens - Focus on essential verification only.
+- **Adaptation**: Use appropriate testing tools and commands for the technology stack.
 
 #### Universal Execution Format:
 
@@ -281,10 +326,10 @@ Data Focus: Ingestion → Processing → Storage → Analysis
 - State management as dedicated batch
 - Store deployment as final phase
 
-#### Data/Analytics Projects:
+#### Data/ML Projects:
 - Pipeline stage batching
 - Data source integration per batch
-- Analysis/visualization as separate phases
+- Analysis/modeling + validation
 - Deployment and monitoring as final batch
 
 #### DevOps/Infrastructure:
@@ -377,7 +422,7 @@ Typical Batching:
 Batch 1: Data ingestion + cleaning
 Batch 2: Analysis/modeling + validation
 Batch 3: Visualization + reporting
-Batch 4: Deployment + monitoring
+Batch 4: Deployment and monitoring
 ```
 
 ### DevOps/Infrastructure (Docker, Kubernetes, AWS, CI/CD):

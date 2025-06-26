@@ -11,8 +11,8 @@ $config = [
     'recipient_email' => 'info@naser.com.mx', // Primary recipient
     'cc_email' => '', // Optional CC recipient
     'subject_prefix' => 'Formulario de Contacto: ', // Email subject prefix
-    'success_redirect' => 'contacto.html?status=success', // Redirect on success
-    'error_redirect' => 'contacto.html?status=error', // Redirect on error
+    'success_redirect' => 'contacto.html?status=success', // Redirect on success (no longer used for AJAX)
+    'error_redirect' => 'contacto.html?status=error', // Redirect on error (no longer used for AJAX)
     'allowed_origin' => $_SERVER['HTTP_HOST'], // Prevent cross-site submissions
     'required_fields' => ['name', 'email', 'subject', 'message'], // Required form fields
     'log_file' => __DIR__ . '/form_submissions.log', // Log file path
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response['errors'] = $errors;
         $response['message'] = 'Por favor corrija los errores en el formulario.';
         logMessage('ERROR: Validation failed - ' . implode('; ', $errors), $config['log_file']);
-        redirectWithError($config['error_redirect'], implode(' ', $errors));
+        sendJsonResponse(false, 'Por favor corrija los errores en el formulario.', $errors);
     }
     
     // Sanitize form data
@@ -118,18 +118,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response['success'] = true;
         $response['message'] = 'Mensaje enviado correctamente. Nos pondremos en contacto pronto.';
         logMessage('SUCCESS: Email sent from ' . $email . ' to ' . $config['recipient_email'], $config['log_file']);
-        redirectWithSuccess($config['success_redirect']);
+        sendJsonResponse(true, 'Mensaje enviado correctamente. Nos pondremos en contacto pronto.');
     } else {
         // Email sending failed
         $response['message'] = 'Error al enviar el mensaje. Por favor intente más tarde o contáctenos directamente por teléfono.';
         logMessage('ERROR: Email failed to send from ' . $email . ' to ' . $config['recipient_email'] . ' - ' . $response['message'], $config['log_file']);
-        redirectWithError($config['error_redirect'], $response['message']);
+        sendJsonResponse(false, 'Error al enviar el mensaje. Por favor intente más tarde o contáctenos directamente por teléfono.');
     }
 } else {
     // Not a POST request
     $response['message'] = 'Método de solicitud no válido.';
     logMessage('ERROR: Invalid request method - Not a POST request.', $config['log_file']);
-    redirectWithError($config['error_redirect'], $response['message']);
+    sendJsonResponse(false, 'Método de solicitud no válido.');
 }
 
 /**
@@ -158,25 +158,15 @@ function sanitizeInput($input) {
 }
 
 /**
- * Redirect with success message
- * 
- * @param string $url URL to redirect to
+ * Send JSON response and exit.
+ *
+ * @param bool $success Indicates if the operation was successful.
+ * @param string $message A message to send to the client.
+ * @param array $errors An array of errors, if any.
  */
-function redirectWithSuccess($url) {
-    header('Location: ' . $url);
-    exit;
-}
-
-/**
- * Redirect with error message
- * 
- * @param string $url URL to redirect to
- * @param string $error Error message
- */
-function redirectWithError($url, $error) {
-    $url .= (strpos($url, '?') !== false) ? '&' : '?';
-    $url .= 'error=' . urlencode($error);
-    header('Location: ' . $url);
+function sendJsonResponse($success, $message, $errors = []) {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => $success, 'message' => $message, 'errors' => $errors]);
     exit;
 }
 

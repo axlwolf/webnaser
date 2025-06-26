@@ -69,20 +69,21 @@ web_naser_23/
 
 ## Tecnologías Utilizadas
 
-- **HTML5**
-- **CSS3** (incluyendo FontAwesome y Owl Carousel)
-- **JavaScript**
-- **Bootstrap 5**
-- **jQuery**
-- **Crisp Chat** (atención en línea)
-- **Python** (para generación de sitemap)
+- **Framework:** Next.js 14+ (App Router), Lenguaje: TypeScript.
+- **UI:** Tailwind CSS + Shadcn/UI.
+- **Base de Datos:** Vercel Postgres (basado en Neon).
+- **ORM:** Drizzle ORM.
+- **Autenticación:** Clerk.
+- **Caché:** Vercel KV (basado en Redis).
+- **Generación de Contenido AI:** OpenAI (API gpt-4o), DeepSeek AI (deepseek-chat), Google AI (Gemini Flash/Pro).
+- **Despliegue:** Vercel.
 
 ## Uso y Desarrollo
 
 ### Prerrequisitos
 
-- Navegador web moderno
-- Python 3 (opcional, solo para generar sitemap)
+- Node.js (v18+)
+- npm / yarn
 
 ### Instalación y Ejecución
 
@@ -90,11 +91,15 @@ web_naser_23/
    ```bash
    git clone https://github.com/axlwolf/webnaser.git
    ```
-2. Abre `index.html` en tu navegador para ver el sitio localmente.
-3. Para generar el sitemap:
+2. Instala las dependencias:
    ```bash
-   python generate_sitemap.py
+   npm install
    ```
+3. Ejecuta el entorno de desarrollo:
+   ```bash
+   npm run dev
+   ```
+4. Abre `http://localhost:3000` en tu navegador.
 
 ### Estructura de Archivos Clave
 

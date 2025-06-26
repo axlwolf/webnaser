@@ -1,36 +1,27 @@
-## Tech Context
+## Tech Context (SaaS CMS AI-First)
 
-### Backend Technologies (Nuevo 2025-06-24)
--   **PHP**: Utilizado para el procesamiento del formulario de contacto (`form-handler.php`).
-    - Validación de datos
-    - Sanitización de entradas
-    - Envío de correos electrónicos
-    - Manejo de errores y redirecciones
+### Arquitectura Primaria
+-   **Framework:** Next.js 14+ (App Router), Lenguaje: TypeScript.
+-   **UI:** Tailwind CSS + Shadcn/UI.
+-   **Base de Datos:** Vercel Postgres (basado en Neon).
+-   **ORM:** Drizzle ORM.
+-   **Autenticación:** Clerk.
+-   **Caché:** Vercel KV (basado en Redis).
+-   **Generación de Contenido AI:** OpenAI (API gpt-4o), DeepSeek AI (deepseek-chat), Google AI (Gemini Flash/Pro).
+-   **Despliegue:** Vercel.
 
-### Frontend Technologies
--   **HTML5**: Standard markup language for creating web pages.
--   **CSS3**: Styling language, including custom styles (`assets/css/styles.css`), Font Awesome for icons (`assets/css/fontawesome.css`), and Owl Carousel styles (`assets/css/owl.css`).
--   **JavaScript**: Used for interactive elements, preloader functionality, and the Crisp chat integration.
--   **Bootstrap**: Frontend framework for responsive design and UI components (`vendor/bootstrap/css/bootstrap.min.css`).
+### Tecnologías a ser Deprecadas
+-   **PHP**: El manejador de formularios (`form-handler.php`) será reemplazado por una API Route de Next.js.
+-   **jQuery**: Toda la manipulación del DOM será reemplazada por la gestión de estado de React.
+-   **HTML Estático**: Los archivos `.html` serán reemplazados por páginas de Next.js en el directorio `pages/`.
+-   **Bootstrap 5**: Será reemplazado por Tailwind CSS y Shadcn/UI.
+-   **Crisp Chat**: La integración de chat en vivo se gestionará a través del nuevo stack.
+-   **Python Script (generate_sitemap.py)**: La generación de sitemaps será dinámica a través de Next.js.
 
-### Libraries and Frameworks
--   **jQuery**: Likely used by Bootstrap and other scripts for DOM manipulation and event handling.
--   **Owl Carousel**: Used for the main banner slider (`assets/css/owl.css`).
-
-### External Services/APIs
--   **Crisp Chat**: Live chat support integration (`https://client.crisp.chat/l.js`).
--   **Google Fonts**: Poppins font family (`https://fonts.googleapis.com/css?family=Poppins`).
-
-### Development Environment
--   **Local Development**: Files are served locally from `/Users/flanuza/Desktop/web_naser_23/`.
-
-### Sitemap Generation
--   **Python Script**: A custom Python script (`generate_sitemap.py`) is used to dynamically generate `sitemap.xml` by parsing HTML files and extracting internal links.
-
-### File Structure (Relevant to Tech)
--   `index.html`: Main entry point of the website.
--   `vendor/bootstrap/`: Contains Bootstrap framework files.
--   `assets/css/`: Contains custom CSS and other styling assets.
--   `assets/images/`: Stores website images, including `logo_naser.png`.
--   `sitemap.xml`: Generated XML sitemap for SEO.
--   `generate_sitemap.py`: Python script for sitemap generation.
+### Estructura de Archivos Clave (Nueva Arquitectura)
+-   `app/`: Contiene las rutas de la aplicación (dashboard, sitios de inquilinos).
+-   `lib/`: Utilidades y funciones auxiliares.
+-   `components/`: Componentes de UI reutilizables.
+-   `db/`: Esquemas de base de datos y configuraciones.
+-   `public/`: Archivos estáticos.
+-   `docs/`: Documentación del proyecto.

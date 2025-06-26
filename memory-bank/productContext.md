@@ -10,7 +10,7 @@ Grupo Naser es un sitio web dedicado a ofrecer servicios funerarios y planes de 
 - Ajuste en la estructura del footer y presentación de datos de contacto.
 - Mejor legibilidad en scripts y estilos.
 
-## Experiencia de Usuario
+## Experiencia de Usuario+
 - Navegación clara y accesible.
 - Contacto directo por email, teléfono, WhatsApp y chat en vivo (Crisp).
 - Información relevante organizada en páginas independientes.
