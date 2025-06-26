@@ -60,7 +60,7 @@ graph TD
             AIGen(Servicio de Generación IA <br> OpenAI/DeepSeek/Gemini)
         end
         subgraph "Infraestructura de Datos"
-            DB[(Vercel Postgres<br>- Users<br>- Sites<br>- Pages<br>- AI_Content_Templates)]
+            DB[(Supabase<br>- Users<br>- Sites<br>- Pages<br>- AI_Content_Templates)]
             Cache[(Vercel KV<br>Cache de Páginas/Sesiones)]
         end
     end

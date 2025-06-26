@@ -15,7 +15,7 @@ This document outlines the technology stack for the SaaS CMS project.
 - **Runtime:** Node.js
 - **Framework:** Next.js API Routes
 - **Authentication:** Clerk
-- **Database:** Vercel Postgres (Neon)
+- **Database:** Supabase
 - **ORM:** Drizzle ORM
 - **Cache:** Vercel KV (Redis)
 
