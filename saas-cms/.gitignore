@@ -30,6 +30,10 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.example
 
 # vercel
 .vercel
+
+# clerk configuration (can include secrets)
+/.clerk/
