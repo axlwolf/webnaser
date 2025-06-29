@@ -1,6 +1,6 @@
-# Migration Plan for Grupo Naser Website (Grav CMS)
+# Migration Plan for Grupo Naser Website Using Grav CMS
 
-This document outlines the migration plan for the Grupo Naser website from its current static HTML structure to **Grav CMS**, a modern flat-file Content Management System (CMS) built on PHP. Grav was selected by the client (https://getgrav.org/) for its simplicity, performance, and compatibility with their existing server infrastructure, which does not support more complex deployments like Next.js. This plan ensures the website retains its visual identity and content while leveraging Grav's ease of use for content management. The previously developed Next.js approach remains preserved for potential use when infrastructure upgrades occur next year.
+This document outlines a migration plan for the Grupo Naser website from its current static HTML structure to **Grav**, a modern flat-file Content Management System (CMS) built on PHP. Grav was selected by the client (https://getgrav.org/) for its simplicity, performance, and compatibility with their existing server infrastructure, which does not support more complex deployments like Next.js. This plan ensures the website retains its visual identity and content while leveraging Grav's ease of use for content management.
 
 ## Objectives
 
@@ -121,4 +121,4 @@ This document outlines the migration plan for the Grupo Naser website from its c
 2. Request server access details or specifications to confirm compatibility (PHP version, web server type).
 3. Begin Phase 1 by downloading and installing Grav, setting up the project structure for development.
 
-This plan ensures the Grupo Naser website is modernized quickly and efficiently using Grav CMS, meeting the client's infrastructure constraints while providing an intuitive content management solution. The Next.js approach remains a viable future option for when server upgrades are available next year.
+This plan ensures the Grupo Naser website is modernized quickly and efficiently using Grav CMS, meeting the client's infrastructure constraints while providing an intuitive content management solution.

@@ -1,171 +1,64 @@
 # Migration Roadmap for Grupo Naser Website
 
 ## Overview
-This roadmap outlines the migration of the Grupo Naser static HTML website to a modern stack with a custom content management system (CMS), focusing on easier content management. The plan adheres to the protocols defined in `ripperFive.md` for adaptive development in batches and follows guidelines from `memory-bank.md` for CMS migration. The migration must be completed within a one-week deadline with no budget for external resources.
+This roadmap outlines the migration of the Grupo Naser static HTML website to a modern stack with a content management system (CMS), focusing on easier content management. The current primary approach is based on **Grav CMS**, a lightweight PHP-based flat-file CMS, selected by the client for compatibility with their existing server infrastructure. The previously developed Next.js approach remains preserved for future use when infrastructure upgrades are available next year.
 
 ## Project Context
 - **Current State**: Static HTML site with Bootstrap 5, PHP form handling, and SEO-focused sitemap.
-- **Goal**: Implement a custom CMS for content management using a modern, free stack (Next.js, Tailwind CSS, Firebase, Vercel).
-- **Constraints**: One-week deadline, no budget, custom CMS preference for control and personalization.
+- **Goal**: Implement Grav CMS for content management, ensuring simplicity and compatibility with current server constraints.
+- **Constraints**: Client's server does not support Next.js deployments; migration must prioritize solutions compatible with standard LAMP stacks.
 - **Target Audience**: ISSSTE affiliates and families seeking funeral services, requiring accessible navigation and immediate contact options.
 
-## Implementation Batches
-Following the `ripperFive.md` protocol, the migration is divided into manageable batches based on complexity and web development batching strategies (Component-first, API integration, Testing). Each batch corresponds to a day within the one-week timeline to ensure timely completion. The batches are designed as per the PLAN mode template for clarity and user approval.
+## Current Approach: Grav CMS (Primary Focus)
+- **Status**: Planned and Approved by Client
+- **Details**: Migration to Grav CMS, a flat-file PHP-based system that requires no database and offers a user-friendly admin interface. This approach ensures compatibility with the client's infrastructure while providing content management capabilities for pages like obituaries and contact forms.
+- **Key Files**:
+  - Project directory: `naser-grav` (to be created)
+  - Documentation: `memory-bank/grav_migration_plan.md` (detailed migration steps and timeline)
+  - Styling Guide: `memory-bank/look_and_feel_guide.md` (mapping original Bootstrap styles, adaptable to Grav themes)
+- **Implementation Batches**: As outlined in `grav_migration_plan.md`, the migration is divided into phases:
+  - **Phase 1: Setup and Environment Preparation** (1 day)
+  - **Phase 2: Theme Development and Styling** (2-3 days)
+  - **Phase 3: Content Migration** (2-3 days)
+  - **Phase 4: Plugins and Functionality** (1-2 days)
+  - **Phase 5: Testing and Deployment** (1-2 days)
+  - **Phase 6: Documentation and Handoff** (1 day)
+- **Total Timeline**: Approximately 8-12 working days.
+- **Next Steps**:
+  - Confirm server compatibility (PHP version, web server type).
+  - Install Grav CMS and set up the project structure in `naser-grav`.
+  - Develop a custom theme to match the original site's design.
+  - Migrate content and test functionality before deployment.
 
-### BATCH 1: Foundation Setup (Day 1)
-**Project**: Grupo Naser Website Migration  
-**Phase**: Initial Setup and Environment Configuration (Items 1-5)  
-**Technology Stack**: Next.js, Tailwind CSS, Firebase, Vercel
+## Future Approach: Next.js with TypeScript and Tailwind CSS (Pending Until Next Year)
+- **Status**: On Hold (Pending Infrastructure Upgrade)
+- **Details**: Significant progress was made on a Next.js-based solution with TypeScript and Tailwind CSS, including layout consistency using shared components (`Header` and `Footer`) across all main pages. This modern approach leverages React practices and server-side rendering for performance but is currently incompatible with the client's server. It is preserved for potential deployment next year.
+- **Key Files**:
+  - Project directory: `naser-modern`
+  - Pages: `src/app/page.tsx`, `src/app/contacto/page.tsx`, etc.
+  - Components: `src/components/Header.tsx`, `src/components/Footer.tsx`
+- **Documentation**:
+  - Look & Feel Guide: `memory-bank/look_and_feel_guide.md` (mapping original Bootstrap styles to Tailwind CSS)
+- **Next Steps (Postponed)**:
+  - Revisit deployment when client infrastructure supports Next.js (expected next year).
+  - Complete any remaining content migration or dynamic features if needed at that time.
 
-**Prerequisites**:
-- Node.js (v18+) and npm installed on the system.
-- GitHub account for repository setup and Vercel deployment.
+## Alternative Approaches (Explored and Documented)
+Due to the client's server limitations, alternative strategies were explored before settling on Grav CMS:
+1. **PHP + Angular Traditional Stack**:
+   - **Status**: Explored, Not Selected
+   - **Details**: A traditional approach using PHP (e.g., Laravel) for backend API and Angular for frontend SPA was planned. Detailed in `traditional_migration_plan.md` with comparative options in `php_angular_comparative_options.md`.
+   - **Reason for Non-Selection**: Client opted for Grav CMS for its simplicity and flat-file architecture over a full-stack framework solution.
 
-**Implementation Steps**:
-1. Create a new directory `naser-modern` for the project to avoid overwriting the existing site.
-2. Initialize a Next.js project with TypeScript and Tailwind CSS in `naser-modern` using `npx create-next-app@latest`.
-3. Configure Firebase for authentication and Firestore for content storage by setting up a Firebase project and installing necessary SDKs.
-4. Set up a GitHub repository for the project and push the initial code for Vercel integration.
-5. Verify local development environment by running `npm run dev` to ensure the basic Next.js app loads correctly.
+## Long-Term Vision
+- The Grav CMS approach addresses immediate needs for content management and server compatibility, allowing the client to maintain and update the website efficiently.
+- The Next.js solution in `naser-modern` remains the preferred modern approach and will be revisited when the client upgrades infrastructure next year. Content and assets migrated to Grav are designed to be reusable for future transitions to Next.js or other frameworks.
 
-**Success Criteria**:
-- Next.js project with Tailwind CSS is initialized and runs locally.
-- Firebase project is created and connected for authentication and content storage.
-- Initial code is pushed to GitHub and linked to Vercel for deployment readiness.
-
-**PAUSE POINT**: Approve this batch before proceeding to admin interface development.
-
-### BATCH 2: Custom CMS Admin Interface (Day 2)
-**Project**: Grupo Naser Website Migration  
-**Phase**: Admin Interface for Content Management (Items 6-9)  
-**Technology Stack**: Next.js, Firebase Firestore, Firebase Authentication
-
-**Prerequisites**:
-- Batch 1 completed with Next.js and Firebase setup.
-
-**Implementation Steps**:
-6. Create a simple admin interface page in Next.js at `app/admin/page.tsx` for content editing.
-7. Implement basic CRUD operations (Create, Read, Update, Delete) for content management using Firebase Firestore to store page data.
-8. Secure the admin interface with Firebase Authentication, allowing only authorized users to access and edit content.
-9. Test the admin interface locally to ensure content can be added, edited, and deleted via Firestore.
-
-**Success Criteria**:
-- Admin interface is accessible and secured with authentication.
-- Content can be managed (added, updated, deleted) through the interface and reflects in Firestore.
-
-**PAUSE POINT**: Approve this batch before proceeding to core page migration.
-
-### BATCH 3: Core Pages Migration (Day 3)
-**Project**: Grupo Naser Website Migration  
-**Phase**: Migrate Essential Pages to Next.js (Items 10-13)  
-**Technology Stack**: Next.js, Tailwind CSS, Firebase Firestore
-
-**Prerequisites**:
-- Batch 2 completed with functional admin interface.
-
-**Implementation Steps**:
-10. Convert key static HTML pages (`index.html`, `contacto.html`, `servicios.html`) to Next.js pages under `app/` directory, pulling content dynamically from Firestore.
-11. Apply Tailwind CSS styling to match the original design, replacing Bootstrap classes.
-12. Ensure SEO elements (meta tags, titles) are preserved using Next.js Head component for each page.
-13. Test the migrated pages locally to confirm content display and styling consistency with the original site.
-
-**Success Criteria**:
-- Core pages (`index`, `contacto`, `servicios`) are rendered dynamically with content from Firestore.
-- Styling matches the original site using Tailwind CSS.
-- SEO meta tags are correctly implemented for each page.
-
-**PAUSE POINT**: Approve this batch before proceeding to additional pages and integrations.
-
-### BATCH 4: Additional Pages and Form Handling (Day 4)
-**Project**: Grupo Naser Website Migration  
-**Phase**: Migrate Remaining Pages and Replace PHP Forms (Items 14-17)  
-**Technology Stack**: Next.js, Tailwind CSS, Firebase Firestore
-
-**Prerequisites**:
-- Batch 3 completed with core pages migrated.
-
-**Implementation Steps**:
-14. Migrate remaining core pages (`necesidad-inmediata.html`, `prevision.html`, `obituario.html`, `nosotros.html`, `cobertura.html`, `historia.html`) to Next.js, pulling content from Firestore.
-15. Migrate location-specific pages (`naser_aragon.html`, `naser_tlalpan.html`, `naser_morelos.html`, `naser_oaxaca.html`) with placeholder content if time-constrained.
-16. Replace PHP form handling in `contacto.html` with Next.js API routes at `app/api/contact/route.ts` for processing form submissions.
-17. Test form submission functionality and page rendering locally for all migrated pages.
-
-**Success Criteria**:
-- All core and location-specific pages are migrated to Next.js with content from Firestore or placeholders.
-- Contact form submits data via Next.js API route successfully.
-
-**PAUSE POINT**: Approve this batch before proceeding to integrations and testing.
-
-### BATCH 5: Integrations and Testing (Day 5)
-**Project**: Grupo Naser Website Migration  
-**Phase**: Chat and Social Integrations, Accessibility Testing (Items 18-21)  
-**Technology Stack**: Next.js, Tailwind CSS
-
-**Prerequisites**:
-- Batch 4 completed with all pages migrated.
-
-**Implementation Steps**:
-18. Embed existing Crisp Chat and social media integrations (WhatsApp, Facebook, etc.) into the Next.js application layout or specific pages.
-19. Conduct accessibility testing using tools like axe-core to ensure navigation and contact options are accessible.
-20. Test responsiveness across devices to confirm Tailwind CSS configurations match the original responsive design.
-21. Address any issues or bugs identified during testing for functionality and accessibility.
-
-**Success Criteria**:
-- Chat and social media integrations function as in the original site.
-- Site passes basic accessibility checks with no critical issues.
-- Responsive design works across mobile, tablet, and desktop views.
-
-**PAUSE POINT**: Approve this batch before proceeding to deployment.
-
-### BATCH 6: Deployment and Final Review (Day 6)
-**Project**: Grupo Naser Website Migration  
-**Phase**: Deploy to Vercel and Review CMS Functionality (Items 22-24)  
-**Technology Stack**: Vercel, Next.js, Firebase
-
-**Prerequisites**:
-- Batch 5 completed with integrations and testing.
-
-**Implementation Steps**:
-22. Deploy the site to Vercel by linking the GitHub repository and configuring environment variables for Firebase.
-23. Conduct a final review of the deployed site to ensure content management via the admin interface works as expected.
-24. Verify SEO sitemap generation dynamically using Next.js features and test page load performance.
-
-**Success Criteria**:
-- Site is live on Vercel with all pages accessible.
-- Admin interface updates content on the live site via Firestore.
-- Sitemap is generated dynamically for SEO purposes.
-
-**PAUSE POINT**: Approve this batch before proceeding to documentation.
-
-### BATCH 7: Documentation and Handover (Day 7)
-**Project**: Grupo Naser Website Migration  
-**Phase**: Document Usage and Maintenance (Items 25-27)  
-**Technology Stack**: Markdown, Documentation
-
-**Prerequisites**:
-- Batch 6 completed with successful deployment.
-
-**Implementation Steps**:
-25. Document how to use the custom admin interface for content updates in a `README.md` within the project repository.
-26. Prepare a brief guide for ongoing maintenance, including Firebase limits and potential future enhancements.
-27. Update `memory-bank/` files with migration details, progress, and next steps as per documentation guidelines.
-
-**Success Criteria**:
-- Documentation for CMS usage and maintenance is clear and accessible in the repository.
-- Memory Bank files are updated to reflect the migration completion and future considerations.
-
-**FINAL PAUSE POINT**: Approve this batch to conclude the migration project.
-
-## Batch Strategy Rationale
-- **Complexity-Based Batching**: Given the tight one-week deadline and the complexity of migrating to a custom CMS, batches are kept small (3-5 items) and focused on daily achievable goals.
-- **Layer-Based Batching**: The roadmap follows a foundation-to-interface progression (Setup → Admin Interface → Pages → Integrations → Deployment), ensuring a logical build-up of functionality.
-- **Feature-Based Batching**: Core CMS functionality and essential pages are prioritized in early batches, with enhancements and polish in later batches.
-
-## Adherence to RipperFive and Memory-Bank Guidelines
-- **RipperFive Protocol**: The roadmap uses the PLAN mode format with clear pause points for user approval after each batch, ensuring no unauthorized changes and maintaining user control. Batch sizes adhere to the recommended limits for web development projects.
-- **Memory-Bank CMS Migration**: This roadmap incorporates the initial batch suggestions from `memory-bank.md` by defining the level of control (custom CMS), listing minimum functionalities (content CRUD, form handling), and deciding on a stack (Next.js, Firebase) tailored to the no-budget constraint.
+## Adherence to Guidelines
+- **RipperFive Protocol**: The roadmap for Grav CMS includes clear pause points for client approval after key phases, ensuring alignment with project goals as development progresses.
+- **Memory-Bank CMS Migration**: The Grav approach incorporates guidelines from `memory-bank.md` by defining the level of control (CMS-based), listing minimum functionalities (content CRUD, form handling), and selecting a stack (Grav CMS) tailored to the client's constraints.
 
 ## Next Steps
-Request approval for Batch 1 to initiate the setup of the Next.js project and Firebase configuration. Each batch will be implemented only after user confirmation, following the strict protocol to prevent overeager changes and ensure alignment with project goals.
+Request client confirmation on server access details and CSS framework preference (Bootstrap or Tailwind) for the Grav theme. Begin Phase 1 of the Grav migration by setting up the environment and installing Grav CMS in the `naser-grav` directory. Each phase will be implemented only after client approval, following a structured process to ensure alignment with project goals.
 
-**PAUSE POINT**: Approve the roadmap and Batch 1 to begin the migration process.
+**PAUSE POINT**: Approve the updated roadmap and Phase 1 of the Grav migration to initiate the process.

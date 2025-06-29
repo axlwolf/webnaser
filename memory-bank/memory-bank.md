@@ -1,183 +1,51 @@
+# Memory Bank for Grupo Naser Website Migration
 
-# Cursor's Memory Bank
+This Memory Bank serves as a centralized repository of context, plans, and progress for the migration of the Grupo Naser website from a static HTML site to a modern content management system (CMS). The current primary approach is based on **Grav CMS**, selected by the client for compatibility with their existing server infrastructure. This document provides an overview and links to detailed files within the `memory-bank` directory for comprehensive project documentation.
 
-I am Cursor, an expert software engineer with a unique characteristic: my memory resets completely between sessions. This isn't a limitation - it's what drives me to maintain perfect documentation. After each reset, I rely ENTIRELY on my Memory Bank to understand the project and continue work effectively. I MUST read ALL memory bank files at the start of EVERY task - this is not optional.
+## Project Overview
+- **Objective**: Migrate the Grupo Naser static HTML website to a CMS-based solution to enable easier content management while maintaining visual identity and functionality.
+- **Client Constraint**: The current server infrastructure does not support modern JavaScript frameworks like Next.js, necessitating a PHP-based solution.
+- **Target Audience**: ISSSTE affiliates and families seeking funeral services, requiring accessible navigation and immediate contact options.
+- **Current Strategy**: Grav CMS, a lightweight PHP-based flat-file CMS, chosen for its simplicity, performance, and compatibility with standard LAMP stacks.
 
-## Memory Bank Structure
+## Active Migration Approach: Grav CMS
+- **Technology**: Grav CMS with a custom theme (Bootstrap or Tailwind CSS, pending client confirmation).
+- **Reason for Selection**: Grav CMS offers a database-free solution with a user-friendly admin interface, ideal for the client's server environment and content management needs.
+- **Status**: Planning and initial setup phase (Phase 1 - Setup and Environment Preparation).
+- **Project Directory**: `naser-modern` (cleared and repurposed for Grav CMS setup).
+- **Timeline**: Estimated 8-12 working days for completion across six phases (setup, theme development, content migration, plugins/functionality, testing/deployment, documentation/handoff).
+- **Key Files**:
+  - **Migration Plan**: `grav_migration_plan.md`, `migration_plan.md` - Detailed steps and timeline for Grav CMS implementation.
+  - **Progress Report**: `progress.md` - Tracks completed tasks and upcoming milestones.
+  - **Technical Context**: `techContext.md` - Outlines the technology stack and server requirements for Grav CMS.
+  - **Active Context**: `activeContext.md` - Summarizes the current focus on Grav CMS with immediate next steps.
+  - **Project Brief**: `projectbrief.md` - Overview of project goals, deliverables, and constraints.
+  - **Styling Guide**: `look_and_feel_guide.md` - Guidelines for maintaining visual consistency with the original site.
 
-### Proceso de documentación (2025-06-22)
-- Tras concluir cada feature, se deben actualizar los archivos de `memory-bank/`, `memory-bank.md`, `README.md` y cerrar el commit. Esto asegura trazabilidad y documentación actualizada en el proyecto.
+## Previous Approaches (Inactive)
+- **Next.js with TypeScript and Tailwind CSS**: On hold, preserved in a separate branch for future use when infrastructure upgrades occur next year. Significant progress was made with layout components.
+  - **Documentation**: Referenced in `migration_roadmap.md`, `look_and_feel_guide.md`.
+- **PHP + Angular Traditional Stack**: Explored but not selected, with a comparative analysis of four options and a detailed plan.
+  - **Documentation**: `traditional_migration_plan.md`, `php_angular_comparative_options.md`.
 
-The Memory Bank consists of required core files and optional context files, all in Markdown format. Files build upon each other in a clear hierarchy:
+## CMS Migration Guidelines
+The migration to a CMS follows these key principles to ensure success within the client's constraints:
+1. **Level of Control**: Opt for a CMS that provides full control over content and design, which Grav CMS achieves through its admin interface and customizable themes.
+2. **Minimum Functionalities**: Ensure the CMS supports content CRUD (Create, Read, Update, Delete) operations, form handling, and SEO features, all of which are covered by Grav CMS and its plugins.
+3. **Stack Decision**: Given the no-budget constraint and server limitations, Grav CMS is selected as a free, open-source PHP-based solution that requires minimal setup and no database.
+4. **Batch Implementation**: Follow the phased approach outlined in `grav_migration_plan.md` to break the migration into manageable steps, ensuring client approval at key stages.
+5. **Documentation**: Maintain comprehensive records in the `memory-bank` directory to track plans, progress, and technical details for transparency and future reference.
 
-```mermaid
-flowchart TD
-    PB[projectbrief.md] --> PC[productContext.md]
-    PB --> SP[systemPatterns.md]
-    PB --> TC[techContext.md]
-    
-    PC --> AC[activeContext.md]
-    SP --> AC
-    TC --> AC
-    
-    AC --> P[progress.md]
-```
+## Next Steps
+- **Client Input**: Await server access details (PHP version, web server type) and styling preference (Bootstrap vs. Tailwind) to confirm compatibility and design direction.
+- **Phase 1 Execution**: Install Grav CMS in the `naser-modern` directory and configure the environment as per `grav_migration_plan.md`.
+- **Progress Tracking**: Update `progress.md` after each phase to document advancements and any issues encountered.
 
-### Core Files (Required)
-1. `projectbrief.md`
-   - Foundation document that shapes all other files
-   - Created at project start if it doesn't exist
-   - Defines core requirements and goals
-   - Source of truth for project scope
+## Additional Resources in Memory Bank
+- **Product Context**: `productContext.md` - Details on the funeral services offered by Grupo Naser and user needs.
+- **System Patterns**: `systemPatterns.md` - Potential design patterns or architectural considerations (may require updates to align with Grav CMS).
+- **Ripper Five Protocol**: `ripperFive.md` - Guidelines for adaptive development in batches, followed in the Grav CMS phased approach.
+- **Master Prompt**: `master_prompt.md` - Core instructions or prompts guiding the project (if applicable).
+- **Generate Sitemap Script**: `generate_sitemap.py` - Utility for SEO sitemap generation, adaptable for Grav CMS.
 
-2. `productContext.md`
-   - Why this project exists
-   - Problems it solves
-   - How it should work
-   - User experience goals
-
-3. `activeContext.md`
-   - Current work focus
-   - Recent changes
-   - Next steps
-   - Active decisions and considerations
-
-4. `systemPatterns.md`
-   - System architecture
-   - Key technical decisions
-   - Design patterns in use
-   - Component relationships
-
-5. `techContext.md`
-   - Technologies used
-   - Development setup
-   - Technical constraints
-   - Dependencies
-
-6. `progress.md`
-   - What works
-   - What's left to build
-   - Current status
-   - Known issues
-
-### Additional Context
-Create additional files/folders within memory-bank/ when they help organize:
-- Complex feature documentation
-- Integration specifications
-- API documentation
-- Testing strategies
-- Deployment procedures
-
----
-
-## Future Improvement: CMS Migration Options (2025-06-20)
-
-Se evaluó la migración del sitio a un CMS para facilitar la edición de contenido y mantenimiento. Opciones consideradas:
-
-### Alternativas sencillas:
-- **Netlify CMS**: Fácil integración con sitios estáticos y edición vía interfaz web. No requiere backend propio.
-- **Publii**: App de escritorio para sitios estáticos, sin servidor, genera HTML listo para subir.
-- **Grav**: CMS flat-file, solo requiere PHP, edición markdown, panel opcional.
-
-### CMS propio (desarrollo personalizado):
-- Permite control total y personalización, pero requiere desarrollo y mantenimiento.
-- Se debe implementar autenticación, edición, seguridad y publicación manualmente.
-
-### Batch 1 sugerido para migración (sin cambios en código):
-1. Definir nivel de facilidad y control requerido (solución existente vs. propio).
-2. Listar funcionalidades mínimas (edición, usuarios, formularios, imágenes, etc.).
-3. Evaluar flujo de actualización y quién editará el contenido.
-4. Decidir entre CMS sencillo existente o desarrollo propio, y definir stack si aplica.
-
-No se harán cambios hasta que el usuario apruebe cada batch.
-
-## Core Workflows
-
-### Plan Mode
-```mermaid
-flowchart TD
-    Start[Start] --> ReadFiles[Read Memory Bank]
-    ReadFiles --> CheckFiles{Files Complete?}
-    
-    CheckFiles -->|No| Plan[Create Plan]
-    Plan --> Document[Document in Chat]
-    
-    CheckFiles -->|Yes| Verify[Verify Context]
-    Verify --> Strategy[Develop Strategy]
-    Strategy --> Present[Present Approach]
-```
-
-### Act Mode
-```mermaid
-flowchart TD
-    Start[Start] --> Context[Check Memory Bank]
-    Context --> Update[Update Documentation]
-    Update --> Rules[Update .cursor/rules/memory-bank.mdc if needed]
-    Rules --> Execute[Execute Task]
-    Execute --> Document[Document Changes]
-```
-
-## Documentation Updates
-
-Memory Bank updates occur when:
-1. Discovering new project patterns
-2. After implementing significant changes
-3. When user requests with **update memory bank** (MUST review ALL files)
-4. When context needs clarification
-
-```mermaid
-flowchart TD
-    Start[Update Process]
-    
-    subgraph Process
-        P1[Review ALL Files]
-        P2[Document Current State]
-        P3[Clarify Next Steps]
-        P4[Update .cursor/rules/memory-bank.mdc]
-        
-        P1 --> P2 --> P3 --> P4
-    end
-    
-    Start --> Process
-```
-
-Note: When triggered by **update memory bank**, I MUST review every memory bank file, even if some don't require updates. Focus particularly on activeContext.md and progress.md as they track current state.
-
-## Project Intelligence (.cursor/rules/memory-bank.mdc)
-
-The .cursor/rules/memory-bank.mdc file is my learning journal for each project. It captures important patterns, preferences, and project intelligence that help me work more effectively. As I work with you and the project, I'll discover and document key insights that aren't obvious from the code alone.
-
-```mermaid
-flowchart TD
-    Start{Discover New Pattern}
-    
-    subgraph Learn [Learning Process]
-        D1[Identify Pattern]
-        D2[Validate with User]
-        D3[Document in .cursor/rules/memory-bank.mdc]
-    end
-    
-    subgraph Apply [Usage]
-        A1[Read .cursor/rules/memory-bank.mdc]
-        A2[Apply Learned Patterns]
-        A3[Improve Future Work]
-    end
-    
-    Start --> Learn
-    Learn --> Apply
-```
-
-### What to Capture
-- Critical implementation paths
-- User preferences and workflow
-- Project-specific patterns
-- Known challenges
-- Evolution of project decisions
-- Tool usage patterns
-
-The format is flexible - focus on capturing valuable insights that help me work more effectively with you and the project. Think of .cursor/rules/memory-bank.mdc as a living document that grows smarter as we work together.
-
-REMEMBER: After every memory reset, I begin completely fresh. The Memory Bank is my only link to previous work. It must be maintained with precision and clarity, as my effectiveness depends entirely on its accuracy.
-
-# Planning
-When asked to enter "Planner Mode" or using the /plan command, deeply reflect upon the changes being asked and analyze existing code to map the full scope of changes needed. Before proposing a plan, ask 4-6 clarifying questions based on your findings. Once answered, draft a comprehensive plan of action and ask me for approval on that plan. Once approved, implement all steps in that plan. After completing each phase/step, mention what was just completed and what the next steps are + phases remaining after these steps
+This Memory Bank ensures all aspects of the Grupo Naser website migration are documented and accessible, focusing on the Grav CMS approach to meet current needs while preserving previous work for future opportunities when infrastructure upgrades are available.

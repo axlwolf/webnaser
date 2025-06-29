@@ -1,43 +1,40 @@
-## Active Context
+# Active Context for Grupo Naser Website Migration
 
-### Cambios recientes (2025-06-24)
+This document summarizes the active context for the migration of the Grupo Naser website from a static HTML site to a modern content management system (CMS). The current primary approach is based on **Grav CMS**, selected by the client for its compatibility with their existing server infrastructure.
 
-- Se implementó un sistema de procesamiento de formularios PHP para el formulario de contacto.
-- Se creó el archivo `form-handler.php` que maneja la validación, sanitización y envío de correos electrónicos.
-- Se actualizó `contacto.html` para utilizar el método POST y apuntar al nuevo handler PHP.
-- Se agregó feedback visual para el usuario con mensajes de éxito o error después del envío del formulario.
-- Se corrigió un problema con campos duplicados en el formulario de contacto.
+## Current Active Approach: Grav CMS
 
-### Cambios recientes (2025-06-22)
+- **Strategy**: Migration to Grav CMS, a lightweight PHP-based flat-file CMS that requires no database and offers a user-friendly admin interface for content management.
+- **Reason for Selection**: Grav CMS was chosen for its simplicity, performance, and ability to run on the client's current server environment, which does not support Next.js deployments.
+- **Project Directory**: `naser-modern` (cleared and repurposed for Grav CMS setup)
+- **Status**: Planning and initial setup phase
+- **Key Documentation**:
+  - Migration Plan: `grav_migration_plan.md` and `migration_plan.md`
+  - Styling Guide: `look_and_feel_guide.md`
+  - Progress Report: `progress.md`
+  - Technical Context: `techContext.md`
+- **Current Phase**: Phase 1 - Setup and Environment Preparation
+- **Immediate Next Steps**:
+  - Confirm server specifications (PHP version 7.3.6+ required, web server type) and file write permissions.
+  - Obtain client preference on CSS framework (Bootstrap vs. Tailwind) for the Grav theme.
+  - Install Grav CMS in the `naser-modern` directory.
 
-- Se mejoró la accesibilidad y el formato en los archivos HTML principales (`index.html`, `contacto.html`, `necesidad-inmediata.html`, `obituario.html`, `prevision.html`, `servicios.html`).
-- Se eliminaron formularios y secciones comentadas innecesarias para limpiar el código y optimizar la experiencia de usuario.
-- Se ajustó la estructura y presentación del footer, datos de contacto y enlaces sociales.
-- Se mejoró la legibilidad de scripts y estilos en los HTML.
+## Project Objectives
+- **Compatibility**: Ensure the solution operates within the client's server constraints (standard LAMP stack, no database required for Grav).
+- **Content Management**: Enable non-technical users to update content (e.g., obituaries, contact forms) via an intuitive admin interface.
+- **Preservation**: Maintain the visual identity and content structure of the original site as outlined in `look_and_feel_guide.md`.
+- **Future-Proofing**: Preserve content and assets for potential future transitions to Next.js or other frameworks when infrastructure upgrades occur next year.
 
-#### Proceso de documentación
-- Se actualizó la política de documentación: tras cada feature, se deben actualizar los archivos de `memory-bank/`, `memory-bank.md`, `README.md` y cerrar el commit para mantener la trazabilidad y calidad documental.
-- [2025-06-22] Se corrigió un error de JavaScript en custom.js (protección contra offset undefined en función visible).
-- [2025-06-22] Se resolvió un problema en index.html donde algunas imágenes no cargaban correctamente.
-### Sitemap Information
+## Previous Approaches (Inactive)
+- **Next.js with TypeScript and Tailwind CSS**: On hold, preserved in a separate branch for future use when infrastructure supports it (expected next year). Previously developed in `naser-modern`.
+- **PHP + Angular Traditional Stack**: Explored but not selected, documented in `traditional_migration_plan.md` and `php_angular_comparative_options.md`.
 
-El sitemap (`sitemap.xml`) sigue incluyendo las páginas clave:
-- `index.html` (Inicio)
-- `necesidad-inmediata.html` (Necesidad Inmediata)
-- `prevision.html` (Previsión)
-- `servicios.html` (Servicios)
-- `obituario.html` (Obituario)
-- `contacto.html` (Contacto)
-- `nosotros.html` (Nosotros)
-- `cobertura.html` (Cobertura)
-- `historia.html` (Historia)
-- `one-page.html`
-- `naser_aragon.html`
-- `naser_morelos.html`
-- `naser_oaxaca.html`
-- `naser_oaxaca_.html`
-- `naser_tlalpan.html`
+## Key Constraints
+- **Server Limitations**: Current infrastructure does not support modern JavaScript frameworks like Next.js, necessitating a PHP-based solution.
+- **Timeline**: Estimated 8-12 working days for Grav CMS migration completion, adjustable based on client feedback and server setup.
 
-### Website Purpose (from index.html)
+## Client Action Items
+- Provide server access details or specifications (PHP version, web server type) to confirm compatibility with Grav CMS.
+- Confirm styling preference (Bootstrap to match original site, or Tailwind CSS for a modern approach) for the Grav theme.
 
-El sitio "Grupo Naser - Servicios Funerarios y Previsión Funeraria" provee servicios funerarios con calidez y calidad, y destaca los servicios de previsión para trabajadores y pensionados ISSSTE. Incluye contacto directo (email, teléfono) y atención en línea vía Crisp.
+This active context ensures focus on the Grav CMS migration strategy, aligning all efforts with the client's current needs and infrastructure constraints while maintaining a clear path for future upgrades.
