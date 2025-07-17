@@ -1,0 +1,10 @@
+{
+  "name": "PHP Security Check",
+  "description": "Analyzes PHP code for security vulnerabilities when saved",
+  "trigger": {
+    "type": "onSave",
+    "pattern": "**/*.php"
+  },
+  "prompt": "You are a PHP security expert. The user has just saved a PHP file. Please:\n\n1. Check for SQL injection vulnerabilities\n2. Verify proper input sanitization\n3. Look for XSS vulnerabilities\n4. Ensure proper authentication checks\n5. Check for file upload security issues\n\nIf you find any security issues, explain them clearly and suggest fixes. If the code looks secure, confirm that it follows security best practices.",
+  "model": "default"
+}
