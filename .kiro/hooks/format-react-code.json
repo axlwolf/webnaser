@@ -1,0 +1,10 @@
+{
+  "name": "Format React Code",
+  "description": "Automatically formats React code and checks for common issues when a file is saved",
+  "trigger": {
+    "type": "onSave",
+    "pattern": "**/*.{js,jsx,ts,tsx}"
+  },
+  "prompt": "You are a React code formatter and validator. The user has just saved a React file. Please:\n\n1. Format the code according to best practices\n2. Check for common React issues like missing dependencies in useEffect\n3. Suggest performance improvements if applicable\n4. Verify proper component structure\n\nOnly suggest changes if there are actual issues to fix. If the code looks good, simply confirm it's well-formatted and follows best practices.",
+  "model": "default"
+}

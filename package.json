@@ -1,0 +1,42 @@
+{
+  "name": "grupo-naser-cms",
+  "version": "1.0.0",
+  "description": "React CMS for Grupo Naser funeral services website",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "cd src/frontend && npm run dev",
+    "build:frontend": "cd src/frontend && npm run build",
+    "test:frontend": "cd src/frontend && npm test",
+    "test:backend": "cd api && composer test",
+    "test:all": "npm run test:frontend && npm run test:backend",
+    "lint:frontend": "cd src/frontend && npm run lint",
+    "lint:backend": "cd api && composer cs",
+    "lint:all": "npm run lint:frontend && npm run lint:backend",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11"
+  },
+  "lint-staged": {
+    "src/frontend/src/**/*.{js,jsx,ts,tsx}": [
+      "cd src/frontend && npm run lint"
+    ],
+    "api/**/*.php": [
+      "cd api && composer cs"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/grupo-naser/cms.git"
+  },
+  "keywords": [
+    "cms",
+    "react",
+    "php",
+    "funeral-services",
+    "grupo-naser"
+  ],
+  "author": "Grupo Naser",
+  "license": "MIT"
+}
