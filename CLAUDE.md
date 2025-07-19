@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Grupo Naser is a React-based CMS for funeral services website, specifically designed for deployment on **GoDaddy shared hosting**. This project replaces the current static HTML website with a dynamic, manageable solution featuring a React frontend for public users and a React+PHP admin panel for content management.
 
+**🐳 Docker Environment**: Complete development environment with Docker Compose for consistent development between Claude (frontend) and Gemini (backend).
+
 ### Business Requirements
 
 - **Target Audience**: ISSSTE affiliates as primary audience
@@ -27,19 +29,81 @@ Grupo Naser is a React-based CMS for funeral services website, specifically desi
 
 ```
 web_naser_23/
-├── api/                    # PHP backend API
-├── src/admin/             # React admin panel
-├── src/frontend/          # React public frontend
-├── assets/                # Static assets (CSS, images, JS)
-├── tests/                 # Testing infrastructure
-├── database/              # Database migrations and seeds
-├── memory-bank/           # Project documentation and context
-└── [marketing pages].html # Static marketing pages
+├── 🐳 docker-compose.yml         # Desarrollo con Docker
+├── 🐳 docker-compose.prod.yml    # Producción con Docker
+├── 🐳 scripts/                   # Scripts de automatización
+├── api/                          # PHP backend API (Gemini)
+│   ├── 🐳 Dockerfile
+│   └── docker/                   # Configuraciones Docker
+├── src/
+│   ├── admin/                    # React admin panel
+│   ├── frontend/                 # React public frontend (Claude)
+│   │   ├── 🐳 Dockerfile
+│   │   └── nginx.conf
+│   ├── components/               # Componentes React compartidos ✅
+│   ├── constants/                # Textos en español ✅
+│   ├── styles/                   # Design tokens ✅
+│   └── utils/                    # Formatters mexicanos ✅
+├── database/                     # Migraciones MySQL ✅
+├── tests/                        # Testing infrastructure
+├── memory-bank/                  # Project documentation and context
+└── [marketing pages].html       # Static marketing pages
 ```
 
 ## Development Commands
 
-### Frontend (React Applications)
+### 🐳 Docker Commands (Recomendado)
+
+#### Inicio Rápido
+```bash
+# Configuración inicial (solo primera vez)
+cp .env.example .env
+
+# Iniciar entorno completo
+./scripts/dev.sh
+
+# URLs disponibles:
+# Frontend React: http://localhost:3000
+# Backend PHP API: http://localhost:8000  
+# Sitio completo: http://localhost
+# phpMyAdmin: http://localhost:8080
+```
+
+#### Comandos de Desarrollo Diarios
+```bash
+# Ejecutar tests completos
+./scripts/test.sh
+
+# Ver logs en tiempo real
+docker-compose logs -f
+
+# Reiniciar un servicio específico
+docker-compose restart frontend
+docker-compose restart backend
+
+# Parar todos los servicios
+docker-compose down
+```
+
+#### Comandos en Contenedores
+
+```bash
+# Frontend React (Claude)
+docker exec naser_frontend npm run test
+docker exec naser_frontend npm run lint
+docker exec naser_frontend npm run build
+
+# Backend PHP (coordinación con Gemini)
+docker exec naser_backend composer install # Importante después de clonar o cambiar dependencias
+docker exec naser_backend composer test
+docker exec naser_backend composer cs
+docker exec naser_backend php migrate.php
+
+# Base de datos
+docker exec naser_db mysql -u naser_user -p naser_cms
+```
+
+### Frontend (React Applications) - Comandos Locales
 
 #### Admin Panel (`src/admin/`)
 
@@ -94,7 +158,7 @@ composer test-coverage # Generate test coverage
 
 - **Language**: PHP 7.4+ (GoDaddy compatible)
 - **Architecture**: MVC with Repository pattern and Clean Architecture principles
-- **Database**: MySQL/MariaDB with PDO connections
+- **Database**: MySQL/MariaDB with PDO connections, **configured via environment variables in `.env`**
 - **Authentication**: JWT tokens with secure session management
 - **Security**: CSRF protection, password hashing, input sanitization
 - **Testing**: PHPUnit 9.5
@@ -169,10 +233,10 @@ tests/
 
 ### Configuration
 
-- `api/config.php` - PHP API configuration with GoDaddy compatibility
+- `api/config.php` - PHP API configuration, **updated to use environment variables from Docker**
 - `src/frontend/vite.config.js` - Frontend build configuration optimized for shared hosting
 - `api/phpunit.xml` - PHP testing configuration
-- `api/composer.json` - PHP dependencies and scripts
+- `api/composer.json` - PHP dependencies and scripts, **now includes `vlucas/phpdotenv` for environment variable loading**
 
 ### Project Specifications (.kiro/)
 

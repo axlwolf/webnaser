@@ -1,156 +1,111 @@
 <?php
-/**
- * Main entry point for the Grupo Naser CMS API
- * Handles all API requests and routes them to the appropriate controllers
- */
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use App\Core\Router;
+use App\Core\Request;
+use App\Core\Response;
+use App\Controllers\AuthController;
+use App\Services\AuthService;
+use App\Repositories\UserRepository;
+use App\Controllers\PageController;
+use App\Services\PageService;
+use App\Repositories\PageRepository;
+use App\Controllers\ServiceController;
+use App\Services\ServiceService;
+use App\Repositories\ServiceRepository;
+use App\Controllers\LocationController;
+use App\Services\LocationService;
+use App\Repositories\LocationRepository;
+use App\Controllers\ObituaryController;
+use App\Services\ObituaryService;
+use App\Repositories\ObituaryRepository;
+use App\Controllers\MediaController;
+use App\Services\MediaService;
+use App\Repositories\MediaRepository;
+
+// Define environment
+define('ENV', 'development');
 
 // Load configuration
-require_once 'config.php';
+require_once __DIR__ . '/config.php';
 
-// Set headers for JSON API
-header('Content-Type: application/json');
-
-// Handle CORS preflight requests
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    if (ENV === 'development') {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
-    }
-    exit(0);
-}
-
-// Parse the request URI
-$requestUri = $_SERVER['REQUEST_URI'];
-$basePath = API_BASE_PATH;
-
-// Remove the base path from the request URI
-if (strpos($requestUri, $basePath) === 0) {
-    $requestUri = substr($requestUri, strlen($basePath));
-}
-
-// Remove query string from the request URI
-$requestUri = strtok($requestUri, '?');
-
-// Split the URI into segments
-$segments = explode('/', trim($requestUri, '/'));
-
-// Get the resource and ID (if any)
-$resource = isset($segments[0]) ? $segments[0] : '';
-$id = isset($segments[1]) ? $segments[1] : null;
-$action = isset($segments[2]) ? $segments[2] : null;
-
-// Get the HTTP method
-$method = $_SERVER['REQUEST_METHOD'];
-
-// Get the request body for POST, PUT requests
-$requestBody = file_get_contents('php://input');
-$requestData = json_decode($requestBody, true);
-
-// Initialize response array
-$response = [
-    'success' => false,
-    'data' => null,
-    'error' => null
-];
-
+// Database connection
 try {
-    // Route the request to the appropriate controller
-    switch ($resource) {
-        case 'auth':
-            require_once 'controllers/AuthController.php';
-            $controller = new AuthController();
-            break;
-        case 'pages':
-            require_once 'controllers/PageController.php';
-            $controller = new PageController();
-            break;
-        case 'services':
-            require_once 'controllers/ServiceController.php';
-            $controller = new ServiceController();
-            break;
-        case 'locations':
-            require_once 'controllers/LocationController.php';
-            $controller = new LocationController();
-            break;
-        case 'media':
-            require_once 'controllers/MediaController.php';
-            $controller = new MediaController();
-            break;
-        case 'forms':
-            require_once 'controllers/FormController.php';
-            $controller = new FormController();
-            break;
-        default:
-            // If no resource is specified, return API information
-            if (empty($resource)) {
-                $response['success'] = true;
-                $response['data'] = [
-                    'name' => 'Grupo Naser CMS API',
-                    'version' => API_VERSION,
-                    'status' => 'running'
-                ];
-                echo json_encode($response);
-                exit;
-            }
-            
-            // Resource not found
-            http_response_code(404);
-            $response['error'] = [
-                'code' => 'RESOURCE_NOT_FOUND',
-                'message' => 'The requested resource does not exist'
-            ];
-            echo json_encode($response);
-            exit;
-    }
-    
-    // Handle the request based on the HTTP method
-    switch ($method) {
-        case 'GET':
-            if ($id) {
-                if ($action) {
-                    $result = $controller->custom($id, $action);
-                } else {
-                    $result = $controller->get($id);
-                }
-            } else {
-                $result = $controller->getAll();
-            }
-            break;
-        case 'POST':
-            $result = $controller->create($requestData);
-            break;
-        case 'PUT':
-            if (!$id) {
-                throw new Exception('ID is required for PUT requests');
-            }
-            $result = $controller->update($id, $requestData);
-            break;
-        case 'DELETE':
-            if (!$id) {
-                throw new Exception('ID is required for DELETE requests');
-            }
-            $result = $controller->delete($id);
-            break;
-        default:
-            throw new Exception('Method not allowed');
-    }
-    
-    // Set the response
-    $response['success'] = true;
-    $response['data'] = $result;
-    
-} catch (Exception $e) {
-    // Handle exceptions
-    http_response_code(500);
-    $response['error'] = [
-        'code' => 'SERVER_ERROR',
-        'message' => ENV === 'development' ? $e->getMessage() : 'An error occurred'
-    ];
-    
-    // Log the error
-    error_log($e->getMessage());
+    $pdo = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET, DB_USER, DB_PASS, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
+} catch (\PDOException $e) {
+    // In a real app, log this error and show a generic message
+    die("Database connection failed: " . $e->getMessage());
 }
 
-// Return the response as JSON
-echo json_encode($response);
+// Dependency Injection
+$userRepository = new UserRepository($pdo);
+$authService = new AuthService($userRepository);
+$authController = new AuthController($authService);
+
+$pageRepository = new PageRepository($pdo);
+$pageService = new PageService($pageRepository);
+$pageController = new PageController($pageService);
+
+$serviceRepository = new ServiceRepository($pdo);
+$serviceService = new ServiceService($serviceRepository);
+$serviceController = new ServiceController($serviceService);
+
+$locationRepository = new LocationRepository($pdo);
+$locationService = new LocationService($locationRepository);
+$locationController = new LocationController($locationService);
+
+$obituaryRepository = new ObituaryRepository($pdo);
+$obituaryService = new ObituaryService($obituaryRepository);
+$obituaryController = new ObituaryController($obituaryService);
+
+$mediaRepository = new MediaRepository($pdo);
+$mediaService = new MediaService($mediaRepository, UPLOAD_DIR, MAX_UPLOAD_SIZE, ALLOWED_EXTENSIONS);
+$mediaController = new MediaController($mediaService);
+
+// Routing
+$router = new Router();
+
+$router->add('POST', '/api/v1/auth/login', function(Request $request) use ($authController) {
+    return $authController->login($request);
+});
+
+// Page routes
+$router->add('GET', '/api/v1/pages', fn(Request $r) => $pageController->index($r));
+$router->add('POST', '/api/v1/pages', fn(Request $r) => $pageController->store($r));
+$router->add('GET', '/api/v1/pages/(\d+)', fn(Request $r, $id) => $pageController->show($r, $id));
+$router->add('PUT', '/api/v1/pages/(\d+)', fn(Request $r, $id) => $pageController->update($r, $id));
+$router->add('DELETE', '/api/v1/pages/(\d+)', fn(Request $r, $id) => $pageController->destroy($r, $id));
+
+// Service routes
+$router->add('GET', '/api/v1/services', fn(Request $r) => $serviceController->index($r));
+$router->add('POST', '/api/v1/services', fn(Request $r) => $serviceController->store($r));
+$router->add('GET', '/api/v1/services/(\d+)', fn(Request $r, $id) => $serviceController->show($r, $id));
+$router->add('PUT', '/api/v1/services/(\d+)', fn(Request $r, $id) => $serviceController->update($r, $id));
+$router->add('DELETE', '/api/v1/services/(\d+)', fn(Request $r, $id) => $serviceController->destroy($r, $id));
+
+// Location routes
+$router->add('GET', '/api/v1/locations', fn(Request $r) => $locationController->index($r));
+$router->add('POST', '/api/v1/locations', fn(Request $r) => $locationController->store($r));
+$router->add('GET', '/api/v1/locations/(\d+)', fn(Request $r, $id) => $locationController->show($r, $id));
+$router->add('PUT', '/api/v1/locations/(\d+)', fn(Request $r, $id) => $locationController->update($r, $id));
+$router->add('DELETE', '/api/v1/locations/(\d+)', fn(Request $r, $id) => $locationController->destroy($r, $id));
+
+// Obituary routes
+$router->add('GET', '/api/v1/obituaries', fn(Request $r) => $obituaryController->index($r));
+$router->add('POST', '/api/v1/obituaries', fn(Request $r) => $obituaryController->store($r));
+$router->add('GET', '/api/v1/obituaries/(\d+)', fn(Request $r, $id) => $obituaryController->show($r, $id));
+$router->add('PUT', '/api/v1/obituaries/(\d+)', fn(Request $r, $id) => $obituaryController->update($r, $id));
+$router->add('DELETE', '/api/v1/obituaries/(\d+)', fn(Request $r, $id) => $obituaryController->destroy($r, $id));
+
+// Media routes
+$router->add('GET', '/api/v1/media', fn(Request $r) => $mediaController->index($r));
+$router->add('POST', '/api/v1/media', fn(Request $r) => $mediaController->upload($r, $_FILES['file'])); // Pass $_FILES directly
+$router->add('GET', '/api/v1/media/(\d+)', fn(Request $r, $id) => $mediaController->show($r, $id));
+$router->add('DELETE', '/api/v1/media/(\d+)', fn(Request $r, $id) => $mediaController->destroy($r, $id));
+
+$router->dispatch();

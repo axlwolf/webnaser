@@ -8,15 +8,16 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src'),
-      '@components': resolve(__dirname, 'src/components'),
-      '@pages': resolve(__dirname, 'src/pages'),
-      '@hooks': resolve(__dirname, 'src/hooks'),
-      '@context': resolve(__dirname, 'src/context'),
-      '@services': resolve(__dirname, 'src/services'),
-      '@utils': resolve(__dirname, 'src/utils'),
-      '@styles': resolve(__dirname, 'src/styles'),
-      '@assets': resolve(__dirname, 'src/assets'),
+      '@': resolve(__dirname, '../'),
+      '@components': resolve(__dirname, '../components'),
+      '@pages': resolve(__dirname, '../pages'),
+      '@hooks': resolve(__dirname, '../hooks'),
+      '@context': resolve(__dirname, '../context'),
+      '@services': resolve(__dirname, '../services'),
+      '@utils': resolve(__dirname, '../utils'),
+      '@styles': resolve(__dirname, '../styles'),
+      '@assets': resolve(__dirname, '../assets'),
+      '@constants': resolve(__dirname, '../constants'),
     }
   },
   build: {

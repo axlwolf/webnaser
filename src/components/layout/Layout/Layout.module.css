@@ -1,0 +1,38 @@
+/* Layout Component Styles */
+
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  position: relative;
+}
+
+/* Ensure proper spacing when header is fixed */
+.layout:has(.header.fixed) .main {
+  padding-top: var(--header-height, 80px);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .layout * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .layout {
+    min-height: auto;
+  }
+  
+  .main {
+    padding-top: 0 !important;
+  }
+}

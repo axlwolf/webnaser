@@ -1,122 +1,244 @@
-# ⚰️ Grupo Naser - Servicios Funerarios y Previsión
+# ⚰️ Grupo Naser - React CMS para Servicios Funerarios
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT "MIT License")
 ![GitHub repo size](https://img.shields.io/github/repo-size/axlwolf/webnaser)
 [![Active](http://img.shields.io/badge/Status-Active-green.svg)](https://github.com/axlwolf/webnaser)
-[![Generic badge](https://img.shields.io/badge/lang-html%2Bcss%2Bjs-blue.svg)](https://developer.mozilla.org/en-US/docs/Web)
-[![Generic badge](https://img.shields.io/badge/framework-bootstrap%205-red.svg)](https://getbootstrap.com/)
-[![Generic badge](https://img.shields.io/badge/last%20updated-06--2025-blue)](https://github.com/axlwolf/webnaser)
+[![Generic badge](https://img.shields.io/badge/lang-React%2BPHP-blue.svg)](https://reactjs.org/)
+[![Generic badge](https://img.shields.io/badge/hosting-GoDaddy-orange.svg)](https://godaddy.com/)
+[![Generic badge](https://img.shields.io/badge/progress-35%25-yellow)](https://github.com/axlwolf/webnaser)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://docker.com/)
 
 ![Grupo Naser Logo](assets/images/logo_naser.png)
 
-Grupo Naser es un sitio web moderno dedicado a servicios funerarios y previsión funeraria, diseñado para ofrecer información clara, contacto inmediato y atención personalizada a través de chat en línea.
+Sistema de Gestión de Contenidos (CMS) basado en React para servicios funerarios de Grupo Naser, diseñado específicamente para despliegue en **GoDaddy shared hosting**. Incluye frontend React para visitantes y panel de administración React+PHP para gestión de contenido.
 
-## Características
+**🐳 Entorno Docker Completo**: Desarrollo y producción completamente dockerizados para máxima consistencia y colaboración entre equipos.
 
-- **Información de Servicios**: Presentación clara de los servicios funerarios y planes de previsión.
-- **Formulario de Contacto**: Formulario funcional con procesamiento PHP, validación y envío de correos.
-- **Contacto Inmediato**: Datos directos de correo, teléfono y WhatsApp (footer).
-- **Chat en Vivo**: Integración con Crisp Chat para atención al cliente.
-- **UI Moderna y Responsive**: Basado en Bootstrap 5, con componentes interactivos y diseño adaptable.
-- **Preloader y Animaciones**: Experiencia de usuario fluida al navegar por el sitio.
-- **SEO**: Sitemap generado automáticamente mediante script Python.
+**⚠️ IMPORTANTE**: Se identificó un gap significativo entre el diseño actual del sitio web y la implementación React. El frontend requiere rediseño completo para coincidir con la identidad visual real de Grupo Naser.
 
-## Cambios recientes (2025-06-22)
-- Refactorización de HTML para accesibilidad y formato.
-- Footer reestructurado y simplificado.
-- Eliminación de formularios y secciones comentadas innecesarias.
-- Mejor legibilidad en scripts y estilos.
-- Se formalizó el proceso de documentación: tras cada feature, se deben actualizar los archivos de `memory-bank/`, `memory-bank.md`, `README.md` y cerrar el commit.
-- [FIX] Corregido error en custom.js (protección contra offset undefined en función visible).
-- [FIX] Solucionado problema en index.html donde algunas imágenes no cargaban correctamente.
+## Características Planificadas
+
+- **Frontend React**: Interfaz pública moderna y responsive para visitantes
+- **Panel de Administración**: React+PHP para gestión de contenido por administradores
+- **API REST**: Backend PHP optimizado para GoDaddy shared hosting
+- **Base de Datos**: MySQL/MariaDB con arquitectura limpia
+- **Autenticación**: Sistema seguro con JWT tokens
+- **Gestión de Contenido**: Páginas dinámicas, servicios, ubicaciones y medios
+- **SEO Optimizado**: Meta tags dinámicos, sitemap y estructura semántica
+- **Responsive Design**: Mobile-first approach con CSS modules
+- **Testing**: Cobertura completa con Vitest (React) y PHPUnit (PHP)
+- **Docker**: Entorno completo con Docker Compose para desarrollo y producción
+- **Base de Datos**: MySQL 8.0 con migraciones y phpMyAdmin incluido
+
+## Estado del Proyecto
+
+**Progreso General: 30%** (Reevaluado: 18 de julio de 2025)  
+**Fase Actual**: Análisis completado, rediseño frontend requerido  
+**Orquestador**: Keiro (próximo a unirse)
+
+### ✅ Completado - Fase Inicial
+- **Configuración Base**: React frontend con Vite, PHP backend, estructura de directorios
+- **Infraestructura de Testing**: Vitest (React) y PHPUnit (PHP) configurados
+- **Herramientas de Desarrollo**: ESLint, PHP CodeSniffer, PHP Mess Detector
+- **🐳 Docker Completo**: Entorno de desarrollo y producción dockerizado
+- **🎨 Frontend Prototipo**: Header, Navigation, Logo y páginas básicas (requiere rediseño)
+- **🌐 Internacionalización**: Sistema completo en español mexicano
+- **📊 Base de Datos**: Esquema MySQL con migraciones iniciales
+- **🔧 Scripts de Automatización**: dev.sh, test.sh, deploy.sh
+- **📚 Documentación**: Docker, desarrollo y arquitectura completa
+- **🔍 Análisis de Diseño**: Identificación de gaps con sitio actual
+
+### 🔄 En Progreso - Fase de Rediseño
+- **🎨 Rediseño Frontend**: Alineación con identidad visual real de Grupo Naser
+- **API REST**: Endpoints y autenticación (pendiente para Gemini)
+- **Panel de Administración**: Gestión de contenido
+
+### ❌ Pendiente - Próximas Fases
+- **🎨 Frontend Redesign**: Implementar diseño real basado en análisis del sitio actual
+- **Backend PHP**: Implementación de API REST por Gemini (coordinado por Keiro)
+- **Integración API-Frontend**: Conexión completa
+- **Componentes React Avanzados**: Formularios, galerías, mapas con diseño real
+- **Migración de Datos**: Del sitio HTML actual al CMS
+- **Deploy en GoDaddy**: Configuración final de hosting
+
+### 🚨 Gap Crítico Identificado
+**Diseño Actual vs React Frontend**: El sitio web actual tiene una identidad visual específica (colores marrones/dorados, logo con símbolo solar, layout cinematográfico) que difiere significativamente del frontend React desarrollado. Se requiere rediseño completo antes de continuar.
 
 ## Arquitectura y Estructura
 
-El proyecto sigue una estructura clara y modular:
+### Arquitectura de Tres Capas
+
+- **Frontend Estático**: Páginas HTML/CSS/JS de marketing (nivel raíz)
+- **Frontend React**: Aplicación pública en `src/frontend/`
+- **Panel de Administración**: Aplicación React en `src/admin/`
+- **Backend API**: API PHP en `api/`
+
+### Estructura de Directorios
 
 ```
 web_naser_23/
-├── assets/
-│   ├── css/
-│   │   ├── fontawesome.css
-│   │   ├── owl.css
-│   │   └── styles.css
-│   └── images/
-│       └── logo_naser.png
-├── memory-bank/
-│   ├── activeContext.md
-│   ├── memory-bank.md
-│   ├── productContext.md
-│   ├── progress.md
-│   ├── projectbrief.md
-│   ├── ripperFive.md
-│   ├── systemPatterns.md
-│   ├── techContext.md
-├── vendor/
-│   └── bootstrap/
-│       ├── css/
-│       └── js/
-├── index.html
-├── generate_sitemap.py
-└── ...
+├── 🐳 docker-compose.yml         # Desarrollo con Docker
+├── 🐳 docker-compose.prod.yml    # Producción con Docker
+├── 🐳 DOCKER.md                  # Documentación completa Docker
+├── api/                          # PHP backend API
+│   ├── 🐳 Dockerfile
+│   ├── docker/                   # Configuraciones Docker
+│   ├── src/                      # Código fuente PHP
+│   └── composer.json             # Dependencias PHP
+├── src/
+│   ├── admin/                    # Panel de administración React
+│   ├── frontend/                 # Frontend público React
+│   │   ├── 🐳 Dockerfile
+│   │   └── nginx.conf            # Configuración Nginx
+│   ├── components/               # Componentes React compartidos
+│   ├── constants/                # Textos en español y configuración
+│   ├── styles/                   # Tokens de diseño y CSS global
+│   └── utils/                    # Formatters y validadores mexicanos
+├── 🐳 scripts/                   # Scripts de automatización
+│   ├── dev.sh                    # Iniciar desarrollo
+│   ├── test.sh                   # Ejecutar tests
+│   └── deploy.sh                 # Desplegar producción
+├── database/                     # Migraciones y seeds MySQL
+├── docker/                       # Configuraciones Docker globales
+├── tests/                        # Testing (PHPUnit + Vitest)
+├── memory-bank/                  # Documentación del proyecto
+├── .kiro/                        # Especificaciones técnicas
+└── [páginas].html               # Páginas de marketing estáticas
 ```
 
-- **HTML Principal**: `index.html` contiene la estructura y contenido principal del sitio.
-- **Estilos y Recursos**: Carpeta `assets/` para CSS y recursos gráficos.
-- **Bootstrap**: Framework para UI responsiva en `vendor/bootstrap/`.
-- **Scripts**: Integraciones y scripts personalizados en `assets/js/`.
-- **Documentación y Contexto**: Carpeta `memory-bank/` con documentación, contexto y bitácora de avances.
+### Componentes Clave
+
+- **🐳 Docker**: Entorno completo de desarrollo y producción
+- **Clean Architecture**: Separación clara entre dominio, aplicación e infraestructura
+- **Compatibilidad GoDaddy**: Optimizado para hosting compartido
+- **Testing**: Cobertura obligatoria del 80% (Vitest + PHPUnit)
+- **Responsive Design**: Mobile-first con CSS modules
+- **🌐 Español Mexicano**: Localización completa (es-MX) con formatters
 
 ## Tecnologías Utilizadas
 
-- **Framework:** Next.js 14+ (App Router), Lenguaje: TypeScript.
-- **UI:** Tailwind CSS + Shadcn/UI.
-- **Base de Datos:** Vercel Postgres (basado en Neon).
-- **ORM:** Drizzle ORM.
-- **Autenticación:** Clerk.
-- **Caché:** Vercel KV (basado en Redis).
-- **Generación de Contenido AI:** OpenAI (API gpt-4o), DeepSeek AI (deepseek-chat), Google AI (Gemini Flash/Pro).
-- **Despliegue:** Vercel.
+### Frontend
+- **Framework**: React 19.1.0 con Vite
+- **Routing**: React Router DOM v7.7.0
+- **Estilos**: CSS Modules con metodología BEM
+- **Testing**: Vitest con Testing Library
+- **Build**: Vite con configuración optimizada para GoDaddy
+
+### Backend
+- **Lenguaje**: PHP 7.4+ (compatible con GoDaddy)
+- **Arquitectura**: MVC con Repository pattern
+- **Base de Datos**: MySQL/MariaDB con PDO
+- **Autenticación**: JWT tokens
+- **Testing**: PHPUnit 9.5
+
+### Herramientas de Desarrollo
+- **🐳 Docker**: Docker Compose para desarrollo y producción
+- **Calidad de Código**: ESLint, PHP CodeSniffer, PHP Mess Detector
+- **Testing**: Vitest (frontend), PHPUnit (backend)
+- **Automatización**: Scripts bash para dev, test y deploy
+- **Base de Datos**: MySQL 8.0 + phpMyAdmin
+- **Hosting**: GoDaddy shared hosting
 
 ## Uso y Desarrollo
 
 ### Prerrequisitos
 
-- Node.js (v18+)
-- npm / yarn
+- **Docker Desktop** 4.0+ (requerido)
+- **Docker Compose** 2.0+
+- **Git** (para clonado del repositorio)
+- **4GB+ RAM** disponible para contenedores
 
-### Instalación y Ejecución
+### 🚀 Inicio Rápido con Docker
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/axlwolf/webnaser.git
-   ```
-2. Instala las dependencias:
-   ```bash
-   npm install
-   ```
-3. Ejecuta el entorno de desarrollo:
-   ```bash
-   npm run dev
-   ```
-4. Abre `http://localhost:3000` en tu navegador.
+```bash
+# 1. Clonar el repositorio
+git clone <repository-url>
+cd web_naser_23
 
-### Estructura de Archivos Clave
+# 2. Configuración inicial
+cp .env.example .env
 
-- `index.html`: Página principal del sitio.
-- `assets/css/styles.css`: Estilos personalizados.
-- `assets/images/logo_naser.png`: Logo institucional.
-- `vendor/bootstrap/`: Archivos de Bootstrap 5.
-- `assets/js/`: Scripts adicionales para interactividad.
-- `generate_sitemap.py`: Script para generar el sitemap.
-- `memory-bank/`: Documentación y bitácora del proyecto.
+# 3. Iniciar entorno completo
+./scripts/dev.sh
+```
+
+**¡Listo!** Después de ejecutar el script tendrás:
+- **Frontend React**: http://localhost:3000
+- **Backend PHP API**: http://localhost:8000  
+- **Sitio Completo**: http://localhost
+- **phpMyAdmin**: http://localhost:8080
+
+### 🔧 Comandos de Desarrollo
+
+```bash
+# Desarrollo
+./scripts/dev.sh        # Iniciar entorno completo
+./scripts/test.sh       # Ejecutar todos los tests
+./scripts/deploy.sh     # Desplegar a producción
+
+# Docker manual
+docker-compose up -d    # Iniciar servicios
+docker-compose logs -f  # Ver logs en tiempo real
+docker-compose down     # Parar servicios
+
+# Comandos en contenedores
+docker exec naser_frontend npm run test
+docker exec naser_backend composer test
+docker exec naser_backend php migrate.php
+```
+
+### 📊 Base de Datos
+
+**Credenciales de desarrollo:**
+- **Host**: localhost:3306
+- **Usuario**: naser_user  
+- **Contraseña**: naser_pass_2024
+- **Base de datos**: naser_cms
+
+Ver **`DOCKER.md`** para documentación completa.
+
+### 👥 Colaboración con Gemini
+
+Este proyecto está diseñado para colaboración entre **Claude (Frontend)** y **Gemini (Backend)**:
+
+- **Claude**: Responsable del frontend React y componentes
+- **Gemini**: Responsable del backend PHP y API REST
+- **Compartido**: Base de datos MySQL y documentación
+
+**Flujo de trabajo:**
+1. Ambos usan el mismo entorno Docker
+2. Claude desarrolla en `/src/frontend` y `/src/components`
+3. Gemini desarrolla en `/api` y `/database`
+4. Sincronización through Docker y base de datos compartida
 
 ## Documentación
 
-- `memory-bank/memory-bank.md`: Resumen de alcance, funcionalidades y contexto.
-- `memory-bank/ripperFive.md`: Protocolo estricto para IA en desarrollo y mantenimiento.
-- `memory-bank/progress.md`: Bitácora de avances y cambios relevantes.
-- `memory-bank/techContext.md`: Tecnologías y frameworks utilizados.
+### Documentación del Proyecto
+- **🐳 `DOCKER.md`**: Guía completa de Docker (desarrollo y producción)
+- **`CLAUDE.md`**: Guía para desarrollo con Claude Code
+- **`GEMINI.md`**: Guía para colaboración con Gemini
+- **`roadmap.md`**: Estado actual y próximos pasos del proyecto
+- **`memory-bank/ripperFive.md`**: Protocolo Ripper Five para desarrollo con IA
+
+### Especificaciones Técnicas
+- **`.kiro/specs/react-cms-godaddy/`**: Especificaciones detalladas del CMS
+- **`.kiro/steering/`**: Estándares de desarrollo y arquitectura
+
+### Contexto del Proyecto
+- **`memory-bank/memory-bank.md`**: Contexto y alcance del proyecto
+- **`memory-bank/activeContext.md`**: Contexto activo de desarrollo
+
+## Protocolo de Desarrollo
+
+Este proyecto sigue el **Protocolo Ripper Five Optimizado** para desarrollo asistido por IA:
+
+1. **RESEARCH**: Investigación y comprensión del código existente
+2. **INNOVATE**: Exploración de soluciones y enfoques
+3. **PLAN**: Creación de planes de implementación detallados
+4. **CODE**: Escritura de código siguiendo los planes
+5. **EXECUTE**: Testing y verificación de implementaciones
+
+Ver `memory-bank/ripperFive.md` para detalles completos.
 
 ## Licencia
 
