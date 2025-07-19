@@ -32,13 +32,3 @@ if (ob_get_level()) {
     ob_end_clean();
 }
 
-// Initialize test environment
-echo "Initializing test environment...\n";
-echo "Test root: " . TEST_ROOT . "\n";
-echo "Project root: " . PROJECT_ROOT . "\n";
-echo "API root: " . API_ROOT . "\n";
-echo "Environment: " . ($_ENV['APP_ENV'] ?? 'unknown') . "\n";
-echo "Database: " . ($_ENV['DB_CONNECTION'] ?? 'unknown') . "\n";
-echo "Timezone: " . date_default_timezone_get() . "\n";
-echo "PHP Version: " . PHP_VERSION . "\n";
-echo "PHPUnit ready!\n\n";

@@ -65,7 +65,11 @@ class DatabaseTest extends TestCase
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
         
         $expectedKeys = ['id', 'username', 'email', 'password_hash', 'role', 'created_at', 'updated_at'];
-        $this->assertJsonStructure($expectedKeys, $user);
+        
+        // Asegurarse de que todas las claves esperadas existen
+        foreach ($expectedKeys as $key) {
+            $this->assertArrayHasKey($key, $user, "La clave '$key' no existe en el usuario");
+        }
     }
 
     /**

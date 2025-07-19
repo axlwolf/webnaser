@@ -51,7 +51,15 @@ class ExampleTest extends TestCase
 
         $expectedKeys = ['id', 'name', 'email'];
         
-        $this->assertJsonStructure($expectedKeys, $testArray);
+        // Verificar que todas las claves esperadas existen
+        foreach ($expectedKeys as $key) {
+            $this->assertArrayHasKey($key, $testArray, "La clave '$key' no existe en el array");
+        }
+        
+        // Verificar los valores
+        $this->assertEquals(1, $testArray['id']);
+        $this->assertEquals('Test', $testArray['name']);
+        $this->assertEquals('test@example.com', $testArray['email']);
     }
 
     /**

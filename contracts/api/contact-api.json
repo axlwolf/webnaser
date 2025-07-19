@@ -1,0 +1,478 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Grupo Naser CMS API - Contact",
+    "version": "1.0.0",
+    "description": "API contract for contact forms and inquiries management"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Development server"
+    },
+    {
+      "url": "https://gruponaser.com/api/v1",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/contact": {
+      "post": {
+        "summary": "Submit contact form",
+        "operationId": "submitContact",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ContactSubmission" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact form submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 123 },
+                        "reference": { "type": "string", "example": "CONTACT-2025-000123" },
+                        "message": { "type": "string", "example": "Thank you for contacting us. We will respond within 24 hours." },
+                        "estimated_response": { "type": "string", "format": "date-time", "example": "2025-07-19T14:30:00Z" }
+                      }
+                    },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/ValidationError" },
+          "429": { "$ref": "#/components/responses/RateLimitError" }
+        }
+      }
+    },
+    "/contact/quote": {
+      "post": {
+        "summary": "Request service quote",
+        "operationId": "requestQuote",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/QuoteRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quote request submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 456 },
+                        "reference": { "type": "string", "example": "QUOTE-2025-000456" },
+                        "message": { "type": "string", "example": "Thank you for your quote request. Our team will contact you within 4 hours." },
+                        "estimated_response": { "type": "string", "format": "date-time", "example": "2025-07-18T18:30:00Z" }
+                      }
+                    },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/ValidationError" },
+          "429": { "$ref": "#/components/responses/RateLimitError" }
+        }
+      }
+    },
+    "/contact/emergency": {
+      "post": {
+        "summary": "Submit emergency contact",
+        "operationId": "submitEmergency",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EmergencyContact" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Emergency contact submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 789 },
+                        "reference": { "type": "string", "example": "EMERGENCY-2025-000789" },
+                        "message": { "type": "string", "example": "Emergency request received. Our team will contact you immediately." },
+                        "phone_contact": { "type": "string", "example": "55 5688 7866" },
+                        "whatsapp_contact": { "type": "string", "example": "https://wa.me/525556887866" }
+                      }
+                    },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/ValidationError" },
+          "429": { "$ref": "#/components/responses/RateLimitError" }
+        }
+      }
+    },
+    "/admin/contact": {
+      "get": {
+        "summary": "Get all contact submissions (Admin)",
+        "operationId": "getContactSubmissions",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1, "minimum": 1 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 20, "minimum": 1, "maximum": 100 }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": { 
+              "type": "string", 
+              "enum": ["general", "quote", "emergency"],
+              "example": "general"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { 
+              "type": "string", 
+              "enum": ["pending", "contacted", "resolved"],
+              "example": "pending"
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "schema": { "type": "string", "format": "date", "example": "2025-07-01" }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "schema": { "type": "string", "format": "date", "example": "2025-07-31" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of contact submissions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/ContactRecord" }
+                    },
+                    "pagination": { "$ref": "#/components/schemas/Pagination" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/admin/contact/{id}": {
+      "get": {
+        "summary": "Get contact submission details (Admin)",
+        "operationId": "getContactSubmission",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 123 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact submission details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "$ref": "#/components/schemas/ContactRecord" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "put": {
+        "summary": "Update contact submission status (Admin)",
+        "operationId": "updateContactStatus",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "example": 123 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": { 
+                    "type": "string", 
+                    "enum": ["pending", "contacted", "resolved"],
+                    "example": "contacted"
+                  },
+                  "notes": { "type": "string", "example": "Client contacted via phone", "maxLength": 1000 }
+                },
+                "required": ["status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contact status updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "$ref": "#/components/schemas/ContactRecord" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContactSubmission": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 2, "maxLength": 100, "example": "Juan Pérez" },
+          "email": { "type": "string", "format": "email", "maxLength": 255, "example": "juan.perez@email.com" },
+          "phone": { "type": "string", "minLength": 10, "maxLength": 15, "example": "5551234567" },
+          "message": { "type": "string", "minLength": 10, "maxLength": 1000, "example": "Me interesa conocer más sobre sus servicios..." },
+          "subject": { "type": "string", "maxLength": 255, "example": "Consulta sobre servicios" },
+          "preferred_contact": { 
+            "type": "string", 
+            "enum": ["email", "phone", "whatsapp"],
+            "example": "phone"
+          }
+        },
+        "required": ["name", "email", "phone", "message"]
+      },
+      "QuoteRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 2, "maxLength": 100, "example": "María González" },
+          "email": { "type": "string", "format": "email", "maxLength": 255, "example": "maria.gonzalez@email.com" },
+          "phone": { "type": "string", "minLength": 10, "maxLength": 15, "example": "5551234567" },
+          "service_id": { "type": "integer", "example": 1 },
+          "location_id": { "type": "integer", "example": 2 },
+          "message": { "type": "string", "maxLength": 1000, "example": "Necesito cotización para servicio funeral..." },
+          "budget_range": { 
+            "type": "string", 
+            "enum": ["0-10000", "10000-25000", "25000-50000", "50000+"],
+            "example": "10000-25000"
+          },
+          "urgency": { 
+            "type": "string", 
+            "enum": ["immediate", "within_week", "within_month", "planning"],
+            "example": "within_week"
+          }
+        },
+        "required": ["name", "email", "phone", "service_id"]
+      },
+      "EmergencyContact": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "minLength": 2, "maxLength": 100, "example": "Carlos Ruiz" },
+          "phone": { "type": "string", "minLength": 10, "maxLength": 15, "example": "5551234567" },
+          "location": { "type": "string", "maxLength": 255, "example": "Hospital ABC, Av. Principal 123" },
+          "situation": { "type": "string", "maxLength": 500, "example": "Necesito asistencia inmediata..." },
+          "contact_name": { "type": "string", "maxLength": 100, "example": "Dr. López" },
+          "preferred_location_id": { "type": "integer", "example": 1 }
+        },
+        "required": ["name", "phone", "location", "situation"]
+      },
+      "ContactRecord": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 123 },
+          "reference": { "type": "string", "example": "CONTACT-2025-000123" },
+          "type": { 
+            "type": "string", 
+            "enum": ["general", "quote", "emergency"],
+            "example": "general"
+          },
+          "name": { "type": "string", "example": "Juan Pérez" },
+          "email": { "type": "string", "format": "email", "example": "juan.perez@email.com" },
+          "phone": { "type": "string", "example": "5551234567" },
+          "message": { "type": "string", "example": "Me interesa conocer más sobre sus servicios..." },
+          "subject": { "type": "string", "example": "Consulta sobre servicios" },
+          "status": { 
+            "type": "string", 
+            "enum": ["pending", "contacted", "resolved"],
+            "example": "pending"
+          },
+          "service_id": { "type": "integer", "example": 1 },
+          "location_id": { "type": "integer", "example": 2 },
+          "notes": { "type": "string", "example": "Client contacted via phone" },
+          "created_at": { "type": "string", "format": "date-time", "example": "2025-07-18T10:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2025-07-18T10:00:00Z" }
+        },
+        "required": ["id", "reference", "type", "name", "phone", "status"]
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer", "example": 1 },
+          "per_page": { "type": "integer", "example": 20 },
+          "total": { "type": "integer", "example": 147 },
+          "total_pages": { "type": "integer", "example": 8 },
+          "has_next": { "type": "boolean", "example": true },
+          "has_previous": { "type": "boolean", "example": false }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time", "example": "2025-07-18T14:30:00Z" },
+          "version": { "type": "string", "example": "1.0.0" },
+          "request_id": { "type": "string", "example": "req_123456789" }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Unauthorized access",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "unauthorized" },
+                "message": { "type": "string", "example": "Token invalid or expired" },
+                "code": { "type": "integer", "example": 401 }
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "not_found" },
+                "message": { "type": "string", "example": "Contact submission not found" },
+                "code": { "type": "integer", "example": 404 }
+              }
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "validation_error" },
+                "message": { "type": "string", "example": "The given data was invalid" },
+                "violations": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["The email field is required"]
+                    },
+                    "phone": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["The phone field is required"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "RateLimitError": {
+        "description": "Rate limit exceeded",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "rate_limit_exceeded" },
+                "message": { "type": "string", "example": "Too many requests. Please try again later." },
+                "code": { "type": "integer", "example": 429 },
+                "retry_after": { "type": "integer", "example": 60 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

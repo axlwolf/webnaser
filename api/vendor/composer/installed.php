@@ -3,7 +3,7 @@
         'name' => 'grupo-naser/cms-api',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '42091dca39ec747d4f4d69e73a0a9591b7cbdbcc',
+        'reference' => '877520230b7f47ce5df21e2ba0261b4a46b36252',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -61,7 +61,7 @@
         'grupo-naser/cms-api' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '42091dca39ec747d4f4d69e73a0a9591b7cbdbcc',
+            'reference' => '877520230b7f47ce5df21e2ba0261b4a46b36252',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

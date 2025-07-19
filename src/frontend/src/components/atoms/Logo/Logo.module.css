@@ -1,0 +1,141 @@
+/* Logo Component - Grupo Naser Brand */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  text-decoration: none;
+  color: inherit;
+}
+
+.iconSymbol {
+  width: 48px;
+  height: 48px;
+  background: var(--color-primary);
+  color: var(--color-secondary);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: 24px;
+  box-shadow: 0 2px 8px rgba(82, 64, 48, 0.15);
+  transition: all var(--transition-fast);
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.primaryText {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1.2;
+}
+
+.taglineText {
+  font-family: var(--font-family-secondary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.3;
+}
+
+.compactText {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+/* Size variants */
+.sm .iconSymbol {
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+}
+
+.sm .primaryText {
+  font-size: var(--font-size-lg);
+}
+
+.sm .taglineText {
+  font-size: var(--font-size-xs);
+}
+
+.sm .compactText {
+  font-size: var(--font-size-md);
+}
+
+.lg .iconSymbol {
+  width: 64px;
+  height: 64px;
+  font-size: 32px;
+}
+
+.lg .primaryText {
+  font-size: var(--font-size-2xl);
+}
+
+.lg .taglineText {
+  font-size: var(--font-size-md);
+}
+
+.lg .compactText {
+  font-size: var(--font-size-xl);
+}
+
+/* Variant-specific styles */
+.icon {
+  gap: 0;
+}
+
+.compact {
+  gap: var(--spacing-2);
+}
+
+.full {
+  gap: var(--spacing-3);
+}
+
+/* Interactive states */
+.logo:hover .iconSymbol {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(82, 64, 48, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .logo {
+    gap: var(--spacing-2);
+  }
+  
+  .full .textContainer {
+    display: none;
+  }
+  
+  .full {
+    gap: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .compact .compactText {
+    display: none;
+  }
+  
+  .compact {
+    gap: 0;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .logo:hover .iconSymbol {
+    transform: none;
+  }
+}

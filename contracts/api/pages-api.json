@@ -1,0 +1,339 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Grupo Naser CMS API - Pages",
+    "version": "1.0.0",
+    "description": "API contract for dynamic pages management"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Development server"
+    },
+    {
+      "url": "https://gruponaser.com/api/v1",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/pages": {
+      "get": {
+        "summary": "Get all published pages",
+        "operationId": "getPages",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1, "minimum": 1 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10, "minimum": 1, "maximum": 100 }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": { "type": "string", "example": "nosotros" }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": { "type": "string", "enum": ["published", "draft"], "default": "published" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of pages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Page" }
+                    },
+                    "pagination": { "$ref": "#/components/schemas/Pagination" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" }
+        }
+      },
+      "post": {
+        "summary": "Create new page",
+        "operationId": "createPage",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PageInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Page created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "$ref": "#/components/schemas/Page" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/pages/{slug}": {
+      "get": {
+        "summary": "Get page by slug",
+        "operationId": "getPageBySlug",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "example": "nosotros" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Page details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "$ref": "#/components/schemas/Page" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "put": {
+        "summary": "Update page",
+        "operationId": "updatePage",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PageInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Page updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "$ref": "#/components/schemas/Page" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      },
+      "delete": {
+        "summary": "Delete page",
+        "operationId": "deletePage",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Page deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Page deleted successfully" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Page": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "title": { "type": "string", "example": "Nosotros - Grupo Naser" },
+          "slug": { "type": "string", "example": "nosotros" },
+          "content": { "type": "string", "example": "<p>Grupo Naser es una empresa...</p>" },
+          "excerpt": { "type": "string", "example": "Grupo Naser es una empresa líder en servicios funerarios" },
+          "meta_title": { "type": "string", "example": "Nosotros - Grupo Naser | Servicios Funerarios" },
+          "meta_description": { "type": "string", "example": "Conoce la historia y valores de Grupo Naser" },
+          "featured_image": { "type": "string", "example": "/uploads/pages/nosotros-hero.jpg" },
+          "status": { "type": "string", "enum": ["published", "draft"], "example": "published" },
+          "created_at": { "type": "string", "format": "date-time", "example": "2025-07-18T10:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2025-07-18T10:00:00Z" }
+        },
+        "required": ["id", "title", "slug", "content", "status"]
+      },
+      "PageInput": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "minLength": 1, "maxLength": 255 },
+          "slug": { "type": "string", "pattern": "^[a-z0-9-]+$", "maxLength": 255 },
+          "content": { "type": "string", "minLength": 1 },
+          "excerpt": { "type": "string", "maxLength": 500 },
+          "meta_title": { "type": "string", "maxLength": 255 },
+          "meta_description": { "type": "string", "maxLength": 500 },
+          "featured_image": { "type": "string", "format": "uri" },
+          "status": { "type": "string", "enum": ["published", "draft"], "default": "draft" }
+        },
+        "required": ["title", "slug", "content"]
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "current_page": { "type": "integer", "example": 1 },
+          "per_page": { "type": "integer", "example": 10 },
+          "total": { "type": "integer", "example": 25 },
+          "total_pages": { "type": "integer", "example": 3 },
+          "has_next": { "type": "boolean", "example": true },
+          "has_previous": { "type": "boolean", "example": false }
+        }
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time", "example": "2025-07-18T14:30:00Z" },
+          "version": { "type": "string", "example": "1.0.0" },
+          "request_id": { "type": "string", "example": "req_123456789" }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "bad_request" },
+                "message": { "type": "string", "example": "Invalid request parameters" },
+                "code": { "type": "integer", "example": 400 }
+              }
+            }
+          }
+        }
+      },
+      "Unauthorized": {
+        "description": "Unauthorized access",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "unauthorized" },
+                "message": { "type": "string", "example": "Token invalid or expired" },
+                "code": { "type": "integer", "example": 401 }
+              }
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Resource not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "not_found" },
+                "message": { "type": "string", "example": "Page not found" },
+                "code": { "type": "integer", "example": 404 }
+              }
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "validation_error" },
+                "message": { "type": "string", "example": "The given data was invalid" },
+                "violations": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["The title field is required"]
+                    },
+                    "slug": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["The slug format is invalid"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
