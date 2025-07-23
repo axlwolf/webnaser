@@ -43,10 +43,15 @@ class UserRepository implements UserRepositoryInterface {
     }
 
     private function mapToUser(array $data): User {
-        $user = new User($data['username'], $data['email'], $data['password_hash'], $data['role']);
-        $user->id = (int)$data['id'];
-        $user->created_at = $data['created_at'];
-        $user->updated_at = $data['updated_at'];
+        $user = new User(
+            (int)$data['id'],
+            $data['name'],
+            $data['email'],
+            $data['password_hash'],
+            $data['role']
+        );
+        $user->setCreatedAt(new \DateTime($data['created_at']));
+        $user->setUpdatedAt(new \DateTime($data['updated_at']));
         return $user;
     }
 }

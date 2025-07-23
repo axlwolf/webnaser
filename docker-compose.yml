@@ -1,7 +1,7 @@
 # Docker Compose - Desarrollo Grupo Naser CMS
 # Configuración para desarrollo local con hot reload
 
-version: '3.8'
+version: "3.8"
 
 services:
   # Base de datos MySQL
@@ -58,8 +58,12 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - ./api:/var/www/html
+      # Montar todo el proyecto para acceso a tests
+      - .:/var/www/project
+      # Mantener API en directorio de trabajo de Apache
+      
       - ./api/docker/php.ini:/usr/local/etc/php/conf.d/99-app.ini
+    working_dir: /var/www/project
     environment:
       DB_HOST: database
       DB_PORT: 3306

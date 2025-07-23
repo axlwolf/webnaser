@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Layout } from '../../components/layout/Layout/Layout';
 import { Home } from '../../pages/Home/Home';
 import { TEXTS } from '../../constants/texts';
+import { AuthProvider, ProtectedRoute } from './auth';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -18,9 +19,10 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <Layout>
-          <Routes>
+      <AuthProvider>
+        <Router>
+          <Layout>
+            <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/servicios" element={
               <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -52,6 +54,31 @@ function App() {
                 <p>Página en construcción...</p>
               </div>
             } />
+            
+            {/* Authentication Routes */}
+            <Route path="/login" element={
+              <div style={{ padding: '2rem', textAlign: 'center' }}>
+                <h1>Iniciar Sesión</h1>
+                <p>Formulario de login en desarrollo...</p>
+              </div>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <div style={{ padding: '2rem', textAlign: 'center' }}>
+                  <h1>Panel de Administración</h1>
+                  <p>Dashboard administrativo en desarrollo...</p>
+                </div>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/*" element={
+              <ProtectedRoute>
+                <div style={{ padding: '2rem', textAlign: 'center' }}>
+                  <h1>Área Administrativa</h1>
+                  <p>Sección administrativa protegida</p>
+                </div>
+              </ProtectedRoute>
+            } />
+            
             <Route path="/emergencia" element={
               <div style={{ padding: '2rem', textAlign: 'center', backgroundColor: '#fef2f2' }}>
                 <h1 style={{ color: '#dc2626' }}>{TEXTS.contact.emergency.title}</h1>
@@ -89,9 +116,10 @@ function App() {
                 </a>
               </div>
             } />
-          </Routes>
-        </Layout>
-      </Router>
+            </Routes>
+          </Layout>
+        </Router>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

@@ -26,7 +26,7 @@
     }
   },
   "scripts": {
-    "test": "phpunit",
+    "test": "cd /var/www/project && phpunit",
     "test-coverage": "phpunit --coverage-html ../tests/coverage",
     "cs": "phpcs",
     "cs-fix": "phpcbf",
