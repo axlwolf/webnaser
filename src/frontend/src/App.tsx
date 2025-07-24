@@ -5,6 +5,7 @@ import { Layout } from '../../components/layout/Layout/Layout';
 import { Home } from '../../pages/Home/Home';
 import { TEXTS } from '../../constants/texts';
 import { AuthProvider, ProtectedRoute } from './auth';
+import { LoginForm } from './auth/components/LoginForm';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -57,9 +58,15 @@ function App() {
             
             {/* Authentication Routes */}
             <Route path="/login" element={
-              <div style={{ padding: '2rem', textAlign: 'center' }}>
-                <h1>Iniciar Sesión</h1>
-                <p>Formulario de login en desarrollo...</p>
+              <div style={{ 
+                minHeight: '100vh', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                backgroundColor: '#f9fafb',
+                padding: '1rem' 
+              }}>
+                <LoginForm onSuccess={() => window.location.href = '/admin'} />
               </div>
             } />
             <Route path="/admin" element={

@@ -105,7 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const initializeAuth = () => {
       const token = TokenStorage.getToken();
-      const user = TokenStorage.getStoredUser();
+      const user = TokenStorage.getUser();
 
       if (token && user && !TokenStorage.isTokenExpired(token)) {
         dispatch({
