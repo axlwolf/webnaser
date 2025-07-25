@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Error Recovery",
+  "description": "Sistema de recuperación automática cuando ocurren errores inesperados en la aplicación",
+  "version": "1",
+  "when": {
+    "type": "error",
+    "patterns": [
+      "An unexpected error occurred, please retry",
+      "Application Error",
+      "System Failure"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Se ha detectado un error en la aplicación. Ejecuta el protocolo de recuperación:\n\n1. **Diagnóstico**: Verifica el estado del sistema, conectividad de base de datos y servicios\n2. **Logs**: Revisa los logs de error para identificar la causa raíz\n3. **Recuperación**: Intenta recuperar desde el último estado conocido bueno\n4. **Limpieza**: Limpia archivos temporales y cache si es necesario\n5. **Reinicio**: Reinicia servicios si es requerido\n6. **Validación**: Confirma que el sistema está operativo\n7. **Reanudar**: Continúa desde el último checkpoint\n\nRegistra todos los intentos de recuperación y notifica el resultado."
+  }
+}

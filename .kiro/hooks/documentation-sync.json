@@ -1,0 +1,42 @@
+{
+  "name": "Documentation Sync",
+  "description": "Automatically update documentation when source files change",
+  "trigger": {
+    "type": "file_change",
+    "patterns": [
+      "**/*.php",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.py",
+      "**/*.sql",
+      "api/**/*.php",
+      "src/**/*.ts",
+      "src/**/*.tsx",
+      "src/**/*.js",
+      "src/**/*.jsx",
+      "contracts/**/*.ts",
+      "database/migrations/*.sql",
+      "package.json",
+      "composer.json",
+      "docker-compose.yml",
+      "docker-compose.prod.yml"
+    ],
+    "exclude": [
+      "node_modules/**",
+      "vendor/**",
+      ".git/**",
+      "coverage/**",
+      "*.test.*",
+      "*.spec.*",
+      ".yoyo/**",
+      "logs/**"
+    ]
+  },
+  "action": {
+    "type": "agent_request",
+    "prompt": "Source files have been modified in this repository. Please review the changes and update the documentation accordingly. Focus on:\n\n1. Update the README.md if there are significant architectural changes, new features, or setup instructions that need modification\n2. If there's a /docs folder, update relevant documentation files there\n3. Update API documentation if backend endpoints have changed\n4. Update component documentation if React components have been modified\n5. Ensure all new features, configuration changes, or important code changes are properly documented\n\nPlease analyze the changed files and determine what documentation updates are needed, then make the appropriate changes to keep the documentation current and helpful for developers and users."
+  },
+  "enabled": true
+}

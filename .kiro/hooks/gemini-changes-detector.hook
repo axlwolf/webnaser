@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "name": "Gemini Changes Detector",
+  "description": "Detecta automáticamente cuando Gemini completa tareas backend y actualiza el sistema de seguimiento",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "api/models/**/*",
+      "api/repositories/**/*",
+      "api/services/**/*",
+      "api/controllers/**/*",
+      "api/middleware/**/*",
+      "tests/unit/backend/**/*",
+      "tests/integration/**/*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Se han detectado cambios en archivos backend PHP. Analiza los cambios para:\n\n1. **Detectar tareas completadas**: Verifica si se han implementado clases completas con sus tests correspondientes\n2. **Validar código PHP**: Confirma que sigue PSR-4, tiene namespaces correctos, DocBlocks y type hints\n3. **Ejecutar tests**: Corre PHPUnit automáticamente para validar la implementación\n4. **Verificar base de datos**: Si hay migraciones, ejecuta y valida cambios de esquema\n5. **Actualizar estado**: Si una tarea está completa, actualiza el estado del proyecto\n\nProporciona un resumen de los cambios detectados, resultados de tests y acciones recomendadas."
+  }
+}

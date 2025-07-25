@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Test Frontend on Save",
+  "description": "Ejecuta tests del frontend automáticamente cuando se guarda un archivo React",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/frontend/**/*.tsx",
+      "src/frontend/**/*.ts",
+      "src/frontend/**/*.jsx",
+      "src/frontend/**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Un archivo React del frontend ha sido guardado. Por favor:\n\n1. Si es un archivo de test (.test.tsx), ejecútalo usando: `cd src/frontend && npm test -- --testPathPattern=${fileName}`\n2. Si es un componente, verifica que tenga su test correspondiente\n3. Ejecuta el linter para verificar el estilo: `cd src/frontend && npm run lint`\n4. Si hay errores, analízalos y sugiere correcciones\n5. Reporta el estado usando: `node .kiro/specs/auth-integration/update-status.js update-progress claude \"frontend-tests\" \"Tests ejecutados automáticamente\"`\n\nSolo ejecuta los comandos si es necesario. Si el archivo guardado es menor, simplemente confirma que está bien formateado."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Docker Health Check",
+  "description": "Verifica el estado de los contenedores Docker cuando se modifica docker-compose.yml",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "docker-compose.yml",
+      "docker-compose.*.yml"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "El archivo docker-compose.yml ha sido modificado. Por favor:\n\n1. Verifica el estado de los contenedores: `docker-compose ps`\n2. Si hay contenedores detenidos, intenta reiniciarlos: `docker-compose up -d`\n3. Verifica que los servicios estén respondiendo:\n   - Frontend: `curl -s http://localhost:3000`\n   - Backend: `curl -s http://localhost:8000/api/v1/health`\n   - Base de datos: `docker exec naser_database mysqladmin ping`\n4. Reporta el estado usando: `node .kiro/specs/auth-integration/update-status.js update-progress warp \"docker-health\" \"Contenedores verificados automáticamente\"`\n\nSi todo está funcionando correctamente, confirma el estado de salud del sistema."
+  }
+}

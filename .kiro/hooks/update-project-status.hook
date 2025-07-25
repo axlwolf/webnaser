@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Update Project Status",
+  "description": "Actualiza el estado del proyecto cuando se completan tareas importantes",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.php",
+      "**/*.tsx",
+      "**/*.ts",
+      "**/*.jsx",
+      "**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Se ha guardado un archivo del proyecto. Por favor:\n\n1. Analiza si el archivo guardado indica la completitud de alguna tarea importante:\n   - LoginForm.tsx, LoginForm.test.tsx → Tarea de login completada\n   - UserRepository.php, UserRepositoryTest.php → Repositorio de usuarios completado\n   - JwtService.php, JwtServiceTest.php → Servicio JWT completado\n   - LogoutButton.tsx → Botón de logout completado\n\n2. Si detectas una tarea completada, actualiza el estado:\n   `node .kiro/specs/auth-integration/update-status.js complete-task [agente] \"[tarea]\" \"Completado automáticamente\"`\n\n3. Si no es una tarea importante, simplemente confirma que el archivo está bien guardado\n\n4. Proporciona un resumen del progreso actual del proyecto\n\nSolo actualiza el estado si realmente se ha completado una tarea significativa."
+  }
+}

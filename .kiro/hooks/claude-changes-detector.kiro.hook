@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "Claude Changes Detector",
+  "description": "Detecta automáticamente cuando Claude completa tareas frontend y actualiza el sistema de seguimiento",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/frontend/src/auth/**",
+      "src/frontend/src/components/**",
+      "src/frontend/src/pages/**",
+      "src/frontend/src/services/**",
+      "src/frontend/src/hooks/**",
+      "src/frontend/src/context/**"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analiza los cambios recientes en los archivos del frontend de React. Detecta qué tareas han sido completadas basándote en los archivos modificados. Valida la calidad del código implementado y actualiza el estado del proyecto. Proporciona un resumen de: 1) Tareas completadas, 2) Calidad del código, 3) Próximos pasos recomendados, 4) Estado actualizado del proyecto."
+  }
+}

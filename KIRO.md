@@ -45,17 +45,33 @@ Grupo Naser CMS es un sistema de gestión de contenidos basado en React para el 
   - Testing de API y modelos
   - Optimización de consultas y rendimiento
 
+#### Warp (DevOps)
+
+- **Rol Principal**: Especialista en DevOps y Automatización
+- **Responsabilidades**:
+  - Automatización de infraestructura y deployment
+  - Gestión de contenedores Docker y orquestación
+  - Monitoreo continuo de performance y salud del sistema
+  - Optimización de pipelines CI/CD
+  - Gestión de backups y recuperación de datos
+  - Preparación y optimización para deployment en GoDaddy
+  - Automatización de testing y quality assurance
+
 ### Flujo de Comunicación
 
 ```mermaid
 graph TD
     A[Kiro - Orquestador] -->|Define Contratos| B[Claude - Frontend]
     A -->|Define Contratos| C[Gemini - Backend]
+    A -->|Coordina DevOps| D[Warp - DevOps]
     B -->|Consume API| C
     C -->|Provee Datos| B
-    A -->|Supervisa Integración| D[Integración Frontend-Backend]
-    B -->|Implementa UI| D
-    C -->|Implementa API| D
+    D -->|Automatiza Deploy| B
+    D -->|Monitorea Infra| C
+    A -->|Supervisa Integración| E[Integración Completa]
+    B -->|Implementa UI| E
+    C -->|Implementa API| E
+    D -->|Automatiza Procesos| E
 ```
 
 ## Plan de Acción Inmediato (Próximos 7 días)

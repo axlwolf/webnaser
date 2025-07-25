@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Test Backend on Save",
+  "description": "Ejecuta tests del backend automáticamente cuando se guarda un archivo PHP",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "api/**/*.php"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A PHP file has been modified in the backend API. Please run the PHPUnit test suite to ensure all tests pass. Execute the tests using the appropriate PHPUnit configuration, report the results including any failures or errors, and update the test status. If tests fail, provide a summary of what needs to be fixed."
+  }
+}
