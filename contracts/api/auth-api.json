@@ -1,0 +1,220 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Grupo Naser CMS API - Authentication",
+    "version": "1.0.0",
+    "description": "API contract for authentication management"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Development server"
+    },
+    {
+      "url": "https://gruponaser.com/api/v1",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "summary": "Authenticate user and get JWT token",
+        "operationId": "login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "admin@naser.com.mx"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 6,
+                    "example": "admin123"
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                        },
+                        "user": { "$ref": "#/components/schemas/User" },
+                        "expires_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-07-19T14:30:00Z"
+                        }
+                      }
+                    },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string", "example": "unauthorized" },
+                    "message": { "type": "string", "example": "Invalid email or password" },
+                    "code": { "type": "integer", "example": 401 }
+                  }
+                }
+              }
+            }
+          },
+          "422": { "$ref": "#/components/responses/ValidationError" }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Logout user and invalidate token",
+        "operationId": "logout",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Logout successful" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Get current authenticated user",
+        "operationId": "getCurrentUser",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Current user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": { "$ref": "#/components/schemas/User" },
+                    "meta": { "$ref": "#/components/schemas/Meta" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "Administrador" },
+          "email": { "type": "string", "format": "email", "example": "admin@naser.com.mx" },
+          "role": { "type": "string", "enum": ["admin", "editor"], "example": "admin" },
+          "created_at": { "type": "string", "format": "date-time", "example": "2025-07-18T10:00:00Z" },
+          "updated_at": { "type": "string", "format": "date-time", "example": "2025-07-18T10:00:00Z" }
+        },
+        "required": ["id", "name", "email", "role"]
+      },
+      "Meta": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string", "format": "date-time", "example": "2025-07-18T14:30:00Z" },
+          "version": { "type": "string", "example": "1.0.0" },
+          "request_id": { "type": "string", "example": "req_123456789" }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Unauthorized access",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "unauthorized" },
+                "message": { "type": "string", "example": "Token invalid or expired" },
+                "code": { "type": "integer", "example": 401 }
+              }
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": { "type": "string", "example": "validation_error" },
+                "message": { "type": "string", "example": "The given data was invalid" },
+                "violations": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["The email field is required"]
+                    },
+                    "password": {
+                      "type": "array",
+                      "items": { "type": "string" },
+                      "example": ["The password must be at least 6 characters"]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

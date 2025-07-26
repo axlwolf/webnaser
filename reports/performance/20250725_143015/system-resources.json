@@ -1,0 +1,13 @@
+{
+    "timestamp": "2025-07-25T14:30:16-06:00",
+    "system": {
+        "cpu_usage": "14.30",
+        "memory_usage": "64",
+        "disk_usage": "64"
+    },
+    "processes": {
+        "node": 0,
+        "docker": 0
+    },
+    "recommendations": []
+}

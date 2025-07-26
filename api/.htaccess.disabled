@@ -1,0 +1,21 @@
+# Configuración mínima para evitar conflictos
+Options -Indexes
+
+# Solo aplicar reglas si mod_rewrite está disponible
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # No procesar archivos que ya existen
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # Todo lo demás va a index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Configuración PHP básica
+<IfModule mod_php.c>
+    php_flag display_errors Off
+    php_value memory_limit 256M
+</IfModule>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<ruleset name="Grupo Naser CMS Coding Standard">
+    <description>Coding standard for Grupo Naser CMS PHP code</description>
+
+    <!-- Display progress -->
+    <arg value="p"/>
+    <!-- Use colors in output -->
+    <arg name="colors"/>
+    <!-- Show sniff codes in all reports -->
+    <arg value="s"/>
+
+    <!-- Use PSR-12 as a base -->
+    <rule ref="PSR12"/>
+
+    <!-- Paths to check -->
+    <file>controllers</file>
+    <file>models</file>
+    <file>services</file>
+    <file>repositories</file>
+    <file>middleware</file>
+    <file>utils</file>
+    <file>index.php</file>
+    <file>config.php</file>
+
+    <!-- Exclude vendor directory -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+
+    <!-- Specific rules -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="120"/>
+        </properties>
+    </rule>
+</ruleset>

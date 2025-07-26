@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Project Status Summary",
+  "description": "Genera un resumen completo del estado actual del proyecto Grupo Naser CMS",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      ".kiro/specs/auth-integration/status.json",
+      "STATUS-SUMMARY.md",
+      "memory-bank/progress.md",
+      "docker-compose.yml",
+      "package.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Por favor genera un resumen completo del estado actual del proyecto Grupo Naser CMS:\n1. **Estado de Tareas**: Lee el archivo .kiro/specs/auth-integration/status.json para obtener el progreso actual\n2. **Estado Técnico**: Verifica contenedores Docker, tests, frontend\n3. **Archivos Importantes**: Lista archivos principales creados recientemente\n4. **Recomendaciones**: Sugiere próximas acciones prioritarias\n5. **Métricas**: Porcentaje de progreso general, tiempo estimado\nProporciona un resumen ejecutivo claro y accionable."
+  }
+}

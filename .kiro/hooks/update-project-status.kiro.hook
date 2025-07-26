@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Update Project Status",
+  "description": "Actualiza el estado del proyecto cuando se completan tareas importantes",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.php",
+      "**/*.tsx",
+      "**/*.ts",
+      "**/*.jsx",
+      "**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Se ha guardado un archivo del proyecto. Por favor:\n1. Analiza si el archivo guardado indica la completitud de alguna tarea importante\n2. Si detectas una tarea completada, actualiza el estado usando: node .kiro/specs/auth-integration/update-status.js complete-task [agente] \"[tarea]\" \"Completado automáticamente\"\n3. Si no es una tarea importante, simplemente confirma que el archivo está bien guardado\n4. Proporciona un resumen del progreso actual del proyecto\nSolo actualiza el estado si realmente se ha completado una tarea significativa."
+  }
+}
