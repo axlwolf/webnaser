@@ -5,13 +5,25 @@
 
 /* Main form container */
 .loginForm {
-  max-width: 400px;
+  max-width: 450px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 2.5rem;
   background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e5e7eb;
+  border-radius: 0;
+  box-shadow: 0 10px 30px rgba(82, 64, 48, 0.2);
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+}
+
+.loginForm::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #524030 0%, #cfbfaa 100%);
 }
 
 /* Header section */
@@ -21,18 +33,21 @@
 }
 
 .title {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin: 0 0 0.5rem 0;
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: #524030;
+  margin: 0 0 0.75rem 0;
   line-height: 1.2;
+  font-family: 'Poppins', sans-serif;
+  letter-spacing: -0.025em;
 }
 
 .subtitle {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 1rem;
+  color: #666666;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
+  font-weight: 400;
 }
 
 /* Form groups */
@@ -126,25 +141,30 @@
 /* Submit button */
 .submitButton {
   width: 100%;
-  padding: 0.875rem 1rem;
-  background-color: #d4af37; /* Grupo Naser gold */
+  padding: 1rem 2rem;
+  background-color: #524030;
   color: #ffffff;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
+  border-radius: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px; /* Touch-friendly */
+  min-height: 56px;
   line-height: 1.4;
 }
 
 .submitButton:hover:not(:disabled) {
-  background-color: #b8941f;
+  background-color: #cfbfaa;
+  color: #524030;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(82, 64, 48, 0.3);
 }
 
 .submitButton:active:not(:disabled) {

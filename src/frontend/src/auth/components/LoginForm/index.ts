@@ -3,6 +3,4 @@
  */
 
 export { LoginForm } from './LoginForm';
-
-// Re-export for convenience
-export default LoginForm;
+export { LoginForm as default } from './LoginForm';

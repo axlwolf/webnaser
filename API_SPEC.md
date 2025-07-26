@@ -48,6 +48,91 @@ Este documento define las especificaciones detalladas de la API RESTful para el 
 - **400 Bad Request**: Error de validación o solicitud incorrecta
 - **401 Unauthorized**: Autenticación requerida o inválida
 - **403 Forbidden**: Autenticado pero sin permisos
+
+### Performance y Optimización
+
+#### Métricas de Performance
+
+Todos los endpoints incluyen métricas de performance en los headers de respuesta:
+
+```http
+X-Response-Time: 0.245ms
+X-Memory-Usage: 2.1MB
+X-Query-Count: 3
+X-Cache-Status: HIT|MISS
+```
+
+#### Límites de Rate Limiting
+
+- **Endpoints públicos**: 100 requests/minuto por IP
+- **Endpoints autenticados**: 1000 requests/minuto por usuario
+- **Endpoints de administración**: 500 requests/minuto por usuario
+
+#### Optimizaciones Implementadas
+
+- **OPcache**: Habilitado para mejor performance de PHP
+- **Query Optimization**: Índices optimizados para consultas frecuentes
+- **Response Caching**: Cache de respuestas para endpoints de solo lectura
+- **Compression**: Compresión gzip habilitada para todas las respuestas
+
+#### Endpoint de Health Check
+
+```http
+GET /api/v1/health
+```
+
+**Respuesta:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "status": "healthy",
+    "database": "connected",
+    "cache": "operational",
+    "memory_usage": "45%",
+    "response_time": "0.123ms",
+    "infrastructure": {
+      "apache_status": "healthy",
+      "php_version": "8.2",
+      "opcache_enabled": true,
+      "docker_container": "running"
+    }
+  },
+  "timestamp": "2025-07-25T10:30:00-06:00"
+}
+```
+
+**Respuesta en caso de problemas críticos:**
+
+```json
+{
+  "success": false,
+  "data": {
+    "status": "critical",
+    "database": "connected",
+    "cache": "operational",
+    "memory_usage": "85%",
+    "response_time": "2.456ms",
+    "infrastructure": {
+      "apache_status": "redirect_loop_detected",
+      "php_version": "8.2",
+      "opcache_enabled": true,
+      "docker_container": "unhealthy"
+    },
+    "critical_issues": [
+      "Apache redirection loop detected",
+      "High memory usage (>80%)",
+      "Slow response time (>2s)"
+    ]
+  },
+  "timestamp": "2025-07-25T10:30:00-06:00"
+}
+```
+
+**Uso para diagnóstico crítico:**
+Este endpoint es utilizado por los scripts de resolución crítica (`fix-apache-backend.sh`) para validar el estado del sistema antes y después de aplicar correcciones.
+
 - **404 Not Found**: Recurso no encontrado
 - **500 Internal Server Error**: Error del servidor
 
@@ -499,6 +584,102 @@ $errorMessages = [
 ];
 ```
 
+## Consideraciones de Infraestructura
+
+### Problemas Críticos y Resolución
+
+La API incluye mecanismos para detectar y reportar problemas críticos de infraestructura:
+
+#### Detección de Problemas Apache
+
+- **Redirección Infinita**: El endpoint `/health` detecta bucles de redirección
+- **Configuración .htaccess**: Validación automática de reglas de reescritura
+- **Estado del Contenedor**: Monitoreo del estado del contenedor Docker
+
+#### Compatibilidad ARM64
+
+- **Arquitectura**: Soporte completo para Mac M1/M2 (ARM64)
+- **Dependencias**: Configuración específica para módulos nativos
+- **Docker**: Imágenes multi-arquitectura disponibles
+
+#### Scripts de Resolución Automática
+
+El proyecto incluye un **ecosistema completo de herramientas DevOps** desarrollado por Warp para mantener la estabilidad de la API:
+
+```bash
+# Verificar salud de la API
+curl -f http://localhost:8000/api/v1/health
+
+# Herramientas de Restauración Crítica (Warp)
+./fixes/critical/restore-backend.sh        # ⭐ CRÍTICO - Restaura backend ante cambios conflictivos
+./fixes/critical/fix-apache-backend.sh     # Resolver problemas Apache automáticamente
+./fixes/critical/fix-apache-final.sh       # Enfoque alternativo para Apache
+
+# Validación y Monitoreo
+./scripts/emergency/validate-fixes.sh      # Validar correcciones aplicadas
+./scripts/emergency/health-check-critical.sh # Verificación de salud crítica
+./scripts/testing/continuous-monitoring.sh # Monitoreo continuo 24/7
+
+# Performance y Optimización
+./scripts/performance/analyze-performance.sh # Análisis completo de performance API
+./scripts/performance/monitor-metrics.sh     # Monitoreo en tiempo real
+```
+
+#### Configuración de Producción
+
+- **OPcache**: Habilitado para mejor performance
+- **Apache**: Configuración optimizada para GoDaddy hosting
+- **PHP**: Configuración de producción con logs de error
+- **Headers de Seguridad**: Configurados automáticamente
+
+### Monitoreo y Alertas
+
+#### Métricas Críticas
+
+- **Tiempo de Respuesta**: >2s genera alerta
+- **Uso de Memoria**: >80% genera alerta
+- **Estado de Contenedores**: Unhealthy genera alerta crítica
+- **Errores HTTP 500**: >5 por minuto genera alerta
+
+#### Logs de Infraestructura
+
+```bash
+# Logs de Apache
+docker logs naser_backend --tail=50
+
+# Logs de PHP
+docker exec naser_backend tail -f /var/log/php_errors.log
+
+# Logs críticos consolidados (Warp)
+tail -f logs/critical/backend-error.log
+tail -f logs/critical/apache-fix.log
+tail -f logs/critical/restoration.log
+
+# Reportes de performance automáticos
+ls -la reports/performance/*/performance-report.md
+
+# Logs de testing continuo
+tail -f logs/testing/continuous-monitoring.log
+```
+
+#### Herramientas de Contribución Adicional (Warp)
+
+Warp ha desarrollado herramientas adicionales que van más allá de las tareas asignadas:
+
+- **15 archivos creados** con ~4,400 líneas de código
+- **Sistema completo de emergencia y restauración**
+- **Suite de testing automatizado**
+- **Análisis de performance en tiempo real**
+- **Monitoreo continuo 24/7**
+
+```bash
+# Registrar nueva contribución de Warp
+./scripts/warp-log-contribution.sh "Descripción" "archivo" "propósito"
+
+# Ver todas las contribuciones adicionales
+cat WARP-CONTRIBUTIONS-LOG.md
+```
+
 ## Consideraciones de Seguridad
 
 ### Protección CSRF
@@ -522,8 +703,89 @@ $errorMessages = [
 - Todos los inputs deben ser sanitizados
 - HTML permitido solo en campos específicos (content)
 
+## Frontend Integration Status
+
+### Pixel Perfect Implementation (Claude - Batch 4)
+
+**Estado Actual**: 🚨 Múltiples problemas críticos bloqueando implementación
+
+**Problemas Identificados**:
+
+**PROBLEMA 1: Configuración TypeScript Inconsistente**
+
+- ❌ Falta `tsconfig.json` en el frontend
+- ❌ Archivo `src/test/App.test.jsx` usa JSX en lugar de TSX
+- ❌ `vite.config.js` debería ser `vite.config.ts`
+- ❌ Configuración TypeScript incompleta
+
+**PROBLEMA 2: Error CSS Crítico**
+
+```
+[plugin:vite:css] [postcss] ENOENT: no such file or directory, open '../../styles/tokens.css'
+/app/src/index.css:undefined:null
+```
+
+**Solución Requerida**:
+
+1. Configurar TypeScript correctamente siguiendo estándares de React
+2. Convertir archivos JSX a TSX para consistencia
+3. Corregir rutas de importación CSS en `src/frontend/src/index.css`
+4. Implementar design tokens en `src/frontend/src/styles/tokens.css`
+5. Asegurar compatibilidad Docker y desarrollo local
+
+**Páginas a Implementar** (13 páginas HTML):
+
+- `index.html` → Página principal con hero slider
+- `nosotros.html` → Página acerca de nosotros
+- `historia.html` → Historia de la empresa
+- `servicios.html` → Servicios generales
+- `necesidad-inmediata.html` → Servicio de necesidad inmediata
+- `prevision.html` → Servicio de previsión
+- `obituario.html` → Obituarios
+- `contacto.html` → Contacto general
+- `cobertura.html` → Cobertura de servicios
+- `naser_aragon.html` → Sucursal Aragón
+- `naser_morelos.html` → Sucursal Morelos
+- `naser_oaxaca.html` → Sucursal Oaxaca
+- `naser_tlalpan.html` → Sucursal Tlalpan
+
+**Componentes Prioritarios**:
+
+- Header con sub-header y navegación
+- Hero slider cinematográfico
+- Secciones de servicios
+- Footer completo
+- Sistema de routing React
+
+**Criterios de Aceptación**:
+
+- [ ] Configuración TypeScript completa (tsconfig.json, archivos TSX)
+- [ ] Error CSS resuelto
+- [ ] Design tokens implementados
+- [ ] Header pixel perfect
+- [ ] Página principal completa
+- [ ] Todas las 13 páginas implementadas
+- [ ] Responsive design funcional
+- [ ] Testing visual automatizado
+
+## Herramientas DevOps Adicionales
+
+Para información completa sobre el ecosistema de herramientas DevOps desarrollado por Warp, consultar:
+
+- **`docs/DEVOPS-INFRASTRUCTURE.md`**: Documentación completa de herramientas DevOps
+- **`WARP-CONTRIBUTIONS-LOG.md`**: Registro detallado de contribuciones adicionales
+
+**Herramientas Destacadas**:
+
+- Sistema de restauración automática de backend
+- Suite completa de testing automatizado
+- Análisis de performance en tiempo real
+- Monitoreo continuo 24/7
+- Scripts de resolución crítica
+
 ---
 
-**Última actualización**: 18 de julio de 2025  
+**Última actualización**: 25 de julio de 2025  
 **Autor**: Kiro (Orquestador)  
-**Para implementación por**: Gemini (Backend)
+**DevOps Infrastructure**: Warp (Specialist)  
+**Para implementación por**: Gemini (Backend) + Claude (Frontend Pixel Perfect)

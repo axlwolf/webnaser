@@ -1,0 +1,260 @@
+name: CI - Testing Suite
+
+on:
+  push:
+    branches: [main, feature/auth-integration]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    name: Backend PHP Tests
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: naser_cms_test
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          extensions: pdo, pdo_mysql, mbstring, zip, gd
+          coverage: xdebug
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: api/vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('api/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Backend Dependencies
+        run: |
+          cd api
+          composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Setup test database
+        run: |
+          mysql -h 127.0.0.1 -u root -ptest_password -e "CREATE DATABASE IF NOT EXISTS naser_cms_test;"
+          mysql -h 127.0.0.1 -u root -ptest_password -e "GRANT ALL PRIVILEGES ON naser_cms_test.* TO 'test_user'@'%';"
+
+      - name: Run Backend Tests
+        run: |
+          cd api
+          ./vendor/bin/phpunit --configuration phpunit.xml --coverage-clover coverage.xml --testdox
+
+      - name: Upload Backend Coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./api/coverage.xml
+          flags: backend
+          name: backend-coverage
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: backend-test-results
+          path: |
+            api/coverage.xml
+            api/phpunit.xml
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+    name: Frontend React Tests
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: src/frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd src/frontend
+          npm ci
+
+      - name: Run Frontend Linting
+        run: |
+          cd src/frontend
+          npm run lint || echo "Linting completed with warnings"
+
+      - name: Run Frontend Tests
+        run: |
+          cd src/frontend
+          npm test -- --coverage --watchAll=false --testResultsProcessor=jest-junit
+
+      - name: Upload Frontend Coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./src/frontend/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+
+      - name: Archive test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: frontend-test-results
+          path: |
+            src/frontend/coverage/
+            src/frontend/junit.xml
+
+  integration-tests:
+    runs-on: ubuntu-latest
+    name: Integration Tests
+    needs: [backend-tests, frontend-tests]
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: naser_cms_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and start services
+        run: |
+          # Crear archivo .env para testing
+          cp .env.example .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=naser_cms_test" >> .env
+          echo "DB_USERNAME=root" >> .env
+          echo "DB_PASSWORD=test_password" >> .env
+
+          # Iniciar servicios con Docker Compose
+          docker-compose up -d --build
+
+          # Esperar a que los servicios estén listos
+          sleep 30
+
+      - name: Wait for services to be ready
+        run: |
+          # Esperar a que el backend esté listo
+          timeout 60 bash -c 'until curl -f http://localhost:8000; do sleep 2; done' || echo "Backend timeout"
+
+          # Esperar a que el frontend esté listo
+          timeout 60 bash -c 'until curl -f http://localhost:3000; do sleep 2; done' || echo "Frontend timeout"
+
+      - name: Run Integration Tests
+        run: |
+          chmod +x scripts/testing/test-integration.sh
+          ./scripts/testing/test-integration.sh
+
+      - name: Collect Docker logs
+        if: failure()
+        run: |
+          echo "=== Docker Compose Services ==="
+          docker-compose ps
+          echo "=== Backend Logs ==="
+          docker-compose logs backend || echo "No backend logs"
+          echo "=== Frontend Logs ==="
+          docker-compose logs frontend || echo "No frontend logs"
+          echo "=== Database Logs ==="
+          docker-compose logs database || echo "No database logs"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker-compose down -v
+          docker system prune -f
+
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scan
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
+
+  notify-results:
+    runs-on: ubuntu-latest
+    name: Notify Results
+    needs: [backend-tests, frontend-tests, integration-tests, security-scan]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine overall status
+        id: status
+        run: |
+          if [[ "${{ needs.backend-tests.result }}" == "success" && 
+                "${{ needs.frontend-tests.result }}" == "success" && 
+                "${{ needs.integration-tests.result }}" == "success" ]]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=🎉 All tests passed successfully!" >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=❌ Some tests failed. Check the logs for details." >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create status badge
+        run: |
+          if [[ "${{ steps.status.outputs.status }}" == "success" ]]; then
+            echo "![Tests](https://img.shields.io/badge/tests-passing-brightgreen)" > test-status.md
+          else
+            echo "![Tests](https://img.shields.io/badge/tests-failing-red)" > test-status.md
+          fi
+
+      - name: Display results
+        run: |
+          echo "## 🧪 Test Results Summary"
+          echo ""
+          echo "| Component | Status |"
+          echo "|-----------|--------|"
+          echo "| Backend PHP | ${{ needs.backend-tests.result == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+          echo "| Frontend React | ${{ needs.frontend-tests.result == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+          echo "| Integration | ${{ needs.integration-tests.result == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+          echo "| Security Scan | ${{ needs.security-scan.result == 'success' && '✅ PASS' || '❌ FAIL' }} |"
+          echo ""
+          echo "${{ steps.status.outputs.message }}"
+
+      - name: Archive test summary
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-summary
+          path: test-status.md

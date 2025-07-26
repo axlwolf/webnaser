@@ -1,0 +1,180 @@
+# Configuración optimizada para GoDaddy Hosting - Grupo Naser CMS
+# Optimizado por Warp DevOps
+
+# Versión PHP recomendada
+# php_value php_version 8.2
+
+# ========================================
+# SEGURIDAD
+# ========================================
+
+# Deshabilitar listado de directorios
+Options -Indexes
+
+# Prevenir acceso a archivos sensibles
+<FilesMatch "^(\.htaccess|\.gitignore|composer\.json|composer\.lock|phpunit\.xml|README\.md|\.env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Proteger archivos de configuración
+<FilesMatch "\.(ini|log|sh|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Headers de seguridad
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header unset X-Powered-By
+    Header unset Server
+</IfModule>
+
+# ========================================
+# PERFORMANCE
+# ========================================
+
+# Compresión GZIP
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/json application/xml application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject application/x-font-ttf
+    AddOutputFilterByType DEFLATE font/opentype image/svg+xml image/x-icon
+</IfModule>
+
+# Cache del navegador
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Imágenes
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    
+    # Video
+    ExpiresByType video/mp4 "access plus 1 year"
+    ExpiresByType video/mpeg "access plus 1 year"
+    
+    # CSS, JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    
+    # Otros
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+</IfModule>
+
+# ETags
+<IfModule mod_headers.c>
+    Header unset ETag
+</IfModule>
+FileETag None
+
+# ========================================
+# REWRITE RULES
+# ========================================
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Forzar HTTPS (descomentar en producción)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+    
+    # Redirigir www a no-www (o viceversa según preferencia)
+    # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    # RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+    
+    # Prevenir hotlinking de imágenes
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?naser\.com\.mx [NC]
+    RewriteRule \.(jpg|jpeg|png|gif|webp)$ - [F,NC,L]
+    
+    # API routing
+    RewriteCond %{REQUEST_URI} ^/api/
+    RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+    
+    # Frontend SPA routing
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !^/api/
+    RewriteRule ^(.*)$ index.html [QSA,L]
+</IfModule>
+
+# ========================================
+# PHP CONFIGURACIÓN
+# ========================================
+
+<IfModule mod_php7.c>
+    # Límites de memoria y ejecución
+    php_value memory_limit 256M
+    php_value max_execution_time 60
+    php_value max_input_time 60
+    php_value post_max_size 10M
+    php_value upload_max_filesize 10M
+    
+    # Manejo de errores (producción)
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_value error_log /home/[usuario]/public_html/error_log
+    
+    # Seguridad
+    php_flag register_globals Off
+    php_flag magic_quotes_gpc Off
+    php_flag allow_url_fopen Off
+    php_flag allow_url_include Off
+    
+    # Zona horaria
+    php_value date.timezone "America/Mexico_City"
+</IfModule>
+
+# ========================================
+# OPTIMIZACIONES ADICIONALES
+# ========================================
+
+# Keep-Alive
+<IfModule mod_headers.c>
+    Header set Connection keep-alive
+</IfModule>
+
+# Deshabilitar firma del servidor
+ServerSignature Off
+
+# Charset UTF-8
+AddDefaultCharset utf-8
+
+# Tipos MIME adicionales
+<IfModule mod_mime.c>
+    AddType application/font-woff .woff
+    AddType application/font-woff2 .woff2
+    AddType application/vnd.ms-fontobject .eot
+    AddType application/x-font-ttf .ttf
+    AddType font/opentype .otf
+</IfModule>
+
+# ========================================
+# RATE LIMITING (si está disponible)
+# ========================================
+
+# Limitar peticiones por IP (requiere mod_ratelimit)
+# <IfModule mod_ratelimit.c>
+#     SetOutputFilter RATE_LIMIT
+#     SetEnv rate-limit 100
+# </IfModule>
+
+# ========================================
+# MANTENIMIENTO
+# ========================================
+
+# Página de mantenimiento (descomentar cuando sea necesario)
+# RewriteCond %{REQUEST_URI} !^/mantenimiento\.html$
+# RewriteCond %{REMOTE_ADDR} !^123\.456\.789\.000$
+# RewriteRule ^(.*)$ /mantenimiento.html [R=307,L]

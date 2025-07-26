@@ -5,9 +5,9 @@
 
 // Context and Hooks
 export { AuthProvider, useAuth } from './context/AuthContext';
-export { useAuth as useAuthHook } from './hooks/useAuth';
 
 // Components
+export { LoginForm } from './components/LoginForm';
 export { default as ProtectedRoute } from './components/ProtectedRoute';
 
 // Services

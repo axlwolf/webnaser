@@ -1,0 +1,36 @@
+# Dockerfile específico para ARM64 (Mac M1/M2)
+FROM --platform=linux/arm64 node:20-alpine
+
+# Establecer variables de entorno para ARM64
+ENV NODE_ENV=development
+ENV PLATFORM=linux/arm64
+ENV ARCH=arm64
+
+# Instalar dependencias del sistema incluyendo python3 para compilación nativa
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git \
+    bash
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Copiar archivos de configuración
+COPY package*.json ./
+
+# Limpiar caché de npm
+RUN npm cache clean --force
+
+# Instalar dependencias con flag para reconstruir módulos nativos
+RUN npm install --force
+
+# Copiar código fuente
+COPY . .
+
+# Exponer puerto
+EXPOSE 3000
+
+# Comando de inicio con host binding
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

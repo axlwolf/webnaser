@@ -1,0 +1,113 @@
+# Dockerfile específico para testing - Optimizado para CI/CD
+FROM php:8.2-cli
+
+# Metadatos
+LABEL maintainer="Warp DevOps <devops@naser.com.mx>"
+LABEL description="Contenedor optimizado para testing del CMS Grupo Naser"
+LABEL version="1.0"
+
+# Variables de entorno para testing
+ENV DEBIAN_FRONTEND=noninteractive
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_NO_INTERACTION=1
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    # Herramientas básicas
+    git \
+    unzip \
+    curl \
+    wget \
+    # Librerías para PHP
+    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    # Cliente MySQL
+    default-mysql-client \
+    # Herramientas de testing
+    sqlite3 \
+    # Limpieza
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configurar extensiones de PHP
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        pdo_sqlite \
+        mbstring \
+        zip \
+        gd \
+        xml \
+        bcmath
+
+# Instalar Xdebug para cobertura de código
+RUN pecl install xdebug-3.2.2 \
+    && docker-php-ext-enable xdebug
+
+# Configurar Xdebug para cobertura
+RUN echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+# Instalar Composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+
+# Configurar PHP para testing
+RUN echo "memory_limit=512M" >> /usr/local/etc/php/conf.d/testing.ini \
+    && echo "max_execution_time=300" >> /usr/local/etc/php/conf.d/testing.ini \
+    && echo "error_reporting=E_ALL" >> /usr/local/etc/php/conf.d/testing.ini \
+    && echo "display_errors=On" >> /usr/local/etc/php/conf.d/testing.ini \
+    && echo "log_errors=On" >> /usr/local/etc/php/conf.d/testing.ini
+
+# Crear usuario para testing (no root)
+RUN groupadd -r testuser && useradd -r -g testuser testuser
+
+# Establecer directorio de trabajo
+WORKDIR /var/www/project
+
+# Copiar archivos de configuración de Composer primero (para cache)
+COPY api/composer.json api/composer.lock ./api/
+
+# Cambiar al usuario de testing para instalar dependencias
+USER testuser
+
+# Instalar dependencias de Composer (sin scripts para cache)
+RUN cd api && composer install --no-scripts --no-autoloader --no-dev
+
+# Volver a root para copiar archivos
+USER root
+
+# Copiar código fuente
+COPY --chown=testuser:testuser . .
+
+# Cambiar permisos y generar autoloader
+RUN chown -R testuser:testuser /var/www/project \
+    && cd api && composer dump-autoload --optimize
+
+# Crear directorios para reportes
+RUN mkdir -p /var/www/project/reports/backend \
+    && mkdir -p /var/www/project/reports/frontend \
+    && mkdir -p /var/www/project/reports/integration \
+    && chown -R testuser:testuser /var/www/project/reports
+
+# Cambiar al usuario de testing
+USER testuser
+
+# Configurar Git para el usuario de testing
+RUN git config --global user.email "test@naser.com.mx" \
+    && git config --global user.name "Test User"
+
+# Script de entrada para testing
+COPY --chown=testuser:testuser docker/testing/entrypoint-test.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint-test.sh
+
+# Healthcheck para verificar que el contenedor está listo
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD php -v && composer --version || exit 1
+
+# Comando por defecto para tests
+ENTRYPOINT ["/usr/local/bin/entrypoint-test.sh"]
+CMD ["php", "api/vendor/bin/phpunit", "--configuration", "api/phpunit.xml"]

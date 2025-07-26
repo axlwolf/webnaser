@@ -200,8 +200,103 @@ Este documento define las especificaciones visuales extraídas del sitio actual 
 - Lazy loading para imágenes y componentes
 - Animaciones optimizadas para rendimiento
 
+## Implementación Pixel Perfect - Batch 4
+
+### Estado Actual
+
+**Fase**: Implementación pixel perfect del sitio web completo  
+**Responsable**: Claude (Frontend React)  
+**Progreso**: 🚨 Bloqueado por múltiples problemas críticos
+
+### Problemas Críticos a Resolver
+
+**PROBLEMA 1: Configuración TypeScript Inconsistente**
+
+- ❌ Falta `tsconfig.json` en el frontend
+- ❌ Archivo `src/test/App.test.jsx` usa JSX en lugar de TSX
+- ❌ `vite.config.js` debería ser `vite.config.ts`
+- ❌ Configuración TypeScript incompleta
+
+**PROBLEMA 2: Error CSS Crítico**
+
+```
+[plugin:vite:css] [postcss] ENOENT: no such file or directory, open '../../styles/tokens.css'
+/app/src/index.css:undefined:null
+```
+
+**Causa**: Configuración TypeScript inconsistente y rutas de importación CSS incorrectas en contenedor Docker  
+**Solución**: Configurar TypeScript correctamente, corregir imports en `src/frontend/src/index.css` y crear design tokens
+
+### Design Tokens Requeridos
+
+```css
+/* src/frontend/src/styles/tokens.css */
+:root {
+  /* Colores Primarios */
+  --color-primary: #c8a97e; /* Dorado Naser */
+  --color-secondary: #1e2b4d; /* Azul Oscuro */
+  --color-accent: #2a4176; /* Azul Medio */
+
+  /* Tipografía */
+  --font-family-primary: "Poppins", sans-serif;
+
+  /* Espaciado y Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+}
+```
+
+### Estructura de Componentes Requerida
+
+```
+src/frontend/src/
+├── components/
+│   ├── layout/
+│   │   ├── Header/         # Header con sub-header y navegación
+│   │   ├── Footer/         # Footer completo 4 columnas
+│   │   └── Layout/         # Layout wrapper principal
+│   ├── sections/
+│   │   ├── Hero/           # Hero slider cinematográfico
+│   │   ├── Services/       # Sección de servicios
+│   │   ├── About/          # Sección acerca de
+│   │   └── Contact/        # Sección de contacto
+│   └── ui/
+│       ├── Button/         # FilledButton y BorderButton
+│       ├── Card/           # ServiceCard
+│       └── Slider/         # HeroSlider
+├── pages/                  # 13 páginas del sitio
+└── styles/
+    ├── tokens.css          # Design tokens (CREAR)
+    ├── globals.css         # Estilos globales
+    └── components.css      # Estilos de componentes
+```
+
+### Criterios de Aceptación Pixel Perfect
+
+- [ ] **TypeScript Configurado**: tsconfig.json completo y archivos TSX convertidos
+- [ ] **Error CSS Resuelto**: Contenedor frontend sin errores
+- [ ] **Design Tokens**: Sistema completo implementado
+- [ ] **Header Completo**: Sub-header + navegación + logo
+- [ ] **Hero Slider**: Slider cinematográfico funcional
+- [ ] **13 Páginas**: Todas las páginas HTML convertidas a React
+- [ ] **Responsive**: Mobile-first design perfecto
+- [ ] **Performance**: Imágenes optimizadas y lazy loading
+- [ ] **Testing**: Comparación visual automatizada
+
+### Metodología de Implementación
+
+1. **CONFIGURAR TYPESCRIPT**: Crear tsconfig.json y convertir archivos JSX a TSX
+2. **RESOLVER ERROR CSS**: Corregir rutas y crear tokens
+3. **COMPONENTES BASE**: Header, Footer, Layout
+4. **PÁGINA PRINCIPAL**: Hero slider y secciones
+5. **PÁGINAS RESTANTES**: Implementar las 12 páginas restantes
+6. **RESPONSIVE**: Validar en todos los breakpoints
+7. **OPTIMIZACIÓN**: Performance y accesibilidad
+
 ---
 
-**Última actualización**: 18 de julio de 2025  
+**Última actualización**: 25 de julio de 2025  
 **Autor**: Kiro (Orquestador)  
-**Para implementación por**: Claude (Frontend)
+**Para implementación por**: Claude (Frontend Pixel Perfect - Batch 4)
