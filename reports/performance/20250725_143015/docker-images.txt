@@ -1,0 +1,16 @@
+REPOSITORY                                        TAG        SIZE
+web_naser_23-frontend                             latest     978MB
+web_naser_23-backend                              latest     1.12GB
+redis                                             7-alpine   61.4MB
+php                                               8.1-cli    724MB
+nginx                                             alpine     80.1MB
+merchant_dash_local                               latest     24.7MB
+dash_local_dev                                    latest     1.99GB
+postgres                                          15         628MB
+postgres                                          latest     640MB
+mcr.microsoft.com/devcontainers/javascript-node   20         2.07GB
+mysql                                             8.0        1.05GB
+phpmyadmin/phpmyadmin                             latest     814MB
+premios-aplazo                                    latest     21.4MB
+testcontainers/ryuk                               0.7.0      23.4MB
+postgres                                          11         286MB

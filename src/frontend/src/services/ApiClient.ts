@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 import { ApiResponse, ApiListResponse, ApiError, ValidationError } from '../types/api';
-import { TEXTS } from '../../../constants/texts';
+import { TEXTS } from '../constants/texts';
 
 export class ApiClient {
   private axiosInstance: AxiosInstance;

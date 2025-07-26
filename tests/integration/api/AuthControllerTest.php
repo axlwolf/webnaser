@@ -30,21 +30,22 @@ class AuthControllerTest extends TestCase {
     private function createUsersTable(): void {
         $this->pdo->exec("CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
+            name TEXT NOT NULL,
             email TEXT NOT NULL,
-            password_hash TEXT NOT NULL,
+            password TEXT NOT NULL,
             role TEXT NOT NULL DEFAULT 'editor',
+            reset_token TEXT,
+            reset_token_expiry DATETIME,
+            last_login DATETIME,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )");
     }
 
     private function seedUsers(): void {
-        $user = new User('testuser', 'test@example.com', '');
-        $user->setPassword('password123');
-
-        $stmt = $this->pdo->prepare("INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$user->username, $user->email, $user->password_hash, 'admin']);
+        $passwordHash = password_hash('password123', PASSWORD_DEFAULT);
+        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)");
+        $stmt->execute(['Test User', 'test@example.com', $passwordHash, 'admin']);
     }
 
     public function testLoginWithValidCredentialsReturnsToken(): void {

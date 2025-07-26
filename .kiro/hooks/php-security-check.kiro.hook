@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "PHP Security Check",
+  "description": "Analiza código PHP en busca de vulnerabilidades de seguridad como SQL injection, XSS, validación de entrada y problemas de autenticación",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.php"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the modified PHP files for security vulnerabilities. Focus on:\n\n1. **SQL Injection**: Check for unescaped user input in database queries, missing prepared statements, and direct concatenation of user data in SQL\n2. **Cross-Site Scripting (XSS)**: Look for unescaped output, missing htmlspecialchars(), and user input displayed without sanitization\n3. **Input Validation**: Verify proper validation and sanitization of $_GET, $_POST, $_REQUEST, $_FILES, and other user inputs\n4. **Authentication & Authorization**: Check for weak session management, missing authentication checks, insecure password handling, and authorization bypasses\n5. **File Upload Security**: Examine file upload functionality for type validation, size limits, and path traversal vulnerabilities\n6. **CSRF Protection**: Verify presence of CSRF tokens in forms and state-changing operations\n\nProvide specific recommendations for each vulnerability found, including code examples of secure implementations. Prioritize critical security issues that could lead to data breaches or system compromise."
+  }
+}

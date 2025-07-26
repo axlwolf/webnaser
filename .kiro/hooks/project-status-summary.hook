@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Project Status Summary",
+  "description": "Genera un resumen completo del estado actual del proyecto Grupo Naser CMS",
+  "version": "1",
+  "when": {
+    "type": "manual"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Por favor genera un resumen completo del estado actual del proyecto Grupo Naser CMS:\n\n1. **Estado de Tareas:**\n   - Lee el archivo `.kiro/specs/auth-integration/status.json` para obtener el progreso actual\n   - Lista las tareas completadas por cada agente (Claude, Gemini, Warp)\n   - Identifica las próximas tareas pendientes\n\n2. **Estado Técnico:**\n   - Verifica que los contenedores Docker estén funcionando: `docker-compose ps`\n   - Revisa si hay tests fallando: `./scripts/test-docker.sh`\n   - Verifica el estado del frontend: `cd src/frontend && npm test`\n\n3. **Archivos Importantes:**\n   - Lista los archivos principales creados recientemente\n   - Identifica archivos faltantes para completar tareas\n\n4. **Recomendaciones:**\n   - Sugiere las próximas acciones prioritarias\n   - Identifica posibles bloqueos o dependencias\n\n5. **Métricas:**\n   - Porcentaje de progreso general\n   - Tiempo estimado para completar el sprint actual\n\nProporciona un resumen ejecutivo claro y accionable."
+  }
+}

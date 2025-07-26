@@ -1,6 +1,8 @@
 /* Import our design system */
-@import '../../styles/tokens.css';
-@import '../../styles/globals.css';
+@import './styles/colors.css';
+@import './styles/typography.css';
+@import './styles/tokens.css';
+@import './styles/globals.css';
 
 /* Base reset and setup */
 *,

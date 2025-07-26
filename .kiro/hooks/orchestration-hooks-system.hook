@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Orchestration Hooks System",
+  "description": "Sistema principal de orquestación que coordina los hooks de todos los agentes (Claude, Gemini, Warp)",
+  "version": "1",
+  "when": {
+    "type": "manual"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Gestiona el sistema de orquestación de hooks para coordinar todos los agentes:\n\n1. **Inicializar Sistema**: Configura watchers de archivos para Claude (frontend), Gemini (backend) y Warp (DevOps)\n2. **Monitorear Cambios**: Detecta automáticamente cuando los agentes completan tareas basado en patrones de archivos\n3. **Actualizar Estados**: Sincroniza el estado del proyecto cuando se detectan completitudes de tareas\n4. **Coordinar Agentes**: Asigna siguiente tarea automáticamente cuando una se completa\n5. **Generar Métricas**: Recopila estadísticas de productividad y calidad de código\n6. **Notificaciones**: Informa al equipo sobre progreso y completitudes\n\nProporciona comandos específicos para gestionar el sistema de hooks."
+  }
+}

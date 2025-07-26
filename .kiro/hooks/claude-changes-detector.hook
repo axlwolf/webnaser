@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "Claude Changes Detector",
+  "description": "Detecta automáticamente cuando Claude completa tareas frontend y actualiza el sistema de seguimiento",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/frontend/src/auth/**/*",
+      "src/frontend/src/components/**/*",
+      "src/frontend/src/pages/**/*",
+      "src/frontend/src/services/**/*",
+      "src/frontend/src/hooks/**/*",
+      "src/frontend/src/context/**/*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Se han detectado cambios en archivos frontend. Analiza los cambios para:\n\n1. **Detectar tareas completadas**: Verifica si se han creado componentes completos con sus archivos asociados (*.tsx, *.test.tsx, *.module.css)\n2. **Validar calidad**: Confirma que los archivos siguen las convenciones de naming, tienen tests y estilos apropiados\n3. **Actualizar estado**: Si una tarea está completa, actualiza el estado del proyecto\n4. **Preparar siguiente tarea**: Identifica y prepara la siguiente tarea para Claude\n\nProporciona un resumen de los cambios detectados y las acciones recomendadas."
+  }
+}

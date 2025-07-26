@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Git Sync Helper",
+  "description": "Ayuda con la sincronización de Git cuando se hacen commits importantes",
+  "version": "1",
+  "when": {
+    "type": "manual"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Ayuda con la sincronización de Git para el proyecto Grupo Naser CMS:\n\n1. **Estado del Repositorio:**\n   - Verifica el estado actual: `git status`\n   - Lista los archivos modificados y nuevos\n   - Identifica si hay conflictos pendientes\n\n2. **Preparar Commit:**\n   - Sugiere qué archivos incluir en el próximo commit\n   - Propone un mensaje de commit descriptivo basado en los cambios\n   - Verifica que no se incluyan archivos sensibles (.env, logs, etc.)\n\n3. **Verificaciones Pre-Commit:**\n   - Ejecuta tests antes del commit: `./scripts/test-docker.sh`\n   - Verifica que el código compile correctamente\n   - Confirma que no hay errores de sintaxis\n\n4. **Sincronización:**\n   - Verifica si hay cambios remotos: `git fetch`\n   - Sugiere si es necesario hacer pull o merge\n   - Propone la estrategia de sincronización más segura\n\n5. **Branch Management:**\n   - Confirma que estás en el branch correcto (feature/auth-integration)\n   - Sugiere si es momento de crear un nuevo branch\n   - Identifica si hay branches que se pueden limpiar\n\nProporciona comandos específicos listos para ejecutar."
+  }
+}

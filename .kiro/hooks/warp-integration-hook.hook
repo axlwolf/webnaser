@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Warp Integration",
+  "description": "Automatiza operaciones de terminal, deployment y DevOps para el proyecto",
+  "version": "1",
+  "when": {
+    "type": "manual"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Ayuda con operaciones de DevOps y terminal para el proyecto Grupo Naser CMS:\n\n1. **Docker Operations**: Monitorear contenedores, optimizar performance, gestionar volúmenes\n2. **Dependency Management**: Actualizar npm/composer, verificar vulnerabilidades\n3. **Testing Automation**: Ejecutar suite completa de tests, generar reportes de cobertura\n4. **Deployment Preparation**: Preparar build para GoDaddy, optimizar assets\n5. **Database Operations**: Migraciones, backups, optimización\n6. **Performance Monitoring**: Métricas, logs, alertas\n\nProporciona comandos específicos listos para ejecutar según la necesidad."
+  }
+}

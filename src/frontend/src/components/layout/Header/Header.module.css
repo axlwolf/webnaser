@@ -1,0 +1,410 @@
+/**
+ * Header Styles - Grupo Naser CMS
+ * Pixel perfect siguiendo exactamente el diseño original
+ */
+
+/* Container común */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Header principal */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.header.scrolled {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sub-header exacto del original */
+.subHeader {
+  background-color: #524030;
+  height: 50px;
+  line-height: 50px;
+  color: #ffffff;
+}
+
+.subHeader .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+.contactInfo {
+  display: flex;
+  align-items: center;
+}
+
+.phone,
+.email {
+  display: inline-flex;
+  align-items: center;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  border-left: 1px solid rgba(250, 250, 250, 0.3);
+  padding: 0 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.email {
+  border-right: 1px solid rgba(250, 250, 250, 0.3);
+}
+
+.phone i,
+.email i {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.socialLinks {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+}
+
+.socialLink:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.socialLink i {
+  font-size: 14px;
+}
+
+/* Header principal */
+.mainHeader {
+  background: #ffffff;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.mainHeader .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logoImage {
+  height: 65px;
+  width: auto;
+  transition: all 0.3s ease;
+}
+
+.logo:hover .logoImage {
+  transform: scale(1.05);
+}
+
+/* Navegación desktop */
+.navigation {
+  display: flex;
+  align-items: center;
+}
+
+.navList {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 35px;
+}
+
+.navItem {
+  position: relative;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  color: #333333;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 10px 0;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navLink:hover {
+  color: #c8a97e;
+}
+
+.navLink.active {
+  color: #c8a97e;
+  font-weight: 600;
+}
+
+.navLink.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #c8a97e;
+}
+
+/* Submenú */
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
+  min-width: 220px;
+  z-index: 1001;
+}
+
+.navItem:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.submenuLink {
+  display: block;
+  color: #333333;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.submenuLink:hover {
+  background: #f8f9fa;
+  color: #c8a97e;
+}
+
+/* Botón menú móvil */
+.mobileMenuButton {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburgerLine {
+  width: 25px;
+  height: 3px;
+  background: #333333;
+  margin: 2px 0;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.mobileMenuButton.open .hamburgerLine:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobileMenuButton.open .hamburgerLine:nth-child(2) {
+  opacity: 0;
+}
+
+.mobileMenuButton.open .hamburgerLine:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Menú móvil */
+.mobileMenu {
+  position: fixed;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-top: 1px solid #eee;
+  transform: translateY(-100%);
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 999;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
+}
+
+.mobileMenu.open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobileNavigation {
+  padding: 20px 0;
+}
+
+.mobileNavList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobileNavItem {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.mobileNavLink {
+  display: block;
+  color: #333333;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 15px 20px;
+  transition: all 0.3s ease;
+}
+
+.mobileNavLink:hover,
+.mobileNavLink.active {
+  background: #f8f9fa;
+  color: #c8a97e;
+}
+
+.mobileSubmenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: #f8f9fa;
+}
+
+.mobileSubmenuLink {
+  display: block;
+  color: #666666;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 12px 40px;
+  transition: all 0.3s ease;
+}
+
+.mobileSubmenuLink:hover {
+  background: #e9ecef;
+  color: #c8a97e;
+}
+
+/* Overlay */
+.mobileMenuOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .navList {
+    gap: 25px;
+  }
+  
+  .navLink {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navigation {
+    display: none;
+  }
+  
+  .mobileMenuButton {
+    display: flex;
+  }
+  
+  .contactInfo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .phone,
+  .email {
+    border: none;
+    padding: 0;
+    font-size: 12px;
+  }
+  
+  .socialLinks {
+    display: none;
+  }
+  
+  .subHeader {
+    height: auto;
+    line-height: normal;
+    padding: 10px 0;
+  }
+  
+  .logoImage {
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+  
+  .logoImage {
+    height: 45px;
+  }
+  
+  .subHeader {
+    font-size: 11px;
+  }
+}

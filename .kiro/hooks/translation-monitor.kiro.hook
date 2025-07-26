@@ -1,0 +1,24 @@
+{
+  "enabled": true,
+  "name": "Translation Monitor",
+  "description": "Monitors changes to user-facing text content files and automatically generates translations for all configured target languages while maintaining context and locale-specific conventions",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.json",
+      "**/*.yaml",
+      "**/*.yml",
+      "src/constants/texts.ts",
+      "src/constants/locale.ts",
+      "**/*localization*",
+      "**/*i18n*",
+      "**/*lang*",
+      "**/*translation*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A localization file has been modified. Please analyze the changes to identify new or modified text content that requires translation. For each piece of text that needs translation:\n\n1. Identify the source language and extract the new/modified text\n2. Determine the appropriate target languages based on the project configuration\n3. Generate accurate translations that:\n   - Maintain the original meaning and context\n   - Follow locale-specific conventions and cultural nuances\n   - Preserve any formatting, placeholders, or special characters\n   - Consider the target audience (ISSSTE affiliates for this funeral services website)\n4. Ensure translations are appropriate for the funeral services industry\n5. Output the translations in the same file format and structure as the source\n\nPlease provide the complete translated content ready to be integrated into the corresponding language files."
+  }
+}

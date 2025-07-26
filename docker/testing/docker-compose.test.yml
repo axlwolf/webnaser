@@ -1,0 +1,111 @@
+version: "3.8"
+
+services:
+  # Servicio de testing para backend PHP
+  backend-test:
+    build:
+      context: ../../
+      dockerfile: docker/testing/Dockerfile.test
+    container_name: naser_backend_test
+    environment:
+      - DB_HOST=database-test
+      - DB_PORT=3306
+      - DB_DATABASE=naser_cms_test
+      - DB_USERNAME=test_user
+      - DB_PASSWORD=test_password
+      - XDEBUG_MODE=coverage
+    volumes:
+      - ../../:/var/www/project
+      - ../../reports:/var/www/project/reports
+    depends_on:
+      database-test:
+        condition: service_healthy
+    networks:
+      - testing-network
+    command:
+      [
+        "php",
+        "api/vendor/bin/phpunit",
+        "--configuration",
+        "api/phpunit.xml",
+        "--coverage-html",
+        "reports/backend/coverage",
+      ]
+
+  # Base de datos para testing
+  database-test:
+    image: mysql:8.0
+    container_name: naser_database_test
+    environment:
+      MYSQL_ROOT_PASSWORD: test_root_password
+      MYSQL_DATABASE: naser_cms_test
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: test_password
+    ports:
+      - "3307:3306" # Puerto diferente para no conflictar
+    volumes:
+      - test_db_data:/var/lib/mysql
+      - ../../database/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - testing-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+      interval: 10s
+      start_period: 30s
+
+  # Servicio para tests de integración
+  integration-test:
+    build:
+      context: ../../
+      dockerfile: docker/testing/Dockerfile.test
+    container_name: naser_integration_test
+    environment:
+      - DB_HOST=database-test
+      - DB_PORT=3306
+      - DB_DATABASE=naser_cms_test
+      - DB_USERNAME=test_user
+      - DB_PASSWORD=test_password
+      - BACKEND_URL=http://backend-test:8000
+      - FRONTEND_URL=http://frontend-test:3000
+    volumes:
+      - ../../:/var/www/project
+      - ../../reports:/var/www/project/reports
+    depends_on:
+      - database-test
+      - backend-test
+    networks:
+      - testing-network
+    command: ["bash", "scripts/testing/test-integration.sh"]
+
+  # Servicio para monitoreo de testing
+  test-monitor:
+    build:
+      context: ../../
+      dockerfile: docker/testing/Dockerfile.test
+    container_name: naser_test_monitor
+    environment:
+      - MONITOR_INTERVAL=300 # 5 minutos
+    volumes:
+      - ../../:/var/www/project
+      - ../../reports:/var/www/project/reports
+    networks:
+      - testing-network
+    command:
+      [
+        "bash",
+        "-c",
+        "while true; do ./scripts/testing/continuous-monitoring.sh; sleep $${MONITOR_INTERVAL:-300}; done",
+      ]
+
+volumes:
+  test_db_data:
+    driver: local
+
+networks:
+  testing-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

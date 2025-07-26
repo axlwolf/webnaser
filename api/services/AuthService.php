@@ -20,8 +20,8 @@ class AuthService {
         }
 
         $payload = [
-            'user_id' => $user->id,
-            'role' => $user->role
+            'user_id' => $user->getId(),
+            'role' => $user->getRole()
         ];
         
         // Secret and expiry should come from config

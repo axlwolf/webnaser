@@ -1,0 +1,17 @@
+services:
+  frontend:
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ./src/frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:8000/api/v1
+      - VITE_APP_TITLE=Grupo Naser CMS
+      - VITE_APP_ENV=development
+      - CHOKIDAR_USEPOLLING=true

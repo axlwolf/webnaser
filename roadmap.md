@@ -4,7 +4,7 @@
 
 Este proyecto desarrolla un Sistema de Gestión de Contenidos (CMS) basado en React para el sitio web de servicios funerarios de Grupo Naser, desplegable en hosting de GoDaddy. El sistema incluye un frontend React para visitantes y un panel de administración React+PHP para gestión de contenido.
 
-**🚨 ACTUALIZACIÓN CRÍTICA (18 Jul 2025)**: Se identificó gap significativo entre diseño del sitio actual y frontend React desarrollado. Se requiere rediseño completo para alineación con identidad visual real.
+**🚨 ACTUALIZACIÓN CRÍTICA (25 Jul 2025)**: Se identificaron múltiples problemas críticos bloqueando implementación pixel perfect: configuración TypeScript inconsistente y errores CSS en contenedor Docker. Resolución inmediata requerida.
 
 ## Estado Actual del Proyecto
 
@@ -76,15 +76,23 @@ Este proyecto desarrolla un Sistema de Gestión de Contenidos (CMS) basado en Re
 - 🔄 Pre-push hooks para ejecutar tests unitarios en progreso
 - 🔄 Validación de mensajes de commit en progreso
 
-### 🚨 PRIORIDAD CRÍTICA - Rediseño Frontend
+### 🚨 PRIORIDAD CRÍTICA - Resolución de Problemas Técnicos
 
-#### 🎨 FASE REDISEÑO (Inmediata - Pre-Keiro)
+#### 🔧 FASE RESOLUCIÓN CRÍTICA (Inmediata - Claude Batch 4)
 
-- ❌ **R1. Branding Real**: Implementar logo solar dorado + colores reales
-- ❌ **R2. Layout Cinematográfico**: Hero con imagen de fondo + overlays
-- ❌ **R3. Elementos Premium**: Cards doradas, tipografías serif/sans-serif
-- ❌ **R4. Contenido Específico**: 33 aniversario, galería sucursales reales
-- ❌ **R5. Validación Visual**: Comparación lado a lado con sitio original
+- ❌ **C1. Configuración TypeScript**: Crear tsconfig.json completo y convertir archivos JSX a TSX
+- ❌ **C2. Error CSS Crítico**: Corregir rutas de importación CSS en contenedor Docker
+- ❌ **C3. Design Tokens**: Implementar sistema completo de tokens CSS
+- ❌ **C4. Vite Config**: Convertir vite.config.js a vite.config.ts para consistencia
+- ❌ **C5. Testing Config**: Actualizar configuración de testing para TypeScript
+
+#### 🎨 FASE IMPLEMENTACIÓN PIXEL PERFECT (Post-Resolución)
+
+- ❌ **P1. Header Completo**: Sub-header + navegación + logo pixel perfect
+- ❌ **P2. Hero Slider**: Slider cinematográfico con todas las imágenes
+- ❌ **P3. Páginas Completas**: 13 páginas HTML convertidas a React
+- ❌ **P4. Responsive Design**: Mobile-first design perfecto
+- ❌ **P5. Validación Visual**: Comparación automatizada pixel perfect
 
 ### ❌ Pendiente de Implementar (Post-Rediseño)
 
@@ -190,22 +198,24 @@ Este proyecto desarrolla un Sistema de Gestión de Contenidos (CMS) basado en Re
 
 ### Prioridad Alta (Inmediata)
 
-1. **Completar configuración de Git hooks con Husky** (Tarea 1.4)
+1. **Resolver Configuración TypeScript** (Crítico - Claude)
 
-   - Finalizar configuración de pre-commit hooks
-   - Implementar pre-push hooks para tests
-   - Configurar validación de mensajes de commit
+   - Crear tsconfig.json completo en src/frontend/
+   - Convertir App.test.jsx a App.test.tsx
+   - Actualizar vite.config.js a vite.config.ts
+   - Configurar paths y aliases correctamente
 
-2. **Implementar Clean Architecture** (Tarea 1.5)
+2. **Resolver Error CSS Crítico** (Crítico - Claude)
 
-   - Crear estructura de capas de dominio
-   - Establecer interfaces y casos de uso
-   - Configurar capa de infraestructura
+   - Corregir rutas de importación en src/frontend/src/index.css
+   - Crear src/frontend/src/styles/tokens.css
+   - Implementar design tokens completos
+   - Asegurar compatibilidad Docker y desarrollo local
 
-3. **Implementar esquema de base de datos** (Tarea 2.1)
-   - Crear tablas para páginas, servicios, ubicaciones, medios y usuarios
-   - Establecer relaciones entre tablas
-   - Crear script de migración inicial
+3. **Implementar Pixel Perfect** (Post-Resolución - Claude)
+   - Header con sub-header y navegación
+   - Hero slider cinematográfico
+   - 13 páginas HTML convertidas a React
 
 ### Prioridad Media (Siguiente Sprint)
 
@@ -223,9 +233,9 @@ Este proyecto desarrolla un Sistema de Gestión de Contenidos (CMS) basado en Re
 
 ### 🔴 Riesgos Altos
 
-1. **Falta de implementación de funcionalidad core**: Solo el 12% del proyecto está completado
-2. **Sin sistema de autenticación**: Crítico para el panel de administración
-3. **Sin API funcional**: Necesario para cualquier funcionalidad dinámica
+1. **Problemas Críticos de Configuración**: TypeScript y CSS bloqueando desarrollo frontend
+2. **Claude Bloqueado**: Frontend developer no puede proceder con implementación pixel perfect
+3. **Timeline Impactado**: Resolución crítica requerida antes de continuar desarrollo
 
 ### 🟡 Riesgos Medios
 
@@ -299,6 +309,6 @@ cd tests && ../api/vendor/bin/phpunit
 
 ---
 
-**Última actualización**: 17 de julio de 2025  
-**Estado del proyecto**: Configuración de testing completada, configuración de Git hooks en progreso  
-**Próxima tarea recomendada**: Completar configuración de Git hooks (Tarea 1.4)
+**Última actualización**: 25 de julio de 2025  
+**Estado del proyecto**: Problemas críticos identificados - TypeScript y CSS bloqueando implementación pixel perfect  
+**Próxima tarea recomendada**: Resolver configuración TypeScript y error CSS (Claude - Batch 4)
