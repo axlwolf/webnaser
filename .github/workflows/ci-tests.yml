@@ -35,7 +35,7 @@ jobs:
           coverage: xdebug
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: api/vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('api/composer.lock') }}
@@ -57,14 +57,14 @@ jobs:
           ./vendor/bin/phpunit --configuration phpunit.xml --coverage-clover coverage.xml --testdox
 
       - name: Upload Backend Coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           file: ./api/coverage.xml
           flags: backend
           name: backend-coverage
 
       - name: Archive test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: backend-test-results
@@ -103,14 +103,14 @@ jobs:
           npm test -- --coverage --watchAll=false --testResultsProcessor=jest-junit
 
       - name: Upload Frontend Coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           file: ./src/frontend/coverage/lcov.info
           flags: frontend
           name: frontend-coverage
 
       - name: Archive test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: frontend-test-results
@@ -204,7 +204,7 @@ jobs:
           output: "trivy-results.sarif"
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: "trivy-results.sarif"
@@ -254,7 +254,7 @@ jobs:
           echo "${{ steps.status.outputs.message }}"
 
       - name: Archive test summary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-summary
           path: test-status.md
