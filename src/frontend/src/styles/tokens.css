@@ -1,21 +1,25 @@
 /**
  * Design Tokens - Grupo Naser CMS
- * Sistema de tokens de diseño basado en el sitio HTML original
+ * Sistema unificado de tokens de diseño basado en el sitio HTML original
+ * Versión actualizada con consistencia completa
  */
 
 :root {
-  /* Colores Primarios - Exactos del sitio original */
-  --color-primary: #c8a97e;        /* Dorado Naser exacto */
-  --color-secondary: #1e2b4d;      /* Azul Oscuro */
-  --color-accent: #2a4176;         /* Azul Medio */
-  --color-tertiary: #8b6914;       /* Dorado Oscuro */
+  /* === COLORES PRINCIPALES === */
+  /* Basados exactamente en el diseño original de Grupo Naser */
+  --color-primary: #c8a97e;        /* Dorado Naser - color principal de marca */
+  --color-primary-dark: #1e2b4d;   /* Azul Oscuro - headers, botones principales */
+  --color-primary-light: #c8a97e;  /* Alias para mantener compatibilidad */
+  --color-secondary: #1e2b4d;      /* Azul Oscuro - alias */
+  --color-accent: #2a4176;         /* Azul Medio - elementos interactivos */
+  --color-tertiary: #8b6914;       /* Dorado Oscuro - estados hover */
 
-  /* Colores de Texto */
-  --color-text-primary: #000000;
-  --color-text-secondary: #6a6a6a;
-  --color-text-light: #ffffff;
-  --color-text-muted: #999999;
-  --color-text-inverse: #ffffff;
+  /* === COLORES DE TEXTO === */
+  --color-text-primary: #000000;   /* Texto principal negro */
+  --color-text-secondary: #6a6a6a; /* Texto secundario gris */
+  --color-text-light: #ffffff;     /* Texto blanco para fondos oscuros */
+  --color-text-muted: #999999;     /* Texto deshabilitado/sutil */
+  --color-text-inverse: #ffffff;   /* Texto inverso - alias */
 
   /* Colores de Fondo */
   --color-background: #ffffff;

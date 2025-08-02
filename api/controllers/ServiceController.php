@@ -2,62 +2,120 @@
 
 namespace App\Controllers;
 
-use App\Core\Request;
-use App\Core\Response;
-use App\Services\ServiceService;
+use App\Core\Database;
+use App\Repositories\ServiceRepository;
+use App\Middleware\AdminMiddleware;
+use App\Validators\ServiceValidator;
+use App\Models\Service;
+use App\Exceptions\ValidationException;
+use App\Exceptions\NotFoundException;
 
 class ServiceController {
-    private ServiceService $serviceService;
+    private $serviceRepository;
 
-    public function __construct(ServiceService $serviceService) {
-        $this->serviceService = $serviceService;
+    public function __construct() {
+        $db = Database::getInstance();
+        $this->serviceRepository = new ServiceRepository($db);
     }
 
-    public function index(Request $request): Response {
-        $queryParams = $request->getQueryParams();
-        $pageNum = (int)($queryParams['page'] ?? 1);
-        $limit = (int)($queryParams['limit'] ?? 10);
+    public function index() {
+        $page = $_GET['page'] ?? 1;
+        $limit = $_GET['limit'] ?? 10;
+        $services = $this->serviceRepository->findAll($page, $limit);
+        $total = $this->serviceRepository->count();
+        echo json_encode([
+            'success' => true, 
+            'data' => $services,
+            'pagination' => [
+                'total' => $total,
+                'page' => (int)$page,
+                'limit' => (int)$limit
+            ],
+            'timestamp' => date('c')
+        ]);
+    }
 
-        $result = $this->serviceService->getAllServices($pageNum, $limit);
+    public function show($id) {
+        $service = $this->serviceRepository->findById($id);
+        if ($service) {
+            echo json_encode(['success' => true, 'data' => $service, 'timestamp' => date('c')]);
+        } else {
+            throw new NotFoundException('Servicio no encontrado.');
+        }
+    }
+
+    public function create() {
+        AdminMiddleware::handle();
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $errors = ServiceValidator::validate($data);
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
+
+        $service = new Service();
+        $service->name = $data['name'];
+        $service->category = $data['category'];
+        $service->description = $data['description'];
+        $service->features = $data['features'] ?? [];
+        $service->price_range = $data['price_range'] ?? '';
+        $service->image = $data['image'] ?? null;
+        $service->gallery = $data['gallery'] ?? [];
+        $service->is_featured = $data['is_featured'] ?? false;
+        $service->status = $data['status'] ?? 'active';
+        $service->slug = str_replace(' ', '-', strtolower($data['name']));
+
+
+        $createdService = $this->serviceRepository->save($service);
+
+        http_response_code(201);
+        echo json_encode(['success' => true, 'data' => $createdService, 'message' => 'Servicio creado exitosamente.', 'timestamp' => date('c')]);
+    }
+
+    public function update($id) {
+        AdminMiddleware::handle();
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $service = $this->serviceRepository->findById($id);
+
+        if (!$service) {
+            throw new NotFoundException('Servicio no encontrado.');
+        }
+
+        $errors = ServiceValidator::validate($data);
+        if ($errors) {
+            throw new ValidationException($errors);
+        }
+
+        $service->name = $data['name'] ?? $service->name;
+        $service->category = $data['category'] ?? $service->category;
+        $service->description = $data['description'] ?? $service->description;
+        $service->features = $data['features'] ?? $service->features;
+        $service->price_range = $data['price_range'] ?? $service->price_range;
+        $service->image = $data['image'] ?? $service->image;
+        $service->gallery = $data['gallery'] ?? $service->gallery;
+        $service->is_featured = $data['is_featured'] ?? $service->is_featured;
+        $service->status = $data['status'] ?? $service->status;
+        $service->slug = str_replace(' ', '-', strtolower($service->name));
+
+        $updatedService = $this->serviceRepository->save($service);
+
+        echo json_encode(['success' => true, 'data' => $updatedService, 'message' => 'Servicio actualizado exitosamente.', 'timestamp' => date('c')]);
+    }
+
+    public function delete($id) {
+        AdminMiddleware::handle();
         
-        $pagination = [
-            'current_page' => $pageNum,
-            'per_page' => $limit,
-            'total' => $result['total'],
-            'total_pages' => ceil($result['total'] / $limit)
-        ];
+        $service = $this->serviceRepository->findById($id);
 
-        return new Response(200, ['data' => $result['services'], 'pagination' => $pagination]);
-    }
-
-    public function show(Request $request, int $id): Response {
-        $service = $this->serviceService->getServiceById($id);
         if (!$service) {
-            return new Response(404, ['error' => 'Service not found']);
+            throw new NotFoundException('Servicio no encontrado.');
         }
-        return new Response(200, ['data' => $service]);
-    }
 
-    public function store(Request $request): Response {
-        $data = $request->getBody();
-        // Add validation here
-        $service = $this->serviceService->createService($data);
-        return new Response(201, ['data' => $service]);
-    }
-
-    public function update(Request $request, int $id): Response {
-        $data = $request->getBody();
-        $service = $this->serviceService->updateService($id, $data);
-        if (!$service) {
-            return new Response(404, ['error' => 'Service not found']);
+        if ($this->serviceRepository->delete($id)) {
+            http_response_code(204);
+        } else {
+            throw new \Exception('No se pudo eliminar el servicio.');
         }
-        return new Response(200, ['data' => $service]);
-    }
-
-    public function destroy(Request $request, int $id): Response {
-        if (!$this->serviceService->deleteService($id)) {
-            return new Response(404, ['error' => 'Service not found']);
-        }
-        return new Response(204, []);
     }
 }

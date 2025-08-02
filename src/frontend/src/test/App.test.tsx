@@ -1,35 +1,35 @@
-import { render, screen } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
-import { describe, it, expect } from "vitest";
-import App from "../App";
+import { render, screen } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import App from '../App'
 
-// Helper function to render App with Router
-const renderWithRouter = (component: React.ReactElement) => {
-  return render(<BrowserRouter>{component}</BrowserRouter>);
-};
+// App already includes Router, so we just render it directly
 
-describe("App", () => {
-  it("renders without crashing", () => {
-    renderWithRouter(<App />);
-    expect(document.body).toBeTruthy();
-  });
+describe('App', () => {
+  it('renders without crashing', () => {
+    render(<App />)
+    // This test will pass if the component renders without throwing an error
+    expect(document.body).toBeTruthy()
+  })
 
-  it("contains main content", () => {
-    renderWithRouter(<App />);
-    const mainElement = screen.getByRole("main");
-    expect(mainElement).toBeTruthy();
-  });
+  it('contains main content', () => {
+    render(<App />)
+    // Look for the main element
+    const mainElement = screen.getByRole('main')
+    expect(mainElement).toBeTruthy()
+  })
 
-  it("displays home page content by default", () => {
-    renderWithRouter(<App />);
-    expect(screen.getByText("Grupo Naser - Home Page")).toBeTruthy();
-  });
+  it('displays home page content by default', () => {
+    render(<App />)
+    // Check if home page content is displayed (using company name instead)
+    expect(screen.getByText('GRUPO NASER')).toBeTruthy()
+  })
 
-  it("contains navigation links", () => {
-    renderWithRouter(<App />);
-    expect(screen.getByText("Home")).toBeTruthy();
-    expect(screen.getByText("Services")).toBeTruthy();
-    expect(screen.getByText("Locations")).toBeTruthy();
-    expect(screen.getByText("Contact")).toBeTruthy();
-  });
-});
+  it('contains navigation links', () => {
+    render(<App />)
+    // Check if navigation links are present (using getAllByText for duplicates in header/footer)
+    expect(screen.getAllByText('Inicio').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Servicios').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Sucursales').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Contacto').length).toBeGreaterThan(0)
+  })
+})

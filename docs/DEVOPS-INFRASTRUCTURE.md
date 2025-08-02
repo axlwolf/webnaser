@@ -10,12 +10,59 @@
 
 Warp ha desarrollado un **ecosistema completo de herramientas DevOps** que va más allá de las tareas asignadas, proporcionando:
 
+- **CI/CD Pipeline Completo**: GitHub Actions con testing, security scans y deployment automático
 - **Sistema de Emergencia y Restauración**: Herramientas críticas para mantener estabilidad
 - **Suite de Testing Automatizado**: Testing completo con monitoreo continuo
 - **Análisis de Performance**: Monitoreo y optimización en tiempo real
 - **Resolución Automática**: Scripts para problemas críticos de infraestructura
 
 **Impacto**: Ahorro de ~2-3 horas/día en resolución manual de problemas para todo el equipo.
+
+---
+
+## 🔄 CI/CD Pipeline Completo
+
+### GitHub Actions Workflows
+
+**Archivos**: `.github/workflows/ci-cd.yml` y `.github/workflows/ci-tests.yml`
+
+**Propósito**: Automatización completa de testing, security scanning y deployment.
+
+**Características Implementadas**:
+
+- ✅ **Testing Automatizado**: Frontend (React/Vitest) y Backend (PHP/PHPUnit)
+- ✅ **Security Scanning**: Trivy vulnerability scanner para código y Docker images
+- ✅ **Integration Testing**: Tests E2E con Docker Compose
+- ✅ **Code Quality**: ESLint, PHP CodeSniffer, PHP Mess Detector
+- ✅ **Coverage Reports**: Codecov integration con reportes detallados
+- ✅ **Multi-stage Deployment**: Staging → E2E Tests → Production
+
+**Workflows Configurados**:
+
+1. **`ci-cd.yml`** - Pipeline principal con deployment
+
+   - Triggers: Push a `main` y `develop`, Pull Requests a `main`
+   - Stages: Frontend Testing → Backend Testing → Security Scan → Build & Deploy
+
+2. **`ci-tests.yml`** - Testing suite completo
+   - Triggers: Push a `main` y `feature/auth-integration`, Pull Requests
+   - Jobs: Backend Tests → Frontend Tests → Integration Tests → Security Scan → Notifications
+
+**Métricas y Reportes**:
+
+- **Test Coverage**: Reportes automáticos en Codecov
+- **Security Alerts**: GitHub Security tab con vulnerabilidades
+- **Performance Metrics**: Análisis de Docker images y build times
+- **Deployment Status**: Badges automáticos de estado del pipeline
+
+**Valor Agregado**:
+
+- ⏱️ **Automatización**: 100% de testing automatizado en cada push
+- 🔒 **Security**: Scanning automático de vulnerabilidades
+- 📊 **Visibilidad**: Estado del proyecto en tiempo real
+- 🚀 **Deployment**: Pipeline completo desde desarrollo a producción
+
+**Documentación Completa**: Ver `docs/CI-CD-PIPELINE.md`
 
 ---
 
@@ -344,6 +391,35 @@ curl -s http://localhost:8000/api/v1/health | jq '.data.infrastructure'
 ---
 
 ## 🔧 Configuración y Uso
+
+### 🔒 Política de Permisos de Archivos
+
+**⚠️ CRÍTICO**: Antes de usar cualquier herramienta, es fundamental seguir la **Política de Permisos de Archivos** del proyecto.
+
+**Reglas Esenciales para DevOps**:
+
+- ❌ **NUNCA usar `sudo docker`** - usar `docker` directamente
+- ❌ **NUNCA cambiar ownership** de archivos del proyecto
+- ❌ **NUNCA usar `sudo chmod`** en directorios del proyecto
+- ✅ **Mantener ownership** del usuario de desarrollo (`flanuza:staff`)
+
+**Comandos DevOps Seguros**:
+
+```bash
+# ✅ CORRECTO
+docker build -t image:tag .
+docker-compose up -d
+./scripts/deploy.sh
+mkdir docker/new-service
+
+# ❌ PROHIBIDO
+sudo docker build -t image:tag .
+sudo chmod 755 /var/www/
+sudo chown root:root docker-compose.yml
+sudo systemctl start docker
+```
+
+**Documentación Completa**: `.kiro/steering/file-permissions-policy.md`
 
 ### Instalación
 

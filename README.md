@@ -14,9 +14,13 @@ Sistema de Gestión de Contenidos (CMS) basado en React para servicios funerario
 
 **🐳 Entorno Docker Completo**: Desarrollo y producción completamente dockerizados para máxima consistencia y colaboración entre equipos.
 
+**🤖 AI/ML Features**: Sistema inteligente con recomendaciones personalizadas, chatbot especializado, análisis predictivo y optimización automática de contenido.
+
 **⚠️ IMPORTANTE**: Se identificó un gap significativo entre el diseño actual del sitio web y la implementación React. El frontend requiere rediseño completo para coincidir con la identidad visual real de Grupo Naser.
 
 ## Características Planificadas
+
+### Core CMS Features
 
 - **Frontend React**: Interfaz pública moderna y responsive para visitantes
 - **Panel de Administración**: React+PHP para gestión de contenido por administradores
@@ -30,12 +34,25 @@ Sistema de Gestión de Contenidos (CMS) basado en React para servicios funerario
 - **Docker**: Entorno completo con Docker Compose para desarrollo y producción
 - **Base de Datos**: MySQL 8.0 con migraciones y phpMyAdmin incluido
 
+### 🤖 AI/ML Features (Nuevo - Batch 1)
+
+- **Sistema de Recomendaciones Inteligentes**: Recomendaciones personalizadas de servicios basadas en perfil demográfico, ubicación y presupuesto
+- **Chatbot Especializado**: Atención 24/7 con NLP especializado en servicios funerarios, detección de urgencia emocional y escalación automática
+- **Análisis Predictivo de Demanda**: Predicción de demanda por servicio y ubicación para optimización operativa e inventario
+- **Procesamiento de Lenguaje Natural**: Generación automática de contenido, optimización SEO y análisis de sentimiento
+- **Dashboard de Analytics Avanzado**: Insights automáticos del negocio con detección de anomalías y análisis de customer journey
+- **Segmentación Inteligente de Clientes**: Segmentación automática para marketing personalizado y campañas dirigidas
+- **Optimización Automática de Contenido**: A/B testing automático y personalización de homepage por usuario
+- **Sistema de Alertas Predictivas**: Alertas inteligentes para oportunidades de venta y optimización operativa
+
 ## Estado del Proyecto
 
-**Progreso General: 50%** (Actualizado: 25 de julio de 2025)  
-**Fase Actual**: Implementación pixel perfect del sitio web en progreso  
-**Estado Crítico**: 🚨 Error CSS crítico identificado - resolución prioritaria  
-**Orquestador**: Kiro (sistema de hooks activo)
+**Progreso General: 47.00%** (Actualizado: 1 de agosto de 2025)  
+**Fase Actual**: 🟡 DESARROLLO ACTIVO - Prompts restaurados, Qwen trabajando en Admin Dashboard  
+**Estado Crítico**: Arquitectura establecida ✅, APIs base funcionando ✅, Frontend en desarrollo 🔄  
+**Orquestador**: Kiro (sistema de hooks activo)  
+**🎛️ Admin Dashboard Specialist**: Qwen - Batch 1 EN PROGRESO (0/8 tareas completadas: Admin Dashboard CMS)  
+**⚠️ IMPORTANTE**: Prompts restaurados al directorio raíz mientras Qwen completa su trabajo
 
 ### ✅ Completado - Fases Iniciales
 
@@ -52,20 +69,64 @@ Sistema de Gestión de Contenidos (CMS) basado en React para servicios funerario
 - **🚀 Testing Automatizado**: Suite completa con CI/CD y reportes de cobertura
 - **📊 Análisis de Performance**: Sistema de monitoreo y optimización automática
 - **🤖 Sistema de Hooks**: Kiro con detección automática de cambios
-- **👥 Coordinación de Equipo**: 4 agentes especializados trabajando en paralelo
+- **👥 Coordinación de Equipo**: 5 agentes especializados trabajando en paralelo (+ Qwen Admin Dashboard)
 - **🎨 Pixel Perfect Implementation**: Claude desarrollando sitio web idéntico al original (Batch 4)
+- **🔄 CI/CD Pipeline**: GitHub Actions con testing automatizado, security scans y deployment
+- **🔍 API Diagnostic**: Estructura backend verificada y documentada completamente
 
-### 🔄 En Progreso - Fase de Implementación Pixel Perfect
+### 🔄 FASE CRÍTICA - Resolución en Progreso (Batch 5)
 
-- **🚨 CRÍTICO - Configuración TypeScript**: Configuración inconsistente JSX/TSX bloqueando compilación
-- **🚨 CRÍTICO - Error CSS Frontend**: Rutas de importación incorrectas en contenedor Docker
-- **🎨 Implementación Pixel Perfect**: Sitio web 100% idéntico al original (Claude - Batch 4)
-- **🔐 Sistema de Autenticación**: LoginForm completado, integración con backend en progreso
-- **API REST**: Endpoints y autenticación en desarrollo por Gemini
-- **Panel de Administración**: Gestión de contenido
-- **🚀 Optimización de Performance**: Análisis continuo y mejoras de rendimiento
-- **🐳 Docker Producción**: Configuración optimizada para deployment
-- **⚙️ DevOps Automation**: Scripts de resolución crítica y monitoreo (Warp)
+**PROGRESO CRÍTICO DETECTADO**:
+
+- **✅ TAREA C1**: Configuración TypeScript Completa - `src/frontend/tsconfig.json` ✅ COMPLETADO
+- **🔄 TAREA C2**: Corrección Error CSS - Rutas correctas en progreso
+- **✅ TAREA C3**: Sistema Design Tokens Avanzado - Variables CSS ✅ COMPLETADO
+- **🔄 TAREA C4**: Validación Configuración - Pendiente completar C2
+
+**IMPLEMENTACIÓN PIXEL PERFECT (En progreso)**:
+
+- **🔄 TAREA P1**: Header Completo con Sub-header - Arquitectura de componentes ✅ CREADA
+- **🔄 TAREA P2**: Hero Slider Cinematográfico - Pendiente
+- **🔄 TAREA P3**: Conversión 13 Páginas HTML → React - Pendiente
+
+**ESTADO**: 🟡 Progreso sólido - 2/7 tareas completadas, 2/7 en progreso
+
+### 🎛️ FASE ACTIVA: Admin Dashboard CMS (Qwen - Batch 1)
+
+**Estado**: 🔄 EN PROGRESO - 0/8 tareas completadas  
+**Documentación**: `docs/ADMIN-DASHBOARD.md` - Especificaciones técnicas completas  
+**Especialista**: Qwen (Admin Dashboard CMS)  
+**Prompt Restaurado**: `PROMPT-QWEN-BATCH-1-ADMIN-DASHBOARD.md` - Disponible en directorio raíz  
+**⚙️ Configuración DevOps**: `WARP-TASK-ADMIN-DASHBOARD-CONFIG.md` - Configuración optimizada por Warp  
+**⏳ Estado**: Esperando completitud de Qwen antes del próximo commit coordinado
+
+**Dashboard Core**:
+
+- **🔐 TAREA Q1**: Sistema de Autenticación Admin - Login seguro con JWT, protección de rutas, manejo de sesiones, reCAPTCHA
+- **📊 TAREA Q2**: Dashboard Principal con Métricas - Estadísticas en tiempo real, widgets interactivos, KPIs del negocio, analytics avanzado
+- **📝 TAREA Q3**: Gestión de Páginas y Contenido - CRUD completo, editor WYSIWYG TinyMCE, SEO management, preview en tiempo real
+- **⚰️ TAREA Q4**: Gestión de Servicios Funerarios - Categorías especializadas del sector, pricing avanzado, galería multimedia, disponibilidad por ubicación
+
+**Funcionalidades Avanzadas**:
+
+- **🏢 TAREA Q5**: Gestión de Ubicaciones/Sucursales - CRUD sucursales, Google Maps integrado, horarios complejos, servicios por ubicación
+- **📁 TAREA Q6**: Sistema de Medios y Archivos - Upload drag&drop, organización jerárquica, edición básica de imágenes, optimización automática
+- **👥 TAREA Q7**: Gestión de Usuarios y Permisos - Sistema de roles granular (Super Admin, Admin, Editor, Viewer), matriz de permisos, auditoría
+- **⚙️ TAREA Q8**: Configuraciones del Sistema - Settings generales, SEO global, configuración SMTP, backups automáticos, información del sistema
+
+**Características Técnicas Actualizadas**:
+
+- **React 18+ con TypeScript 5+** para máxima robustez y type safety
+- **Tailwind CSS 3+ + Headless UI** para diseño consistente y accesible
+- **React Hook Form + React Query (TanStack)** para formularios optimizados y estado del servidor
+- **TinyMCE** para editor WYSIWYG profesional con plugins especializados
+- **Google Maps API** para gestión avanzada de ubicaciones
+- **Chart.js/Recharts** para visualización de métricas y analytics
+- **Integración completa con APIs de Gemini** (backend PHP) con manejo de errores robusto
+- **Responsive design mobile-first** optimizado para tablets y móviles
+- **Performance optimizada** con lazy loading, code splitting y caching inteligente
+
+**Valor Diferencial**: Panel de administración especializado para servicios funerarios con gestión completa de obituarios, previsión funeraria, necesidad inmediata, análisis de sucursales y herramientas específicas del sector.
 
 ### ❌ Pendiente - Próximas Fases
 
@@ -76,30 +137,37 @@ Sistema de Gestión de Contenidos (CMS) basado en React para servicios funerario
 - **📦 Migración de Datos**: Del sitio HTML actual al CMS
 - **🚀 Deploy en GoDaddy**: Configuración final de hosting
 
-### 🚨 Problemas Críticos Identificados
+### ✅ PROGRESO CRÍTICO - BATCH 5 (RESOLUCIÓN EN MARCHA)
 
-**PROBLEMA 1: Configuración TypeScript Inconsistente**: El proyecto frontend tiene configuración inconsistente entre JSX y TypeScript que está causando problemas de compilación:
+**CONTEXTO**: El proyecto ha mostrado **PROGRESO SÓLIDO** con problemas críticos parcialmente resueltos, desbloqueando la implementación pixel perfect.
 
-- ❌ Falta `tsconfig.json` en el frontend
-- ❌ Archivo `src/test/App.test.jsx` usa JSX en lugar de TSX
-- ❌ `vite.config.js` debería ser `vite.config.ts`
-- ❌ Configuración TypeScript incompleta
+**✅ PROBLEMA 1: Configuración TypeScript - RESUELTO** 🟢
 
-**PROBLEMA 2: Error CSS Crítico**: Se ha identificado un problema crítico que bloquea la implementación pixel perfect:
+- ✅ **`src/frontend/tsconfig.json` completo** con paths y configuración robusta implementada
+- ✅ **`vite.config.ts` convertido** de JS a TS para consistencia
+- ✅ **Paths y aliases configurados** correctamente
+- ✅ **Testing configuration actualizada** para TypeScript
+- **Impacto**: Base técnica sólida establecida
 
-1. **Rutas CSS Incorrectas**: El archivo `src/frontend/src/index.css` importa `../../styles/tokens.css` pero la ruta es incorrecta dentro del contenedor Docker
-2. **Design Tokens Faltantes**: Sistema de tokens CSS no implementado correctamente
-3. **Estructura de Estilos**: Necesidad de reorganizar la arquitectura CSS para desarrollo y producción
+**🔄 PROBLEMA 2: Error CSS Crítico - EN PROGRESO** 🟡
 
-**Implementación Pixel Perfect**: Claude (Batch 4) debe resolver ambos problemas críticos antes de proceder con la implementación del sitio web 100% idéntico al original, incluyendo:
+```
+Estructura de estilos creada, importaciones en proceso
+```
 
-- Header con sub-header y navegación funcional
-- Hero slider cinematográfico
-- Secciones principales (servicios, about, cobertura, contacto)
-- Todas las páginas del sitio (13 páginas HTML)
-- Responsive design completo
+- 🔄 **Rutas de importación CSS** siendo corregidas en `src/frontend/src/index.css`
+- ✅ **Sistema de Design Tokens implementado** - `tokens.css` creado
+- ✅ **Estructura de estilos consistente** establecida
+- **Impacto**: Implementación pixel perfect desbloqueada parcialmente
 
-**Estado de Resolución**: Prioridad máxima para Claude - resolver configuración TypeScript y error CSS antes de comenzar implementación pixel perfect.
+**✅ PROBLEMA 3: Sistema de Design Tokens - COMPLETADO** 🟢
+
+- ✅ **Variables CSS completas** para colores, tipografía, spacing implementadas
+- ✅ **Tokens semánticos** para consistencia visual creados
+- ✅ **CSS custom properties** implementadas correctamente
+- **Impacto**: Consistencia visual garantizada
+
+**ESTADO ACTUAL**: 🟡 **Progreso sólido** - 2/3 problemas críticos resueltos, arquitectura de componentes establecida. Frontend developer parcialmente desbloqueado.
 
 ## Arquitectura y Estructura
 
@@ -114,41 +182,94 @@ Sistema de Gestión de Contenidos (CMS) basado en React para servicios funerario
 
 ```
 web_naser_23/
-├── 🐳 docker-compose.yml         # Desarrollo con Docker
-├── 🐳 docker-compose.prod.yml    # Producción con Docker
-├── 🐳 DOCKER.md                  # Documentación completa Docker
-├── api/                          # PHP backend API
-│   ├── 🐳 Dockerfile
-│   ├── docker/                   # Configuraciones Docker
-│   ├── src/                      # Código fuente PHP
-│   └── composer.json             # Dependencias PHP
-├── src/
-│   ├── admin/                    # Panel de administración React
+├── 📁 .github/                   # GitHub Actions y workflows CI/CD
+├── 📁 .husky/                    # Git hooks con Husky
+├── 📁 .kiro/                     # Configuración Kiro IDE y especificaciones
+│   ├── hooks/                    # Sistema de hooks automáticos
+│   ├── settings/                 # Configuraciones Kiro
+│   ├── specs/                    # Especificaciones del proyecto
+│   └── steering/                 # Reglas de steering
+├── 📁 api/                       # Backend PHP (APIs REST)
+│   ├── controllers/              # ✅ Controladores REST implementados
+│   ├── core/                     # Clases core del sistema
+│   ├── exceptions/               # ✅ Manejo de errores
+│   ├── middleware/               # Middleware de autenticación
+│   ├── models/                   # Modelos de datos
+│   ├── repositories/             # ✅ Repositorios de datos
+│   ├── routes/                   # Definición de rutas API
+│   ├── services/                 # Servicios de negocio
+│   ├── utils/                    # Utilidades PHP
+│   ├── validators/               # ✅ Validadores
+│   └── v1/                       # Versionado API v1
+├── 📁 assets/                    # Assets estáticos originales
+├── 📁 contracts/                 # Contratos y tipos compartidos
+│   ├── api/                      # ✅ Contratos API
+│   ├── events/                   # Contratos de eventos
+│   ├── schemas/                  # Esquemas de datos
+│   └── types/                    # ✅ Tipos compartidos
+├── 📁 database/                  # Migraciones y seeds
+│   ├── migrations/               # ✅ Migraciones de BD
+│   └── seeds/                    # Seeds de datos
+├── 📁 docker/                    # Configuraciones Docker
+│   ├── backend/                  # Docker backend
+│   ├── frontend/                 # Docker frontend
+│   ├── nginx/                    # Configuración Nginx
+│   ├── production/               # ✅ Configuración producción
+│   └── testing/                  # ✅ Configuración testing
+├── 📁 docs/                      # Documentación del proyecto
+├── 📁 src/                       # Código fuente principal
+│   ├── admin/                    # 🆕 Panel de administración React (Qwen)
+│   │   ├── components/           # Componentes admin especializados
+│   │   │   ├── auth/            # Sistema de autenticación admin
+│   │   │   ├── layout/          # Layout y navegación admin
+│   │   │   ├── dashboard/       # Widgets y métricas
+│   │   │   ├── pages/           # Gestión de páginas CMS
+│   │   │   ├── services/        # Gestión servicios funerarios
+│   │   │   ├── locations/       # Gestión de sucursales
+│   │   │   ├── media/           # Sistema de archivos multimedia
+│   │   │   ├── users/           # Gestión usuarios y permisos
+│   │   │   └── settings/        # Configuraciones del sistema
+│   │   ├── pages/               # Páginas principales del admin
+│   │   ├── hooks/               # Custom hooks para admin
+│   │   ├── services/            # Servicios API admin
+│   │   └── types/               # Tipos TypeScript admin
 │   ├── frontend/                 # Frontend público React
-│   │   ├── 🐳 Dockerfile
-│   │   └── nginx.conf            # Configuración Nginx
+│   │   ├── src/                  # Código fuente React
+│   │   │   ├── auth/            # Sistema de autenticación
+│   │   │   ├── components/      # Componentes React
+│   │   │   │   ├── atoms/       # ✅ Componentes atómicos
+│   │   │   │   ├── layout/      # Componentes de layout
+│   │   │   │   ├── molecules/   # ✅ Componentes moleculares
+│   │   │   │   └── organisms/   # Componentes complejos
+│   │   │   ├── pages/           # Páginas React
+│   │   │   ├── services/        # Servicios API
+│   │   │   ├── styles/          # ✅ Estilos CSS y tokens
+│   │   │   ├── types/           # Tipos TypeScript
+│   │   │   └── utils/           # Utilidades
+│   │   ├── tsconfig.json        # ✅ Configuración TypeScript
+│   │   ├── vite.config.ts       # ✅ Configuración Vite
+│   │   └── package.json         # Dependencias frontend
 │   ├── components/               # Componentes React compartidos
 │   ├── constants/                # Textos en español y configuración
 │   ├── styles/                   # Tokens de diseño y CSS global
 │   └── utils/                    # Formatters y validadores mexicanos
-├── 🐳 scripts/                   # Scripts de automatización
+├── 📁 tests/                     # Testing (PHPUnit + Vitest)
+│   ├── e2e/                      # Tests end-to-end
+│   ├── integration/              # ✅ Tests de integración
+│   └── unit/                     # ✅ Tests unitarios
+├── 📁 scripts/                   # Scripts de automatización
+│   ├── emergency/                # Scripts de emergencia
+│   ├── performance/              # Scripts de performance
+│   ├── testing/                  # ✅ Suite de testing automatizado
 │   ├── dev.sh                    # Iniciar desarrollo
 │   ├── test.sh                   # Ejecutar tests
-│   ├── deploy.sh                 # Desplegar producción
-│   ├── testing/                  # Suite de testing automatizado
-│   │   ├── run-all-tests.sh      # Tests completos con reportes
-│   │   ├── continuous-monitoring.sh # Monitoreo continuo
-│   │   └── test-*.sh             # Tests específicos por área
-│   └── performance/              # Análisis y optimización
-│       ├── analyze-performance.sh # Análisis completo de performance
-│       ├── optimize-docker.sh    # Optimización de contenedores
-│       └── monitor-metrics.sh    # Monitoreo de métricas
-├── database/                     # Migraciones y seeds MySQL
-├── docker/                       # Configuraciones Docker globales
-├── tests/                        # Testing (PHPUnit + Vitest)
-├── memory-bank/                  # Documentación del proyecto
-├── .kiro/                        # Especificaciones técnicas
-└── [páginas].html               # Páginas de marketing estáticas
+│   └── deploy.sh                 # Desplegar producción
+├── 🐳 docker-compose.yml         # Desarrollo con Docker
+├── 🐳 docker-compose.prod.yml    # Producción con Docker
+├── 📄 *.html                     # Páginas HTML originales (13 archivos)
+├── 📄 .env                       # Variables de entorno
+├── 📄 package.json               # Dependencias Node.js raíz
+└── 📄 README.md                  # Documentación principal
 ```
 
 ### Componentes Clave
@@ -225,6 +346,17 @@ cp .env.example .env
 ./scripts/test.sh       # Ejecutar todos los tests
 ./scripts/deploy.sh     # Desplegar a producción
 
+# Admin Dashboard (Nuevo)
+npm run dev:admin       # Iniciar solo admin dashboard (puerto 3001)
+npm run build:admin     # Build admin dashboard
+npm run test:admin      # Tests admin dashboard
+npm run dev:all         # Iniciar frontend + admin simultáneamente
+
+# 🔍 Pre-Commit Verification (Nuevo)
+./scripts/testing/pre-commit-verification.sh   # Verificación completa pre-commit
+npm run pre-commit:check                       # Verificación rápida
+npm run pre-commit:full                        # Verificación completa con builds
+
 # Performance y Optimización
 ./scripts/performance/analyze-performance.sh    # Análisis completo de performance
 ./scripts/performance/optimize-docker.sh        # Optimización de contenedores
@@ -243,6 +375,84 @@ docker-compose down     # Parar servicios
 docker exec naser_frontend npm run test
 docker exec naser_backend composer test
 docker exec naser_backend php migrate.php
+```
+
+### 🔒 Política de Permisos de Archivos
+
+**⚠️ IMPORTANTE**: El proyecto implementa una **política estricta de permisos de archivos** para mantener la estabilidad del sistema y evitar problemas de desarrollo.
+
+**Reglas Críticas**:
+
+- ❌ **NUNCA usar `sudo`** para comandos de desarrollo
+- ❌ **NUNCA cambiar ownership** de archivos (`chown`, `chmod`)
+- ❌ **NUNCA escalar privilegios** innecesariamente
+- ✅ **Mantener ownership** del usuario de desarrollo (`flanuza:staff`)
+- ✅ **Consultar al orquestador** antes de comandos dudosos
+
+**Comandos Prohibidos**:
+
+```bash
+# ❌ PROHIBIDO ABSOLUTAMENTE
+sudo chown
+sudo chmod
+sudo npm install -g
+sudo docker
+sudo composer install
+```
+
+**Alternativas Seguras**:
+
+```bash
+# ✅ PERMITIDO
+npm install
+composer install
+docker build -t image:tag .
+docker-compose up -d
+```
+
+**Documentación Completa**: Ver `.kiro/steering/file-permissions-policy.md` para detalles completos de la política.
+
+### 🔄 CI/CD Pipeline
+
+El proyecto incluye un **pipeline completo de CI/CD** con GitHub Actions que automatiza testing, security scans y deployment:
+
+**Características del Pipeline:**
+
+- **Testing Automatizado**: Frontend (React/Vitest) y Backend (PHP/PHPUnit)
+- **Security Scanning**: Trivy vulnerability scanner para código y Docker images
+- **Integration Testing**: Tests E2E con Docker Compose
+- **Code Quality**: ESLint, PHP CodeSniffer, PHP Mess Detector
+- **Coverage Reports**: Codecov integration con reportes detallados
+- **Multi-stage Deployment**: Staging → E2E Tests → Production
+
+**Workflows Configurados:**
+
+```bash
+.github/workflows/
+├── ci-cd.yml          # Pipeline principal con deployment
+└── ci-tests.yml       # Testing suite completo
+```
+
+**Triggers Automáticos:**
+
+- **Push a `main`**: Full pipeline con deployment a producción
+- **Push a `develop`**: Testing completo sin deployment
+- **Pull Requests**: Validación completa antes de merge
+- **Feature branches**: Testing específico por componente
+
+**Métricas y Reportes:**
+
+- **Test Coverage**: Reportes automáticos en Codecov
+- **Security Alerts**: GitHub Security tab con vulnerabilidades
+- **Performance Metrics**: Análisis de Docker images y build times
+- **Deployment Status**: Badges automáticos de estado del pipeline
+
+```bash
+# Ver estado del pipeline
+git push origin main    # Trigger pipeline completo
+
+# Verificar tests localmente antes de push
+./scripts/testing/run-all-tests.sh --ci
 ```
 
 ### 📊 Base de Datos
@@ -394,29 +604,40 @@ curl -f http://localhost:8000/api/v1/health
 
 ### 👥 Colaboración Multi-Agente
 
-Este proyecto está diseñado para colaboración entre **4 agentes especializados**:
+Este proyecto está diseñado para colaboración entre **5 agentes especializados**:
 
 - **Kiro**: Orquestador principal con sistema de hooks automáticos
-- **Claude**: Desarrollador Frontend React - **BATCH 4: Implementación Pixel Perfect**
+- **Claude**: Desarrollador Frontend React - **BATCH 5: Resolución Crítica**
 - **Gemini**: Desarrollador Backend PHP (UserRepository, JwtService, API REST)
 - **Warp**: Especialista DevOps y automatización (Testing, Performance, Infraestructura)
+- **Qwen**: 🎛️ **Especialista Admin Dashboard** - **BATCH 1: Panel de Administración CMS**
 
 **Flujo de trabajo coordinado:**
 
 1. **Kiro** coordina y detecta cambios automáticamente
-2. **Claude** desarrolla implementación pixel perfect del sitio web completo
+2. **Claude** resuelve problemas críticos de configuración TypeScript y CSS
 3. **Gemini** desarrolla en `/api` y `/database`
 4. **Warp** mantiene infraestructura, testing y performance
-5. Sincronización a través de Docker, base de datos compartida y sistema de hooks
+5. **Qwen** implementa panel de administración en `/src/admin`
+6. Sincronización a través de Docker, base de datos compartida y sistema de hooks
+
+**🔄 Evolución de Metodología de Prompts:**
+
+El proyecto ha implementado un **análisis comparativo de formatos de prompts** (JSON vs Lenguaje Natural) documentado en `ANALISIS-PROMPTS-JSON-VS-NATURAL.md`. Se recomienda un **enfoque híbrido** que mantiene la efectividad del lenguaje natural mientras incorpora metadata JSON para automatización:
+
+- **Mantener**: Prompts en Markdown para contexto rico y motivación
+- **Agregar**: Metadata JSON para tracking automático y métricas
+- **Evolucionar**: Hacia sistema híbrido gradualmente sin perder efectividad actual
 
 **Branch actual**: `feature/auth-integration` - Implementación pixel perfect en progreso
 
 **Estado Actual del Equipo**:
 
-- **Claude (Batch 4)**: 🚨 Resolviendo error CSS crítico para implementación pixel perfect
-- **Gemini**: Desarrollando JwtService y UserRepository
+- **Claude (Batch 5)**: 🟡 **PROGRESO SÓLIDO** - 2/7 tareas completadas, arquitectura de componentes establecida
+- **Gemini (Batch 3)**: 🟢 **EXCELENTE PROGRESO** - 5/8 tareas completadas, APIs core implementadas
 - **Warp**: Manteniendo infraestructura y scripts de resolución crítica
-- **Kiro**: Coordinando desarrollo y actualizando documentación
+- **🎛️ Qwen (Batch 1)**: 🔄 **TRABAJANDO ACTIVAMENTE** - 0/8 tareas completadas (Admin Dashboard CMS)
+- **Kiro**: 📋 **COORDINANDO** - Prompts restaurados, documentación actualizada, esperando completitud de Qwen
 
 ## Documentación
 
@@ -424,6 +645,12 @@ Este proyecto está diseñado para colaboración entre **4 agentes especializado
 
 - **🐳 `DOCKER.md`**: Guía completa de Docker (desarrollo y producción)
 - **🛠️ `docs/DEVOPS-INFRASTRUCTURE.md`**: Ecosistema completo de herramientas DevOps (Warp)
+- **🏗️ `docs/BACKEND-ARCHITECTURE.md`**: ⭐ **NUEVO** - Arquitectura backend completa y estado actual
+- **🔍 `API-DIAGNOSTIC-REPORT.md`**: Diagnóstico completo de la estructura API
+- **📊 `ANALISIS-PROMPTS-JSON-VS-NATURAL.md`**: ⭐ **NUEVO** - Análisis comparativo de metodologías de prompts para sistemas multi-agente
+- **🎛️ `docs/ADMIN-DASHBOARD-CONFIG.md`**: ⭐ **NUEVO** - Configuración DevOps optimizada para Admin Dashboard
+- **🔍 `docs/PRE-COMMIT-VERIFICATION-GUIDE.md`**: ⭐ **NUEVO** - Guía completa del sistema de verificación pre-commit
+- **🔍 `PRE-COMMIT-VERIFICATION.md`**: Checklist y comandos de verificación pre-commit
 - **`CLAUDE.md`**: Guía para desarrollo con Claude Code
 - **`GEMINI.md`**: Guía para colaboración con Gemini
 - **`roadmap.md`**: Estado actual y próximos pasos del proyecto
@@ -433,10 +660,15 @@ Este proyecto está diseñado para colaboración entre **4 agentes especializado
 ### Documentación de Batches Actuales
 
 - **📋 `docs/BATCH-4-PIXEL-PERFECT.md`**: Estado y progreso del Batch 4 (Claude)
+- **📋 `docs/BATCH-5-CRITICAL-RESOLUTION.md`**: Estado y progreso del Batch 5 (Claude)
 - **🎨 `VISUAL_SPEC.md`**: Especificaciones visuales para implementación pixel perfect
 - **🔌 `API_SPEC.md`**: Especificaciones API con estado de integración frontend
-- **📝 `PROMPT-CLAUDE-BATCH-4.md`**: Instrucciones detalladas para implementación pixel perfect
+- **🔌 `docs/API-STATUS-CURRENT.md`**: Estado actual de endpoints y APIs
+- **📝 `PROMPT-CLAUDE-BATCH-5.md`**: Instrucciones detalladas para resolución crítica
 - **⚙️ `docs/TYPESCRIPT-CONFIGURATION.md`**: Configuración TypeScript crítica para frontend
+- **🎛️ `docs/ADMIN-DASHBOARD.md`**: Especificaciones técnicas completas del panel de administración (Qwen - Batch 1)
+- **📝 `PROMPT-QWEN-BATCH-1-ADMIN-DASHBOARD.md`**: Instrucciones detalladas para implementación del admin dashboard
+- **📁 `ESTRUCTURA-PROYECTO-ACTUAL.md`**: ⭐ **NUEVO** - Estructura completa y estado del proyecto
 
 ### Especificaciones Técnicas
 

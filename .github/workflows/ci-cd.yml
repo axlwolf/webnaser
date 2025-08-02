@@ -1,0 +1,120 @@
+name: CI/CD Pipeline - Grupo Naser CMS
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: src/frontend/package-lock.json
+
+      - name: Install dependencies
+        run: cd src/frontend && npm ci
+
+      - name: Run linting
+        run: cd src/frontend && npm run lint
+
+      - name: Run tests
+        run: cd src/frontend && npm run test:coverage
+
+      - name: Build frontend
+        run: cd src/frontend && npm run build
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+
+  test-backend:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: naser_test
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          extensions: pdo, pdo_mysql, mbstring
+
+      - name: Install dependencies
+        run: cd api && composer install --no-dev --optimize-autoloader
+
+      - name: Run PHP CodeSniffer
+        run: cd api && composer cs
+
+      - name: Run PHP Mess Detector
+        run: cd api && composer md
+
+      - name: Run PHPUnit tests
+        run: cd api && composer test
+        env:
+          DB_HOST: 127.0.0.1
+          DB_DATABASE: naser_test
+          DB_USERNAME: root
+          DB_PASSWORD: root
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+          format: "sarif"
+          output: "trivy-results.sarif"
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: "trivy-results.sarif"
+
+  build-and-deploy:
+    needs: [test-frontend, test-backend, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker images
+        run: |
+          docker build -f docker/frontend/Dockerfile.prod -t naser-frontend:latest .
+          docker build -f docker/backend/Dockerfile.prod -t naser-backend:latest .
+
+      - name: Run security scan on images
+        run: |
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy image naser-frontend:latest
+          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+            aquasec/trivy image naser-backend:latest
+
+      - name: Deploy to staging
+        run: ./scripts/deploy-staging.sh
+
+      - name: Run E2E tests
+        run: ./scripts/run-e2e-tests.sh
+
+      - name: Deploy to production
+        if: success()
+        run: ./scripts/deploy-production.sh

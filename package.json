@@ -12,11 +12,30 @@
     "lint:frontend": "cd src/frontend && npm run lint",
     "lint:backend": "cd api && composer cs",
     "lint:all": "npm run lint:frontend && npm run lint:backend",
+    "dev:admin": "cd src/admin && npm run dev",
+    "build:admin": "cd src/admin && npm run build",
+    "test:admin": "cd src/admin && npm run test",
+    "lint:admin": "cd src/admin && npm run lint",
+    "dev:all": "concurrently \"npm run dev:frontend\" \"npm run dev:admin\"",
+    "build:all": "npm run build:frontend && npm run build:admin",
+    "test:all:complete": "npm run test:frontend && npm run test:admin && npm run test:backend",
+    "lint:all:complete": "npm run lint:frontend && npm run lint:admin && npm run lint:backend",
+    "deploy:admin:staging": "npm run build:admin && ./scripts/deploy-admin-staging.sh",
+    "deploy:admin:production": "npm run build:admin && ./scripts/deploy-admin-production.sh",
+    "pre-commit:check": "./scripts/testing/pre-commit-verification.sh --quick",
+    "pre-commit:full": "./scripts/testing/pre-commit-verification.sh --full",
+    "pre-commit:verify": "./scripts/testing/pre-commit-verification.sh",
     "prepare": "husky install"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "chokidar": "^4.0.3",
+    "concurrently": "^8.2.2",
+    "headlessui": "^0.0.0",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.11"
+    "lint-staged": "^15.2.11",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
   },
   "lint-staged": {
     "src/frontend/src/**/*.{js,jsx,ts,tsx}": [
@@ -38,5 +57,18 @@
     "grupo-naser"
   ],
   "author": "Grupo Naser",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
+    "@react-google-maps/api": "^2.20.7",
+    "@tinymce/tinymce-react": "^6.3.0",
+    "axios": "^1.11.0",
+    "chart.js": "^4.5.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-hook-form": "^7.61.1",
+    "react-query": "^3.39.3",
+    "react-router-dom": "^7.7.1",
+    "react-toastify": "^11.0.5",
+    "tinymce": "^8.0.1"
+  }
 }

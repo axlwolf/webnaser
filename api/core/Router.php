@@ -3,35 +3,32 @@
 namespace App\Core;
 
 class Router {
-    private array $routes = [];
+    private $routes = [];
 
-    public function add(string $method, string $path, callable $handler): void {
-        $this->routes[$method][$path] = $handler;
+    public function add($method, $path, $handler) {
+        $this->routes[] = [$method, $path, $handler];
     }
 
-    public function dispatch(): void {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    public function dispatch(Request $request) {
+        $path = $request->getPath();
+        $method = $request->getMethod();
 
-        $handler = null;
-        $params = [];
+        foreach ($this->routes as $route) {
+            list($routeMethod, $routePath, $handler) = $route;
 
-        foreach ($this->routes[$method] as $route => $callback) {
-            $pattern = "#^" . $route . "$#";
-            if (preg_match($pattern, $path, $matches)) {
-                $handler = $callback;
-                $params = array_slice($matches, 1);
-                break;
+            $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '(?P<$1>[a-zA-Z0-9_]+)', $routePath);
+            if ($routeMethod === $method && preg_match("#^$pattern$#", $path, $matches)) {
+                $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
+                
+                list($controllerClass, $methodName) = $handler;
+                $controller = new $controllerClass();
+                
+                call_user_func_array([$controller, $methodName], $params);
+                return;
             }
         }
 
-        if ($handler) {
-            $request = new Request();
-            $response = call_user_func_array($handler, array_merge([$request], $params));
-            $response->send();
-        } else {
-            http_response_code(404);
-            echo json_encode(['error' => 'Not Found']);
-        }
+        http_response_code(404);
+        echo json_encode(['success' => false, 'error' => 'not_found', 'message' => 'Endpoint no encontrado.', 'timestamp' => date('c')]);
     }
 }

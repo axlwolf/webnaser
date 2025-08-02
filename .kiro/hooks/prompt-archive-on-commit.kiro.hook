@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Archive PROMPT Files on Session Close",
+  "description": "Mueve automáticamente los archivos PROMPT-[agent]-BATCH-*.md a docs/prompts-archive cuando se hace un commit de cierre de sesión",
+  "version": "1",
+  "when": {
+    "type": "userTriggered",
+    "patterns": [
+      "PROMPT-*-BATCH-*.md"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Detecté que hay archivos PROMPT-[agent]-BATCH-*.md en el directorio raíz y se está preparando un commit. Por favor:\n\n1. **Identifica todos los archivos PROMPT-[agent]-BATCH-*.md** en el directorio raíz\n2. **Verifica si este es un commit de cierre de sesión** (busca palabras clave como 'sesión', 'final', 'cierre', 'end session', etc. en el mensaje de commit o cambios recientes)\n3. **Si es un commit de cierre de sesión:**\n   - Mueve todos los archivos PROMPT-[agent]-BATCH-*.md a docs/prompts-archive/\n   - Mantén los nombres originales de los archivos\n   - Actualiza el staging area para incluir estos cambios\n   - Confirma que los archivos se movieron correctamente\n\n4. **Genera un resumen** de los archivos movidos y actualiza el commit para incluir esta información\n\n**Archivos a procesar:**\n- PROMPT-CLAUDE-BATCH-*.md\n- PROMPT-GEMINI-BATCH-*.md  \n- PROMPT-WARP-BATCH-*.md\n- Cualquier otro archivo que siga el patrón PROMPT-[agent]-BATCH-*.md\n\n**Directorio destino:** docs/prompts-archive/\n\nEste proceso ayuda a mantener el directorio raíz limpio y organizar el historial de prompts por sesiones de trabajo."
+  }
+}

@@ -4,49 +4,99 @@
 
 Este documento describe los problemas críticos de infraestructura identificados en el **CMS de Grupo Naser** y sus procedimientos de resolución. Estos problemas pueden bloquear completamente el desarrollo del equipo y requieren resolución inmediata.
 
-**Estado del Documento**: Actualizado el 25 de julio de 2025  
-**Responsable**: Warp (DevOps Specialist)  
-**Prioridad**: ✅ RESUELTO - Problemas críticos solucionados  
+**Estado del Documento**: Actualizado el 31 de julio de 2025  
+**Responsable**: Warp (DevOps Specialist) + Claude (Frontend Specialist)  
+**Prioridad**: 🟡 PROGRESO SÓLIDO - 2/3 problemas críticos resueltos  
 **Tiempo de Resolución**: <1 minuto por problema con scripts automáticos
 
 ## Problemas Críticos Identificados
 
-### 1. Configuración TypeScript Inconsistente
+### 1. Configuración TypeScript Inconsistente ✅ RESUELTO
 
-**Descripción**: El proyecto frontend tiene configuración inconsistente entre JSX y TypeScript que está causando problemas de compilación.
+**Descripción**: El proyecto frontend tenía configuración inconsistente entre JSX y TypeScript que estaba causando problemas de compilación.
 
-**Síntomas**:
+**Síntomas Originales**:
 
-- Falta archivo `tsconfig.json` en el directorio frontend
-- Archivo `src/test/App.test.jsx` usa JSX en lugar de TSX
-- `vite.config.js` debería ser `vite.config.ts` para consistencia
-- Configuración TypeScript incompleta para React
+- ❌ Falta archivo `tsconfig.json` en el directorio frontend
+- ❌ Archivo `src/test/App.test.jsx` usa JSX en lugar de TSX
+- ❌ `vite.config.js` debería ser `vite.config.ts` para consistencia
+- ❌ Configuración TypeScript incompleta para React
 
-**Impacto**:
+**Impacto Original**:
 
 - ❌ Claude (Frontend Developer) bloqueado para implementación pixel perfect
 - ❌ Compilación TypeScript inconsistente
 - ❌ Testing con configuración incorrecta
 
-**Solución Implementada**:
+**✅ Solución Implementada (COMPLETADA)**:
 
 ```bash
-# Configuración TypeScript completa requerida
-# - Crear tsconfig.json en src/frontend/
-# - Convertir archivos JSX a TSX
-# - Actualizar vite.config.js a vite.config.ts
-# - Configurar paths y aliases correctamente
+# ✅ Configuración TypeScript completa implementada
+# ✅ tsconfig.json creado en src/frontend/ con configuración robusta
+# ✅ vite.config.js convertido a vite.config.ts
+# ✅ Paths y aliases configurados correctamente
+# ✅ Testing configuration actualizada para TypeScript
 ```
 
-### 2. Error CSS en Contenedor Frontend
+**Estado**: ✅ **COMPLETAMENTE RESUELTO** - Base técnica sólida establecida
+
+### 2. Error CSS en Contenedor Frontend 🔄 EN PROGRESO
 
 **Descripción**: Rutas de importación CSS incorrectas causando errores en el contenedor Docker.
 
-**Síntomas**:
+**Síntomas Originales**:
 
-- Error CSS: `ENOENT: no such file or directory, open '../../styles/tokens.css'`
-- Contenedor frontend con errores de compilación CSS
-- Design tokens no implementados correctamente
+- ❌ Error CSS: `ENOENT: no such file or directory, open '../../styles/tokens.css'`
+- ❌ Contenedor frontend con errores de compilación CSS
+- ❌ Design tokens no implementados correctamente
+
+**🔄 Progreso Actual**:
+
+```
+Estructura de estilos creada, importaciones en proceso
+```
+
+**✅ Trabajo Completado**:
+
+- ✅ Design tokens implementados en `src/frontend/src/styles/tokens.css`
+- ✅ Estructura de estilos establecida correctamente
+- ✅ Sistema de colores, tipografía y spacing definido
+
+**🔄 Trabajo en Progreso**:
+
+- 🔄 Corrección de rutas de importación en `src/frontend/src/index.css`
+- 🔄 Validación de funcionamiento en Docker
+
+**Estado**: 🟡 **PROGRESO AVANZADO** - Estructura creada, importaciones finalizándose
+
+### 3. Sistema de Design Tokens Ausente ✅ RESUELTO
+
+**Descripción**: El proyecto carecía de un sistema de design tokens para mantener consistencia visual.
+
+**Síntomas Originales**:
+
+- ❌ Variables CSS no definidas para colores, tipografía, spacing
+- ❌ Tokens semánticos faltantes para consistencia visual
+- ❌ CSS custom properties no implementadas
+- ❌ Imposible mantener consistencia visual
+
+**Impacto Original**:
+
+- ❌ Implementación pixel perfect imposible
+- ❌ Inconsistencia visual entre componentes
+- ❌ Mantenimiento CSS complejo
+
+**✅ Solución Implementada (COMPLETADA)**:
+
+```bash
+# ✅ Sistema completo de design tokens implementado
+# ✅ src/frontend/src/styles/tokens.css - Tokens completos
+# ✅ src/frontend/src/styles/colors.css - Colores exactos del sitio
+# ✅ src/frontend/src/styles/typography.css - Sistema tipográfico
+# ✅ src/frontend/src/styles/globals.css - Estilos globales
+```
+
+**Estado**: ✅ **COMPLETAMENTE RESUELTO** - Consistencia visual garantizada
 
 **Impacto**:
 
@@ -387,6 +437,36 @@ docker-compose logs -f --tail=10
    - Detección de reiniciar constantes
    - Alertas de errores HTTP 500
 
+## 🔒 Política de Permisos de Archivos
+
+**⚠️ CRÍTICO**: Todos los procedimientos de resolución deben seguir la **Política de Permisos de Archivos** del proyecto.
+
+**Reglas Esenciales**:
+
+- ❌ **NUNCA usar `sudo`** en scripts de resolución
+- ❌ **NUNCA cambiar ownership** de archivos del proyecto
+- ✅ **Mantener permisos** del usuario de desarrollo (`flanuza:staff`)
+- ✅ **Consultar al orquestador** antes de cambios críticos
+
+**Scripts Seguros**:
+
+```bash
+# ✅ CORRECTO
+./fixes/critical/restore-backend.sh
+docker-compose restart backend
+chmod +x scripts/emergency/health-check.sh
+
+# ❌ PROHIBIDO
+sudo ./fixes/critical/restore-backend.sh
+sudo chown root:root api/
+sudo chmod 777 src/
+```
+
+**Documentación Completa**:
+
+- `.kiro/steering/file-permissions-policy.md` - Política completa
+- `docs/SECURITY-DEVELOPMENT-GUIDELINES.md` - Pautas de seguridad
+
 ## Contacto y Escalación
 
 **Responsable Principal**: Warp (DevOps Specialist)  
@@ -397,8 +477,9 @@ docker-compose logs -f --tail=10
 
 1. Ejecutar todos los scripts de diagnóstico
 2. Documentar síntomas en `logs/critical/`
-3. Contactar a Kiro para coordinación de equipo
-4. Considerar rollback completo si es necesario
+3. **Verificar cumplimiento** de política de permisos
+4. Contactar a Kiro para coordinación de equipo
+5. Considerar rollback completo si es necesario
 
 ---
 

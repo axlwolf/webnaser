@@ -27,6 +27,7 @@ scripts/testing/
 ├── test-frontend.sh           # Tests específicos de React
 ├── test-integration.sh        # Tests de integración end-to-end
 ├── continuous-monitoring.sh   # Monitoreo continuo de salud
+├── pre-commit-verification.sh # 🆕 Verificación completa pre-commit
 └── README.md                  # Esta documentación
 
 .github/workflows/
@@ -80,6 +81,19 @@ reports/testing/
 
 # Monitoreo continuo
 ./scripts/testing/continuous-monitoring.sh
+```
+
+### 🔍 Pre-Commit Verification (Nuevo)
+
+```bash
+# Verificación completa antes de commit
+./scripts/testing/pre-commit-verification.sh
+
+# Verificación rápida (solo tests)
+./scripts/testing/pre-commit-verification.sh --quick
+
+# Verificación completa con builds
+./scripts/testing/pre-commit-verification.sh --full
 ```
 
 ### Modo CI/CD
@@ -309,8 +323,134 @@ tail -f reports/testing/latest/frontend-tests.log
 - **Integration Tests**: ~20 segundos
 - **Suite Completa**: ~2 minutos
 
+## 🔍 Pre-Commit Verification System
+
+### Descripción
+
+Sistema completo de verificación que se ejecuta antes de cada commit para garantizar la calidad del código y la estabilidad del sistema.
+
+### Características
+
+- ✅ **Testing Completo**: Backend, Frontend, Admin Dashboard
+- ✅ **Code Quality**: Linting y estándares de código
+- ✅ **Build Verification**: Verificación de builds exitosos
+- ✅ **Functional Testing**: Health checks y conectividad
+- ✅ **Reportes Detallados**: HTML, Markdown y logs
+- ✅ **Instrucciones Automáticas**: Pasos siguientes claros
+
+### Fases de Verificación
+
+#### 1. Testing Completo
+
+```bash
+# Backend PHP con PHPUnit
+cd api && ./vendor/bin/phpunit
+
+# Frontend React con Vitest
+cd src/frontend && npm test
+
+# Admin Dashboard (si existe)
+cd src/admin && npm test
+```
+
+#### 2. Linting y Code Quality
+
+```bash
+# Frontend linting
+cd src/frontend && npm run lint
+
+# Backend linting
+cd api && composer cs
+
+# Admin linting
+cd src/admin && npm run lint
+```
+
+#### 3. Builds (Modo Full)
+
+```bash
+# Frontend build
+cd src/frontend && npm run build
+
+# Admin build
+cd src/admin && npm run build
+
+# Backend dependencies
+cd api && composer install --optimize-autoloader
+```
+
+#### 4. Verificación Funcional
+
+```bash
+# Health checks
+curl -f http://localhost:8000/api/v1/health
+curl -f http://localhost:3000
+
+# Database connectivity
+docker exec naser_db mysql -u naser_user -pnaser_pass_2024 -e "SELECT 1" naser_cms
+```
+
+### Uso Recomendado
+
+**Antes de cada commit:**
+
+```bash
+# 1. Hacer cambios en código
+git add .
+
+# 2. Ejecutar verificación
+./scripts/testing/pre-commit-verification.sh
+
+# 3. Si pasa, proceder con commit
+git commit -m "feat: descripción de cambios"
+
+# 4. Push al repositorio
+git push origin branch-name
+```
+
+### Reportes Generados
+
+Los reportes se guardan en `reports/pre-commit/[timestamp]/`:
+
+- **pre-commit-summary.md**: Reporte ejecutivo
+- **backend-tests.log**: Log detallado de tests PHP
+- **frontend-tests.log**: Log detallado de tests React
+- **backend-lint.log**: Resultados de linting PHP
+- **frontend-lint.log**: Resultados de linting React
+- **frontend-build.log**: Log de build React
+- **backend-build.log**: Log de dependencias PHP
+
+### Integración con npm Scripts
+
+```json
+{
+  "scripts": {
+    "pre-commit:check": "./scripts/testing/pre-commit-verification.sh --quick",
+    "pre-commit:full": "./scripts/testing/pre-commit-verification.sh --full",
+    "pre-commit:verify": "./scripts/testing/pre-commit-verification.sh"
+  }
+}
+```
+
+### Troubleshooting
+
+**Si la verificación falla:**
+
+1. **Revisar logs específicos** en el directorio de reportes
+2. **Corregir problemas identificados**
+3. **Re-ejecutar verificación**
+4. **Proceder con commit solo cuando pase**
+
+**Problemas comunes:**
+
+- **Tests fallan**: Revisar `*-tests.log`
+- **Linting falla**: Revisar `*-lint.log`
+- **Build falla**: Revisar `*-build.log`
+- **Endpoints no responden**: Verificar Docker containers
+
 ## 🔮 Próximas Mejoras
 
+- [x] **Pre-Commit Verification**: Sistema completo implementado
 - [ ] **E2E Testing**: Integración con Cypress/Playwright
 - [ ] **Performance Testing**: Métricas de carga y stress
 - [ ] **Security Testing**: Análisis automático de vulnerabilidades
