@@ -1,230 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useQuery, useMutation } from 'react-query';
-import { getLocation, updateLocation, createLocation } from '../../services/adminApi';
-import HoursManager from './HoursManager';
-import ServicesAssignment from './ServicesAssignment';
-import ServiceGallery from '../services/ServiceGallery';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Location } from '../../../types/admin.types';
+import { getLocationById, updateLocation } from '../../services/locationService';
+import { useForm } from 'react-hook-form';
+import Button from '@headlessui/react';
 
-interface Location {
-  id?: number;
+interface LocationFormInputs {
   name: string;
   slug: string;
   address: string;
   phone: string;
   email: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-  hours: Record<string, string>;
-  services: string[];
-  images: string[];
+  coordinatesLat: number;
+  coordinatesLng: number;
+  hours: string;
+  services: string;
+  images: string;
   isMain: boolean;
-  status: 'active' | 'inactive';
+  status: string;
 }
 
-const LocationEditor = () => {
+const LocationEditor: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
-  const [location, setLocation] = useState<Location>({ name: '', slug: '', address: '', phone: '', email: '', coordinates: { lat: 0, lng: 0 }, hours: {}, services: [], images: [], isMain: false, status: 'active' });
-
-  const { data: existingLocation, isLoading } = useQuery(['location', id], () => getLocation(Number(id)), { enabled: !!id });
-  const { mutateAsync: updateLocationMutate, isLoading: isUpdating } = useMutation(updateLocation);
-  const { mutateAsync: createLocationMutate, isLoading: isCreating } = useMutation(createLocation);
+  const [location, setLocation] = useState<Location | null>(null);
+  const { register, handleSubmit, setValue } = useForm<LocationFormInputs>();
 
   useEffect(() => {
-    if (existingLocation) {
-      setLocation(existingLocation);
+    if (id) {
+      const fetchLocation = async () => {
+        try {
+          const response = await getLocationById(Number(id));
+          setLocation(response.data);
+          setValue('name', response.data.name);
+          setValue('slug', response.data.slug);
+          setValue('address', response.data.address);
+          setValue('phone', response.data.phone);
+          setValue('email', response.data.email);
+          setValue('coordinatesLat', response.data.coordinates.lat);
+          setValue('coordinatesLng', response.data.coordinates.lng);
+          setValue('hours', JSON.stringify(response.data.hours));
+          setValue('services', response.data.services.join(','));
+          setValue('images', response.data.images.join(','));
+          setValue('isMain', response.data.isMain);
+          setValue('status', response.data.status);
+        } catch (error) {
+          console.error('Error fetching location:', error);
+        }
+      };
+
+      fetchLocation();
     }
-  }, [existingLocation]);
+  }, [id, setValue]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setLocation({ ...location, [event.target.name]: event.target.value });
-  };
-
-  const handleCoordinatesChange = (coordinates: { lat: number; lng: number }) => {
-    setLocation({ ...location, coordinates });
-  };
-
-  const handleHoursChange = (hours: Record<string, string>) => {
-    setLocation({ ...location, hours });
-  };
-
-  const handleServicesChange = (services: string[]) => {
-    setLocation({ ...location, services });
-  };
-
-  const handleImagesChange = (images: string[]) => {
-    setLocation({ ...location, images });
-  };
-
-  const handleIsMainChange = (isMain: boolean) => {
-    setLocation({ ...location, isMain });
-  };
-
-  const handleStatusChange = (status: 'active' | 'inactive') => {
-    setLocation({ ...location, status });
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const onSubmit = async (data: LocationFormInputs) => {
     try {
+      const updatedLocation = {
+        ...data,
+        coordinates: {
+          lat: Number(data.coordinatesLat),
+          lng: Number(data.coordinatesLng),
+        },
+        services: data.services.split(',').map(service => service.trim()),
+        images: data.images.split(',').map(image => image.trim()),
+      };
+
       if (id) {
-        await updateLocationMutate({ ...location, id: Number(id) });
-        toast.success('Location updated successfully!');
-      } else {
-        await createLocationMutate(location);
-        toast.success('Location created successfully!');
-        navigate('/locations');
+        await updateLocation(Number(id), updatedLocation);
       }
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to save location.');
+      navigate('/admin/locations');
+    } catch (error) {
+      console.error('Error updating location:', error);
     }
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">{id ? 'Edit Location' : 'Create New Location'}</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Name</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={location.name}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+    <div>
+      <h1>Editar Ubicación</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <label htmlFor='name'>Nombre:</label>
+          <input id='name' {...register('name')} required />{}
         </div>
-        <div className="mb-4">
-          <label htmlFor="slug" className="block text-gray-700 font-bold mb-2">Slug</label>
-          <input
-            type="text"
-            id="slug"
-            name="slug"
-            value={location.slug}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+        <div>
+          <label htmlFor='slug'>Slug:</label>
+          <input id='slug' {...register('slug')} required />{}
         </div>
-        <div className="mb-4">
-          <label htmlFor="address" className="block text-gray-700 font-bold mb-2">Address</label>
-          <textarea
-            id="address"
-            name="address"
-            value={location.address}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            rows={4}
-          ></textarea>
+        <div>
+          <label htmlFor='address'>Dirección:</label>
+          <input id='address' {...register('address')} required />{}
         </div>
-        <div className="mb-4">
-          <label htmlFor="phone" className="block text-gray-700 font-bold mb-2">Phone</label>
-          <input
-            type="text"
-            id="phone"
-            name="phone"
-            value={location.phone}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+        <div>
+          <label htmlFor='phone'>Teléfono:</label>
+          <input id='phone' {...register('phone')} required />{}
         </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-bold mb-2">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={location.email}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
+        <div>
+          <label htmlFor='email'>Email:</label>
+          <input id='email' {...register('email')} required />{}
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-bold mb-2">Coordinates</label>
-          <div className="flex space-x-2">
-            <input
-              type="number"
-              step="any"
-              name="lat"
-              value={location.coordinates.lat}
-              onChange={(e) => handleCoordinatesChange({ ...location.coordinates, lat: parseFloat(e.target.value) })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-            <input
-              type="number"
-              step="any"
-              name="lng"
-              value={location.coordinates.lng}
-              onChange={(e) => handleCoordinatesChange({ ...location.coordinates, lng: parseFloat(e.target.value) })}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+        <div>
+          <label htmlFor='coordinatesLat'>Latitud:</label>
+          <input id='coordinatesLat' type='number' {...register('coordinatesLat')} required />{}
         </div>
-        <HoursManager
-          hours={location.hours}
-          onChange={handleHoursChange}
-        />
-        <ServicesAssignment
-          services={location.services}
-          onChange={handleServicesChange}
-        />
-        <ServiceGallery
-          image={location.images[0] || ''}
-          gallery={location.images.slice(1)}
-          onImageChange={(image) => handleImagesChange([image, ...location.images.slice(1)])}
-          onGalleryChange={(gallery) => handleImagesChange([location.images[0], ...gallery])}
-        />
-        <div className="mb-4">
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              checked={location.isMain}
-              onChange={(e) => handleIsMainChange(e.target.checked)}
-              className="form-checkbox h-5 w-5 text-blue-600"
-            />
-            <span className="ml-2">Main Location</span>
-          </label>
+        <div>
+          <label htmlFor='coordinatesLng'>Longitud:</label>
+          <input id='coordinatesLng' type='number' {...register('coordinatesLng')} required />{}
         </div>
-        <div className="mb-4">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="status"
-              value="active"
-              checked={location.status === 'active'}
-              onChange={() => handleStatusChange('active')}
-              className="form-radio h-4 w-4 text-blue-600"
-            />
-            <span className="ml-2">Active</span>
-          </label>
-          <label className="inline-flex items-center ml-6">
-            <input
-              type="radio"
-              name="status"
-              value="inactive"
-              checked={location.status === 'inactive'}
-              onChange={() => handleStatusChange('inactive')}
-              className="form-radio h-4 w-4 text-blue-600"
-            />
-            <span className="ml-2">Inactive</span>
-          </label>
+        <div>
+          <label htmlFor='hours'>Horarios (JSON):</label>
+          <textarea id='hours' {...register('hours')} required />{}
         </div>
-        <button
-          type="submit"
-          disabled={isUpdating || isCreating}
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isUpdating || isCreating ? 'cursor-not-allowed opacity-50' : ''}`}
-        >
-          {isUpdating || isCreating ? 'Saving...' : 'Save'}
-        </button>
+        <div>
+          <label htmlFor='services'>Servicios (separados por comas):</label>
+          <input id='services' {...register('services')} required />{}
+        </div>
+        <div>
+          <label htmlFor='images'>Imágenes (URLs separadas por comas):</label>
+          <input id='images' {...register('images')} required />{}
+        </div>
+        <div>
+          <label htmlFor='isMain'>Principal:</label>
+          <input id='isMain' type='checkbox' {...register('isMain')} />{}
+        </div>
+        <div>
+          <label htmlFor='status'>Estado:</label>
+          <select id='status' {...register('status')} required >{}
+            <option value='active'>Activo</option>
+            <option value='inactive'>Inactivo</option>
+          </select>
+        </div>
+        <Button type='submit' className='mt-4 bg-blue-500 text-white px-4 py-2 rounded'>Guardar</Button>
       </form>
     </div>
   );

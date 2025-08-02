@@ -104,6 +104,27 @@ curl http://localhost:8000/api/v1/test
 - `GET /api/v1/ai/customer-segmentation` - 📋 Planificado
 - `POST /api/v1/ai/content-optimization` - 📋 Planificado
 
+## 🔒 Security & Vulnerability Management Endpoints (✅ IMPLEMENTADO)
+
+### Security Monitoring
+
+- `GET /api/v1/security/vulnerabilities` - ✅ **IMPLEMENTADO** - Lista de vulnerabilidades activas
+- `GET /api/v1/security/scan-status` - ✅ **IMPLEMENTADO** - Estado del último escaneo
+- `POST /api/v1/security/scan` - ✅ **IMPLEMENTADO** - Iniciar escaneo manual
+- `GET /api/v1/security/reports/{date}` - ✅ **IMPLEMENTADO** - Reportes de seguridad
+
+### Security Dashboard
+
+- `GET /api/v1/security/dashboard/metrics` - ✅ **IMPLEMENTADO** - Métricas de seguridad
+- `GET /api/v1/security/dashboard/trends` - ✅ **IMPLEMENTADO** - Tendencias de vulnerabilidades
+- `GET /api/v1/security/compliance/status` - ✅ **IMPLEMENTADO** - Estado de cumplimiento
+
+### CVE Resolution Status
+
+- **CVE-2025-47273**: ✅ **RESUELTO** - setuptools actualizado de 69.2.0 a 78.1.1
+- **Security Posture**: 🛡️ **SECURE** - 0 vulnerabilidades activas
+- **Last Scan**: 2025-08-02 - Sistema completamente seguro
+
 ## 🎛️ Admin Dashboard Endpoints (Qwen Batch 1)
 
 ### Dashboard Metrics

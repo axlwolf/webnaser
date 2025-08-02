@@ -1,60 +1,35 @@
 import React from 'react';
+import { AdminUser } from '../../../types/admin.types';
+import { useForm } from 'react-hook-form';
+import Button from '@headlessui/react';
 
-interface Props {
-  role: 'super_admin' | 'admin' | 'editor' | 'viewer';
-  onChange: (role: 'super_admin' | 'admin' | 'editor' | 'viewer') => void;
+interface RoleManagerProps {
+  user: AdminUser;
+  onUpdateRole: (role: 'super_admin' | 'admin' | 'editor' | 'viewer') => void;
 }
 
-const RoleManager = ({ role, onChange }: Props) => {
+const RoleManager: React.FC<RoleManagerProps> = ({ user, onUpdateRole }) => {
+  const { register, handleSubmit } = useForm<{ role: 'super_admin' | 'admin' | 'editor' | 'viewer' }>();
+
+  const onSubmit = (data: { role: 'super_admin' | 'admin' | 'editor' | 'viewer' }) => {
+    onUpdateRole(data.role);
+  };
+
   return (
-    <div className="mb-4">
-      <h3 className="text-xl font-bold mb-2">Role Manager</h3>
-      <div className="flex space-x-2">
-        <label className="inline-flex items-center">
-          <input
-            type="radio"
-            name="role"
-            value="super_admin"
-            checked={role === 'super_admin'}
-            onChange={() => onChange('super_admin')}
-            className="form-radio h-4 w-4 text-blue-600"
-          />
-          <span className="ml-2">Super Admin</span>
-        </label>
-        <label className="inline-flex items-center">
-          <input
-            type="radio"
-            name="role"
-            value="admin"
-            checked={role === 'admin'}
-            onChange={() => onChange('admin')}
-            className="form-radio h-4 w-4 text-blue-600"
-          />
-          <span className="ml-2">Admin</span>
-        </label>
-        <label className="inline-flex items-center">
-          <input
-            type="radio"
-            name="role"
-            value="editor"
-            checked={role === 'editor'}
-            onChange={() => onChange('editor')}
-            className="form-radio h-4 w-4 text-blue-600"
-          />
-          <span className="ml-2">Editor</span>
-        </label>
-        <label className="inline-flex items-center">
-          <input
-            type="radio"
-            name="role"
-            value="viewer"
-            checked={role === 'viewer'}
-            onChange={() => onChange('viewer')}
-            className="form-radio h-4 w-4 text-blue-600"
-          />
-          <span className="ml-2">Viewer</span>
-        </label>
-      </div>
+    <div>
+      <h2>Gestionar Rol</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <label htmlFor='role'>Rol:</label>
+          <select id='role' {...register('role')} required >{}
+            <option value='super_admin'>Super Admin</option>
+            <option value='admin'>Admin</option>
+            <option value='editor'>Editor</option>
+            <option value='viewer'>Viewer</option>
+          </select>
+        </div>
+        <Button type='submit' className='mt-4 bg-blue-500 text-white px-4 py-2 rounded'>Actualizar Rol</Button>
+      </form>
     </div>
   );
 };

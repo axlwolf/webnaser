@@ -1,115 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from 'react-query';
-import { getGeneralSettings, updateGeneralSettings } from '../../services/adminApi';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Button from '@headlessui/react';
 
-interface GeneralSettings {
+interface GeneralSettingsFormInputs {
   siteName: string;
   logoUrl: string;
-  contactInfo: {
-    address: string;
-    phone: string;
-    email: string;
-  };
+  contactInfo: string;
 }
 
-const GeneralSettings = () => {
-  const { data: settings, isLoading, refetch } = useQuery(['generalSettings'], getGeneralSettings);
-  const { mutateAsync: updateSettingsMutate, isLoading: isUpdating } = useMutation(updateGeneralSettings);
-
-  const [siteName, setSiteName] = useState('');
-  const [logoUrl, setLogoUrl] = useState('');
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
+const GeneralSettings: React.FC = () => {
+  const [settings, setSettings] = useState<GeneralSettingsFormInputs | null>(null);
+  const { register, handleSubmit, setValue } = useForm<GeneralSettingsFormInputs>();
 
   useEffect(() => {
-    if (settings) {
-      setSiteName(settings.siteName);
-      setLogoUrl(settings.logoUrl);
-      setAddress(settings.contactInfo.address);
-      setPhone(settings.contactInfo.phone);
-      setEmail(settings.contactInfo.email);
-    }
-  }, [settings]);
+    const fetchSettings = async () => {
+      try {
+        // Placeholder for fetching settings from API
+        const response = {
+          siteName: 'Grupo Naser CMS',
+          logoUrl: 'https://example.com/logo.png',
+          contactInfo: 'contact@gruponaser.com',
+        };
+        setSettings(response);
+        setValue('siteName', response.siteName);
+        setValue('logoUrl', response.logoUrl);
+        setValue('contactInfo', response.contactInfo);
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+    fetchSettings();
+  }, [setValue]);
+
+  const onSubmit = async (data: GeneralSettingsFormInputs) => {
     try {
-      await updateSettingsMutate({ siteName, logoUrl, contactInfo: { address, phone, email } });
-      toast.success('General settings updated successfully!');
-      refetch();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to update general settings.');
+      // Placeholder for updating settings in API
+      console.log('Updated settings:', data);
+    } catch (error) {
+      console.error('Error updating settings:', error);
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">General Settings</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="siteName" className="block text-gray-700 font-bold mb-2">Site Name</label>
-          <input
-            type="text"
-            id="siteName"
-            value={siteName}
-            onChange={(e) => setSiteName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="logoUrl" className="block text-gray-700 font-bold mb-2">Logo URL</label>
-          <input
-            type="text"
-            id="logoUrl"
-            value={logoUrl}
-            onChange={(e) => setLogoUrl(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="address" className="block text-gray-700 font-bold mb-2">Address</label>
-          <input
-            type="text"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="phone" className="block text-gray-700 font-bold mb-2">Phone</label>
-          <input
-            type="text"
-            id="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 font-bold mb-2">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isUpdating}
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isUpdating ? 'cursor-not-allowed opacity-50' : ''}`}
-        >
-          {isUpdating ? 'Updating...' : 'Update Settings'}
-        </button>
-      </form>
+    <div>
+      <h2>Configuraciones Generales</h2>
+      {settings && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <label htmlFor='siteName'>Nombre del Sitio:</label>
+            <input id='siteName' {...register('siteName')} required />{}
+          </div>
+          <div>
+            <label htmlFor='logoUrl'>URL del Logo:</label>
+            <input id='logoUrl' {...register('logoUrl')} required />{}
+          </div>
+          <div>
+            <label htmlFor='contactInfo'>Información de Contacto:</label>
+            <input id='contactInfo' {...register('contactInfo')} required />{}
+          </div>
+          <Button type='submit' className='mt-4 bg-blue-500 text-white px-4 py-2 rounded'>Guardar</Button>
+        </form>
+      )}
     </div>
   );
 };

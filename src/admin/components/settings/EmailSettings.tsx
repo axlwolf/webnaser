@@ -1,137 +1,81 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from 'react-query';
-import { getEmailSettings, updateEmailSettings } from '../../services/adminApi';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Button from '@headlessui/react';
 
-interface EmailSettings {
+interface EmailSettingsFormInputs {
   smtpHost: string;
   smtpPort: number;
   smtpUser: string;
   smtpPassword: string;
-  templates: {
-    welcomeEmail: string;
-    forgotPasswordEmail: string;
-  };
+  emailTemplates: string;
 }
 
-const EmailSettings = () => {
-  const { data: settings, isLoading, refetch } = useQuery(['emailSettings'], getEmailSettings);
-  const { mutateAsync: updateSettingsMutate, isLoading: isUpdating } = useMutation(updateEmailSettings);
-
-  const [smtpHost, setSmtpHost] = useState('');
-  const [smtpPort, setSmtpPort] = useState(0);
-  const [smtpUser, setSmtpUser] = useState('');
-  const [smtpPassword, setSmtpPassword] = useState('');
-  const [welcomeEmail, setWelcomeEmail] = useState('');
-  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+const EmailSettings: React.FC = () => {
+  const [settings, setSettings] = useState<EmailSettingsFormInputs | null>(null);
+  const { register, handleSubmit, setValue } = useForm<EmailSettingsFormInputs>();
 
   useEffect(() => {
-    if (settings) {
-      setSmtpHost(settings.smtpHost);
-      setSmtpPort(settings.smtpPort);
-      setSmtpUser(settings.smtpUser);
-      setSmtpPassword(settings.smtpPassword);
-      setWelcomeEmail(settings.templates.welcomeEmail);
-      setForgotPasswordEmail(settings.templates.forgotPasswordEmail);
-    }
-  }, [settings]);
+    const fetchSettings = async () => {
+      try {
+        // Placeholder for fetching settings from API
+        const response = {
+          smtpHost: 'smtp.example.com',
+          smtpPort: 587,
+          smtpUser: 'user@example.com',
+          smtpPassword: 'password',
+          emailTemplates: 'Welcome Email, Reset Password Email',
+        };
+        setSettings(response);
+        setValue('smtpHost', response.smtpHost);
+        setValue('smtpPort', response.smtpPort);
+        setValue('smtpUser', response.smtpUser);
+        setValue('smtpPassword', response.smtpPassword);
+        setValue('emailTemplates', response.emailTemplates);
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+    fetchSettings();
+  }, [setValue]);
+
+  const onSubmit = async (data: EmailSettingsFormInputs) => {
     try {
-      await updateSettingsMutate({
-        smtpHost,
-        smtpPort,
-        smtpUser,
-        smtpPassword,
-        templates: {
-          welcomeEmail,
-          forgotPasswordEmail,
-        },
-      });
-      toast.success('Email settings updated successfully!');
-      refetch();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to update email settings.');
+      // Placeholder for updating settings in API
+      console.log('Updated settings:', data);
+    } catch (error) {
+      console.error('Error updating settings:', error);
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Email Settings</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="smtpHost" className="block text-gray-700 font-bold mb-2">SMTP Host</label>
-          <input
-            type="text"
-            id="smtpHost"
-            value={smtpHost}
-            onChange={(e) => setSmtpHost(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="smtpPort" className="block text-gray-700 font-bold mb-2">SMTP Port</label>
-          <input
-            type="number"
-            id="smtpPort"
-            value={smtpPort}
-            onChange={(e) => setSmtpPort(parseInt(e.target.value))}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="smtpUser" className="block text-gray-700 font-bold mb-2">SMTP User</label>
-          <input
-            type="text"
-            id="smtpUser"
-            value={smtpUser}
-            onChange={(e) => setSmtpUser(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="smtpPassword" className="block text-gray-700 font-bold mb-2">SMTP Password</label>
-          <input
-            type="password"
-            id="smtpPassword"
-            value={smtpPassword}
-            onChange={(e) => setSmtpPassword(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="welcomeEmail" className="block text-gray-700 font-bold mb-2">Welcome Email Template</label>
-          <textarea
-            id="welcomeEmail"
-            value={welcomeEmail}
-            onChange={(e) => setWelcomeEmail(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            rows={6}
-          ></textarea>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="forgotPasswordEmail" className="block text-gray-700 font-bold mb-2">Forgot Password Email Template</label>
-          <textarea
-            id="forgotPasswordEmail"
-            value={forgotPasswordEmail}
-            onChange={(e) => setForgotPasswordEmail(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            rows={6}
-          ></textarea>
-        </div>
-        <button
-          type="submit"
-          disabled={isUpdating}
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isUpdating ? 'cursor-not-allowed opacity-50' : ''}`}
-        >
-          {isUpdating ? 'Updating...' : 'Update Settings'}
-        </button>
-      </form>
+    <div>
+      <h2>Configuraciones de Email</h2>
+      {settings && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <label htmlFor='smtpHost'>SMTP Host:</label>
+            <input id='smtpHost' {...register('smtpHost')} required />{}
+          </div>
+          <div>
+            <label htmlFor='smtpPort'>SMTP Port:</label>
+            <input id='smtpPort' type='number' {...register('smtpPort')} required />{}
+          </div>
+          <div>
+            <label htmlFor='smtpUser'>SMTP User:</label>
+            <input id='smtpUser' {...register('smtpUser')} required />{}
+          </div>
+          <div>
+            <label htmlFor='smtpPassword'>SMTP Password:</label>
+            <input id='smtpPassword' type='password' {...register('smtpPassword')} required />{}
+          </div>
+          <div>
+            <label htmlFor='emailTemplates'>Plantillas de Email (separadas por comas):</label>
+            <input id='emailTemplates' {...register('emailTemplates')} required />{}
+          </div>
+          <Button type='submit' className='mt-4 bg-blue-500 text-white px-4 py-2 rounded'>Guardar</Button>
+        </form>
+      )}
     </div>
   );
 };

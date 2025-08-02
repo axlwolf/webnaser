@@ -1,75 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from 'react-query';
-import { getBackupSettings, updateBackupSettings } from '../../services/adminApi';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import Button from '@headlessui/react';
 
-interface BackupSettings {
+interface BackupSettingsFormInputs {
   backupFrequency: string;
-  backupRetention: number;
+  backupLocation: string;
   lastBackup: string;
 }
 
-const BackupSettings = () => {
-  const { data: settings, isLoading, refetch } = useQuery(['backupSettings'], getBackupSettings);
-  const { mutateAsync: updateSettingsMutate, isLoading: isUpdating } = useMutation(updateBackupSettings);
-
-  const [backupFrequency, setBackupFrequency] = useState('');
-  const [backupRetention, setBackupRetention] = useState(0);
+const BackupSettings: React.FC = () => {
+  const [settings, setSettings] = useState<BackupSettingsFormInputs | null>(null);
+  const { register, handleSubmit, setValue } = useForm<BackupSettingsFormInputs>();
 
   useEffect(() => {
-    if (settings) {
-      setBackupFrequency(settings.backupFrequency);
-      setBackupRetention(settings.backupRetention);
-    }
-  }, [settings]);
+    const fetchSettings = async () => {
+      try {
+        // Placeholder for fetching settings from API
+        const response = {
+          backupFrequency: 'daily',
+          backupLocation: '/backups/',
+          lastBackup: '2023-07-31T15:30:00Z',
+        };
+        setSettings(response);
+        setValue('backupFrequency', response.backupFrequency);
+        setValue('backupLocation', response.backupLocation);
+        setValue('lastBackup', response.lastBackup);
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+    fetchSettings();
+  }, [setValue]);
+
+  const onSubmit = async (data: BackupSettingsFormInputs) => {
     try {
-      await updateSettingsMutate({ backupFrequency, backupRetention });
-      toast.success('Backup settings updated successfully!');
-      refetch();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to update backup settings.');
+      // Placeholder for updating settings in API
+      console.log('Updated settings:', data);
+    } catch (error) {
+      console.error('Error updating settings:', error);
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Backup Settings</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="backupFrequency" className="block text-gray-700 font-bold mb-2">Backup Frequency</label>
-          <input
-            type="text"
-            id="backupFrequency"
-            value={backupFrequency}
-            onChange={(e) => setBackupFrequency(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="backupRetention" className="block text-gray-700 font-bold mb-2">Backup Retention (days)</label>
-          <input
-            type="number"
-            id="backupRetention"
-            value={backupRetention}
-            onChange={(e) => setBackupRetention(parseInt(e.target.value))}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={isUpdating}
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${isUpdating ? 'cursor-not-allowed opacity-50' : ''}`}
-        >
-          {isUpdating ? 'Updating...' : 'Update Settings'}
-        </button>
-      </form>
+    <div>
+      <h2>Configuraciones de Backup</h2>
+      {settings && (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <label htmlFor='backupFrequency'>Frecuencia de Backup:</label>
+            <select id='backupFrequency' {...register('backupFrequency')} required >{}
+              <option value='daily'>Diario</option>
+              <option value='weekly'>Semanal</option>
+              <option value='monthly'>Mensual</option>
+            </select>
+          </div>
+          <div>
+            <label htmlFor='backupLocation'>Ubicación de Backup:</label>
+            <input id='backupLocation' {...register('backupLocation')} required />{}
+          </div>
+          <div>
+            <label htmlFor='lastBackup'>Último Backup:</label>
+            <input id='lastBackup' type='datetime-local' {...register('lastBackup')} required />{}
+          </div>
+          <Button type='submit' className='mt-4 bg-blue-500 text-white px-4 py-2 rounded'>Guardar</Button>
+        </form>
+      )}
     </div>
   );
 };

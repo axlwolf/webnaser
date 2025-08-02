@@ -1,176 +1,239 @@
 #!/bin/bash
 
-# Sistema de Monitoreo de Métricas - Grupo Naser CMS
-# Monitorea métricas del sistema en tiempo real
+# Performance Monitoring - Grupo Naser CMS
+# Monitorea métricas de performance del sistema
 
 set -e
 
-# Colores
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-NC='\033[0m'
+echo "📊 Monitoreando métricas de performance..."
 
-PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-REFRESH_INTERVAL=5  # Segundos entre actualizaciones
+# Parse arguments
+DURATION=60
+OUTPUT_FORMAT="table"
+CONTINUOUS=false
 
-# Función para limpiar pantalla manteniendo header
-clear_screen() {
-    clear
-    echo -e "${PURPLE}
-╔══════════════════════════════════════════════════════════════════════════════╗
-║                    📊 MONITOREO EN TIEMPO REAL - NASER CMS                   ║
-║                           Optimizado por Warp                               ║
-╚══════════════════════════════════════════════════════════════════════════════╝${NC}"
-}
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --duration)
+            DURATION="$2"
+            shift 2
+            ;;
+        --format)
+            OUTPUT_FORMAT="$2"
+            shift 2
+            ;;
+        --continuous)
+            CONTINUOUS=true
+            shift
+            ;;
+        *)
+            echo "Uso: $0 [--duration 60] [--format table|json] [--continuous]"
+            exit 1
+            ;;
+    esac
+done
 
-# Función para obtener métricas del sistema
-get_system_metrics() {
-    # CPU
-    local cpu_usage=$(top -l 1 | grep "CPU usage" | awk '{print $3}' | sed 's/%//')
-    
-    # Memoria (macOS)
-    local memory_info=$(vm_stat | grep "Pages free\|Pages active\|Pages inactive\|Pages wired")
-    local pages_free=$(echo "$memory_info" | grep "Pages free" | awk '{print $3}' | sed 's/\.//')
-    local pages_active=$(echo "$memory_info" | grep "Pages active" | awk '{print $3}' | sed 's/\.//')
-    local pages_inactive=$(echo "$memory_info" | grep "Pages inactive" | awk '{print $3}' | sed 's/\.//')
-    local pages_wired=$(echo "$memory_info" | grep "Pages wired" | awk '{print $4}' | sed 's/\.//')
-    
-    local total_pages=$((pages_free + pages_active + pages_inactive + pages_wired))
-    local used_pages=$((pages_active + pages_wired))
-    local memory_usage=0
-    if [ $total_pages -gt 0 ]; then
-        memory_usage=$((used_pages * 100 / total_pages))
-    fi
-    
-    # Disco
-    local disk_usage=$(df "$PROJECT_ROOT" | tail -1 | awk '{print $5}' | sed 's/%//')
-    
-    echo -e "\n${CYAN}═══ MÉTRICAS DEL SISTEMA ═══${NC}"
-    echo -e "📊 CPU: $(format_metric $cpu_usage)%"
-    echo -e "💾 Memoria: $(format_metric $memory_usage)%"
-    echo -e "💿 Disco: $(format_metric $disk_usage)%"
-}
+# Verificar que Docker esté corriendo
+if ! docker info >/dev/null 2>&1; then
+    echo "❌ Error: Docker no está corriendo."
+    exit 1
+fi
+
+# Crear directorio de reportes
+REPORT_DIR="reports/performance/$(date +%Y%m%d_%H%M%S)"
+mkdir -p "$REPORT_DIR"
 
 # Función para obtener métricas de Docker
 get_docker_metrics() {
-    echo -e "\n${CYAN}═══ MÉTRICAS DOCKER ═══${NC}"
-    
-    if ! docker ps &>/dev/null; then
-        echo -e "${RED}Docker no está disponible${NC}"
-        return
-    fi
-    
-    # Estadísticas de contenedores
-    docker stats --no-stream --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}" | head -6
+    echo "🐳 Métricas de contenedores Docker:"
+    docker stats --no-stream --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}"
 }
 
-# Función para obtener métricas web
-get_web_metrics() {
-    echo -e "\n${CYAN}═══ MÉTRICAS WEB ═══${NC}"
+# Función para obtener métricas de sistema
+get_system_metrics() {
+    echo "💻 Métricas del sistema:"
+    echo "CPU Usage: $(top -l 1 | grep "CPU usage" | awk '{print $3}' | sed 's/%//')"
+    echo "Memory Usage: $(vm_stat | grep "Pages active" | awk '{print $3}' | sed 's/\.//')"
+    echo "Disk Usage: $(df -h / | tail -1 | awk '{print $5}')"
+}
+
+# Función para obtener métricas de aplicación
+get_app_metrics() {
+    echo "🌐 Métricas de aplicación:"
     
-    # Backend API
-    local backend_time=$(curl -o /dev/null -s -w "%{time_total}" "http://localhost:8000/api/v1/health" 2>/dev/null || echo "N/A")
-    if [ "$backend_time" != "N/A" ]; then
-        echo -e "🌐 Backend API: ${GREEN}${backend_time}s${NC}"
+    # Backend response time
+    if curl -f http://localhost:8000/api/v1/health >/dev/null 2>&1; then
+        BACKEND_TIME=$(curl -o /dev/null -s -w "%{time_total}" http://localhost:8000/api/v1/health)
+        echo "Backend Response Time: ${BACKEND_TIME}s"
     else
-        echo -e "🌐 Backend API: ${RED}No disponible${NC}"
+        echo "Backend Response Time: ERROR"
     fi
     
-    # Frontend
-    local frontend_time=$(curl -o /dev/null -s -w "%{time_total}" "http://localhost:3000" 2>/dev/null || echo "N/A")
-    if [ "$frontend_time" != "N/A" ]; then
-        echo -e "🎨 Frontend: ${GREEN}${frontend_time}s${NC}"
+    # Frontend response time
+    if curl -f http://localhost:3000 >/dev/null 2>&1; then
+        FRONTEND_TIME=$(curl -o /dev/null -s -w "%{time_total}" http://localhost:3000)
+        echo "Frontend Response Time: ${FRONTEND_TIME}s"
     else
-        echo -e "🎨 Frontend: ${RED}No disponible${NC}"
+        echo "Frontend Response Time: ERROR"
     fi
-}
-
-# Función para formatear métricas con colores
-format_metric() {
-    local value=$1
-    if [ "$value" -gt 80 ]; then
-        echo -e "${RED}$value${NC}"
-    elif [ "$value" -gt 60 ]; then
-        echo -e "${YELLOW}$value${NC}"
+    
+    # Admin Dashboard response time
+    if curl -f http://localhost:3001 >/dev/null 2>&1; then
+        ADMIN_TIME=$(curl -o /dev/null -s -w "%{time_total}" http://localhost:3001)
+        echo "Admin Dashboard Response Time: ${ADMIN_TIME}s"
     else
-        echo -e "${GREEN}$value${NC}"
+        echo "Admin Dashboard Response Time: ERROR"
     fi
+    
+    # Database connection time
+    DB_TIME=$(docker exec naser_db mysql -u naser_user -pnaser_pass_2024 -e "SELECT 1" naser_cms 2>/dev/null && echo "OK" || echo "ERROR")
+    echo "Database Connection: $DB_TIME"
 }
 
-# Función para mostrar alertas
-check_alerts() {
-    echo -e "\n${CYAN}═══ ALERTAS ═══${NC}"
+# Función para generar reporte JSON
+generate_json_report() {
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     
-    local has_alerts=false
-    
-    # Verificar contenedores unhealthy
-    local unhealthy=$(docker ps --filter "health=unhealthy" --format "{{.Names}}" 2>/dev/null)
-    if [ -n "$unhealthy" ]; then
-        echo -e "${RED}⚠️  Contenedores unhealthy: $unhealthy${NC}"
-        has_alerts=true
-    fi
-    
-    # Verificar contenedores reiniciándose
-    local restarting=$(docker ps --filter "status=restarting" --format "{{.Names}}" 2>/dev/null)
-    if [ -n "$restarting" ]; then
-        echo -e "${RED}⚠️  Contenedores reiniciándose: $restarting${NC}"
-        has_alerts=true
-    fi
-    
-    if [ "$has_alerts" = false ]; then
-        echo -e "${GREEN}✅ Sin alertas activas${NC}"
-    fi
+    cat > "$REPORT_DIR/metrics.json" << EOF
+{
+  "timestamp": "$timestamp",
+  "duration": $DURATION,
+  "docker_stats": $(docker stats --no-stream --format json),
+  "system": {
+    "cpu_usage": "$(top -l 1 | grep "CPU usage" | awk '{print $3}' | sed 's/%//')",
+    "memory_usage": "$(vm_stat | grep "Pages active" | awk '{print $3}' | sed 's/\.//')",
+    "disk_usage": "$(df -h / | tail -1 | awk '{print $5}')"
+  },
+  "application": {
+    "backend_response_time": "$(curl -o /dev/null -s -w "%{time_total}" http://localhost:8000/api/v1/health 2>/dev/null || echo "error")",
+    "frontend_response_time": "$(curl -o /dev/null -s -w "%{time_total}" http://localhost:3000 2>/dev/null || echo "error")",
+    "admin_response_time": "$(curl -o /dev/null -s -w "%{time_total}" http://localhost:3001 2>/dev/null || echo "error")",
+    "database_status": "$(docker exec naser_db mysql -u naser_user -pnaser_pass_2024 -e "SELECT 1" naser_cms >/dev/null 2>&1 && echo "ok" || echo "error")"
+  }
 }
-
-# Función para mostrar timestamp
-show_timestamp() {
-    echo -e "\n${BLUE}🕐 Última actualización: $(date '+%Y-%m-%d %H:%M:%S')${NC}"
-    echo -e "${BLUE}↻  Actualizando cada ${REFRESH_INTERVAL} segundos (Ctrl+C para salir)${NC}"
+EOF
 }
 
 # Función principal de monitoreo
-monitor_loop() {
-    # Reportar inicio a Kiro
-    if [ -f "$PROJECT_ROOT/.kiro/specs/auth-integration/update-status.js" ]; then
-        node "$PROJECT_ROOT/.kiro/specs/auth-integration/update-status.js" \
-            "update-progress" warp "W.3" "Monitoreo de métricas en tiempo real iniciado"
-    fi
+monitor_performance() {
+    local start_time=$(date +%s)
+    local end_time=$((start_time + DURATION))
     
-    while true; do
-        clear_screen
-        get_system_metrics
-        get_docker_metrics
-        get_web_metrics
-        check_alerts
-        show_timestamp
+    echo "⏱️  Monitoreando por $DURATION segundos..."
+    echo "📁 Guardando reportes en: $REPORT_DIR"
+    echo ""
+    
+    # Crear archivo de log
+    LOG_FILE="$REPORT_DIR/performance.log"
+    echo "Performance Monitoring Started: $(date)" > "$LOG_FILE"
+    
+    while [ $(date +%s) -lt $end_time ] || [ "$CONTINUOUS" = true ]; do
+        clear
+        echo "📊 Performance Monitor - Grupo Naser CMS"
+        echo "⏰ $(date)"
+        echo "📍 Tiempo restante: $((end_time - $(date +%s)))s"
+        echo ""
         
-        sleep $REFRESH_INTERVAL
+        # Obtener métricas
+        get_docker_metrics
+        echo ""
+        get_system_metrics
+        echo ""
+        get_app_metrics
+        echo ""
+        
+        # Guardar en log
+        {
+            echo "=== $(date) ==="
+            get_docker_metrics
+            get_system_metrics
+            get_app_metrics
+            echo ""
+        } >> "$LOG_FILE"
+        
+        # Generar reporte JSON si se solicita
+        if [ "$OUTPUT_FORMAT" = "json" ]; then
+            generate_json_report
+        fi
+        
+        # Esperar antes de la siguiente iteración
+        if [ "$CONTINUOUS" = false ]; then
+            sleep 5
+        else
+            sleep 10
+        fi
+        
+        # Salir del loop si no es continuo
+        if [ "$CONTINUOUS" = false ] && [ $(date +%s) -ge $end_time ]; then
+            break
+        fi
     done
 }
 
-# Manejo de señales para salida limpia
-trap 'echo -e "\n${GREEN}Monitoreo detenido${NC}"; exit 0' INT TERM
+# Función para generar reporte final
+generate_final_report() {
+    cat > "$REPORT_DIR/performance-summary.md" << EOF
+# Performance Monitoring Report
 
-# Función principal
-main() {
-    # Verificar dependencias
-    if ! command -v docker &>/dev/null; then
-        error "Docker no está instalado"
-        exit 1
-    fi
-    
-    if ! command -v curl &>/dev/null; then
-        error "curl no está instalado"
-        exit 1
-    fi
-    
-    # Iniciar monitoreo
-    monitor_loop
+**Date**: $(date)
+**Duration**: ${DURATION}s
+**Format**: $OUTPUT_FORMAT
+**Continuous**: $CONTINUOUS
+
+## Summary
+
+### Docker Containers
+$(docker stats --no-stream --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}")
+
+### System Resources
+- CPU Usage: $(top -l 1 | grep "CPU usage" | awk '{print $3}')
+- Memory: $(vm_stat | grep "Pages active" | awk '{print $3}')
+- Disk: $(df -h / | tail -1 | awk '{print $5}')
+
+### Application Performance
+- Backend Health: $(curl -f http://localhost:8000/api/v1/health >/dev/null 2>&1 && echo "✅ OK" || echo "❌ ERROR")
+- Frontend Health: $(curl -f http://localhost:3000 >/dev/null 2>&1 && echo "✅ OK" || echo "❌ ERROR")
+- Database Health: $(docker exec naser_db mysql -u naser_user -pnaser_pass_2024 -e "SELECT 1" naser_cms >/dev/null 2>&1 && echo "✅ OK" || echo "❌ ERROR")
+
+## Files Generated
+- Performance Log: performance.log
+- JSON Metrics: metrics.json (if requested)
+- Summary Report: performance-summary.md
+
+## Recommendations
+1. Monitor CPU usage - keep below 80%
+2. Monitor memory usage - ensure sufficient free memory
+3. Check response times - should be under 2 seconds
+4. Monitor disk space - keep above 20% free
+
+## Next Steps
+1. Review performance.log for detailed metrics
+2. Identify performance bottlenecks
+3. Optimize resource usage if needed
+4. Set up automated monitoring alerts
+EOF
 }
 
-# Ejecutar función principal
-main "$@"
+# Ejecutar monitoreo
+monitor_performance
+
+# Generar reporte final
+echo "📊 Generando reporte final..."
+generate_final_report
+
+echo ""
+echo "✅ Monitoreo completado!"
+echo "📁 Reportes guardados en: $REPORT_DIR"
+echo ""
+echo "📋 Archivos generados:"
+echo "   - performance.log (log detallado)"
+echo "   - performance-summary.md (resumen)"
+if [ "$OUTPUT_FORMAT" = "json" ]; then
+    echo "   - metrics.json (métricas en JSON)"
+fi
+echo ""
+echo "🔧 Comandos útiles:"
+echo "   Ver log en tiempo real: tail -f $REPORT_DIR/performance.log"
+echo "   Monitoreo continuo: $0 --continuous"
+echo "   Formato JSON: $0 --format json"
+echo ""

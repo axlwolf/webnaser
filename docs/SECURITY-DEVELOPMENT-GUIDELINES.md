@@ -278,6 +278,11 @@ composer audit
 
 # ✅ Escaneo de vulnerabilidades Docker
 docker scan naser_frontend:latest
+
+# 🔒 Sistema Automatizado de Vulnerabilidades (Nuevo)
+./scripts/security/scan-vulnerabilities.sh      # Escaneo completo automatizado
+./scripts/security/update-dependencies.sh       # Actualización automática
+./scripts/security/generate-security-report.sh  # Reporte de seguridad
 ```
 
 ## 🚨 Respuesta a Incidentes
@@ -383,6 +388,7 @@ git commit -m "security: update package-name to fix CVE-XXXX"
 
 ### Recursos Adicionales
 
+- **Gestión de Vulnerabilidades**: `docs/SECURITY-VULNERABILITY-MANAGEMENT.md`
 - **Política de Permisos Completa**: `.kiro/steering/file-permissions-policy.md`
 - **Scripts de Emergencia**: `scripts/emergency/`
 - **Herramientas de Seguridad**: `scripts/security/`

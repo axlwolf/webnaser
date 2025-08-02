@@ -1,61 +1,39 @@
-import React from 'react';
-import { useMutation } from 'react-query';
-import { uploadMedia } from '../../services/adminApi';
-import { toast } from 'react-toastify';
-import { IoCloudUploadOutline } from 'react-icons/io5';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createMedia } from '../../services/mediaService';
+import Button from '@headlessui/react';
 
-const FileUploader = ({ onUpload }: { onUpload: () => void }) => {
-  const [files, setFiles] = useState<FileList | null>(null);
-  const { mutateAsync: uploadMediaMutate, isLoading } = useMutation(uploadMedia);
+const FileUploader: React.FC = () => {
+  const [file, setFile] = useState<File | null>(null);
+  const navigate = useNavigate();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFiles(event.target.files);
+    if (event.target.files && event.target.files.length > 0) {
+      setFile(event.target.files[0]);
+    }
   };
 
   const handleUpload = async () => {
-    if (!files) return;
+    if (!file) return;
 
-    for (let i = 0; i < files.length; i++) {
-      const formData = new FormData();
-      formData.append('file', files[i]);
+    const formData = new FormData();
+    formData.append('file', file);
 
-      try {
-        await uploadMediaMutate(formData);
-        toast.success(`File ${files[i].name} uploaded successfully!`);
-        onUpload();
-      } catch (error: any) {
-        toast.error(error.message || `Failed to upload file ${files[i].name}.`);
-      }
+    try {
+      await createMedia(formData);
+      alert('Archivo subido exitosamente');
+      navigate('/admin/media');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      alert('Error al subir el archivo');
     }
   };
 
   return (
-    <div className="mb-4">
-      <label className="block text-gray-700 font-bold mb-2">Upload Files</label>
-      <div className="flex items-center">
-        <input
-          type="file"
-          multiple
-          onChange={handleFileChange}
-          className="hidden"
-          id="file-upload"
-        />
-        <label
-          htmlFor="file-upload"
-          className="flex items-center justify-center px-4 py-2 bg-blue-500 text-white font-bold rounded cursor-pointer"
-        >
-          <IoCloudUploadOutline className="mr-2" />
-          Select Files
-        </label>
-        <button
-          type="button"
-          onClick={handleUpload}
-          disabled={!files || isLoading}
-          className={`px-4 py-2 bg-green-500 text-white font-bold rounded ml-2 ${!files || isLoading ? 'cursor-not-allowed opacity-50' : ''}`}
-        >
-          {isLoading ? 'Uploading...' : 'Upload'}
-        </button>
-      </div>
+    <div>
+      <h2>Subir Archivo</h2>
+      <input type='file' onChange={handleFileChange} accept='image/*,application/pdf' />
+      <Button onClick={handleUpload} className='mt-4 bg-blue-500 text-white px-4 py-2 rounded'>Subir</Button>
     </div>
   );
 };

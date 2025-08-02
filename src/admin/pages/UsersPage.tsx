@@ -1,31 +1,35 @@
 import React from 'react';
-import { useQuery, useMutation } from 'react-query';
-import { getUsers, deleteUser } from '../../services/adminApi';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import UsersList from '../../components/users/UsersList';
+import { AdminUser } from '../../types/admin.types';
+import { getAllUsers } from '../../services/userService';
 
-const UsersPage = () => {
-  const { data: users, isLoading, refetch } = useQuery(['users'], getUsers);
-  const { mutateAsync: deleteUserMutate, isLoading: isDeleting } = useMutation(deleteUser);
+const UsersPage: React.FC = () => {
+  const [users, setUsers] = useState<AdminUser[]>([]);
+  const navigate = useNavigate();
 
-  const handleDelete = async (id: number) => {
-    try {
-      await deleteUserMutate(id);
-      toast.success('User deleted successfully!');
-      refetch();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to delete user.');
-    }
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await getAllUsers();
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  const handleEditUser = (id: number) => {
+    navigate(`/admin/users/${id}/edit`);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6">Users Management</h1>
-      <UsersList users={users} onDelete={handleDelete} />
+    <div>
+      <h1>Gestión de Usuarios</h1>
+      <UsersList users={users} onEdit={handleEditUser} />
     </div>
   );
 };

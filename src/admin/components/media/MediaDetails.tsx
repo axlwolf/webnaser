@@ -1,50 +1,79 @@
-import React from 'react';
-import { Media } from '../../types/admin.types';
-import { IoCloseCircle } from 'react-icons/io5';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { MediaItem } from '../../../types/admin.types';
+import { getMediaById, updateMedia } from '../../services/mediaService';
+import { useForm } from 'react-hook-form';
+import Button from '@headlessui/react';
 
-interface Props {
-  media: Media;
-  onClose: () => void;
+interface MediaFormInputs {
+  name: string;
+  description: string;
+  tags: string;
 }
 
-const MediaDetails = ({ media, onClose }: Props) => {
+const MediaDetails: React.FC = () => {
+  const { id } = useParams<{ id?: string }>();
+  const navigate = useNavigate();
+  const [media, setMedia] = useState<MediaItem | null>(null);
+  const { register, handleSubmit, setValue } = useForm<MediaFormInputs>();
+
+  useEffect(() => {
+    if (id) {
+      const fetchMedia = async () => {
+        try {
+          const response = await getMediaById(Number(id));
+          setMedia(response.data);
+          setValue('name', response.data.name);
+          setValue('description', response.data.description);
+          setValue('tags', response.data.tags.join(','));
+        } catch (error) {
+          console.error('Error fetching media item:', error);
+        }
+      };
+
+      fetchMedia();
+    }
+  }, [id, setValue]);
+
+  const onSubmit = async (data: MediaFormInputs) => {
+    try {
+      const updatedMedia = {
+        ...data,
+        tags: data.tags.split(',').map(tag => tag.trim()),
+      };
+
+      if (id) {
+        await updateMedia(Number(id), updatedMedia);
+      }
+      navigate('/admin/media');
+    } catch (error) {
+      console.error('Error updating media item:', error);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold mb-4">Media Details</h2>
-        {media.type === 'image' && (
-          <img src={media.url} alt={media.name} className="w-full h-48 object-cover rounded-lg" />
-        )}
-        {media.type === 'document' && (
-          <iframe src={media.url} title={media.name} className="w-full h-48" />
-        )}
-        {media.type === 'video' && (
-          <video src={media.url} controls className="w-full h-48" />
-        )}
-        <div className="mt-4">
-          <h3 className="text-lg font-bold mb-2">{media.name}</h3>
-          <p className="text-gray-500 mb-2">Type: {media.type}</p>
-          <p className="text-gray-500 mb-2">Folder: {media.folder}</p>
-          <p className="text-gray-500 mb-2">Uploaded on {media.createdAt}</p>
-          <div className="mt-4">
-            <label htmlFor="tags" className="block text-gray-700 font-bold mb-2">Tags</label>
-            <input
-              type="text"
-              id="tags"
-              value={media.tags.join(', ')}
-              onChange={(e) => {} /* Handle tags change */}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="mt-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-3 rounded focus:outline-none focus:shadow-outline"
-          >
-            <IoCloseCircle className="mr-2" /> Close
-          </button>
+    <div>
+      <h1>Detalles del Medio</h1>
+      {media && (
+        <div>
+          <img src={media.url} alt={media.name} className='max-w-full h-auto mb-4' />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <label htmlFor='name'>Nombre:</label>
+              <input id='name' {...register('name')} required />{}
+            </div>
+            <div>
+              <label htmlFor='description'>Descripción:</label>
+              <textarea id='description' {...register('description')} required />{}
+            </div>
+            <div>
+              <label htmlFor='tags'>Etiquetas (separadas por comas):</label>
+              <input id='tags' {...register('tags')} required />{}
+            </div>
+            <Button type='submit' className='mt-4 bg-blue-500 text-white px-4 py-2 rounded'>Guardar</Button>
+          </form>
         </div>
-      </div>
+      )}
     </div>
   );
 };

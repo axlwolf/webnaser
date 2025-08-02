@@ -1,33 +1,28 @@
 import React from 'react';
-import { useQuery, useMutation } from 'react-query';
-import { getMedias, deleteMedia } from '../../services/adminApi';
-import { toast } from 'react-toastify';
-import FileUploader from './FileUploader';
-import MediaGrid from './MediaGrid';
+import { MediaItem } from '../../../types/admin.types';
+import Button from '@headlessui/react';
 
-const MediaLibrary = () => {
-  const { data: medias, isLoading, refetch } = useQuery(['medias'], getMedias);
-  const { mutateAsync: deleteMediaMutate, isLoading: isDeleting } = useMutation(deleteMedia);
+interface MediaLibraryProps {
+  mediaItems: MediaItem[];
+  onEdit: (id: number) => void;
+}
 
-  const handleDelete = async (id: number) => {
-    try {
-      await deleteMediaMutate(id);
-      toast.success('Media deleted successfully!');
-      refetch();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to delete media.');
-    }
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
+const MediaLibrary: React.FC<MediaLibraryProps> = ({ mediaItems, onEdit }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold mb-4">Media Library</h2>
-      <FileUploader onUpload={refetch} />
-      <MediaGrid medias={medias} onDelete={handleDelete} />
+    <div className='grid grid-cols-1 gap-4'>
+      {mediaItems.map((media) => (
+        <div key={media.id} className='p-4 border rounded shadow'>
+          <h2>{media.name}</h2>
+          <p>{media.type}</p>
+          <img src={media.url} alt={media.name} className='max-w-full h-auto' />
+          <Button
+            onClick={() => onEdit(media.id)}
+            className='bg-blue-500 text-white px-4 py-2 rounded'
+          >
+            Editar
+          </Button>
+        </div>
+      ))}
     </div>
   );
 };
