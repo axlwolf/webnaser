@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ../..
+      dockerfile: docker/production/Dockerfile.prod
+      cache_from:
+        - php:8.2-apache
+    image: naser-cms-backend:prod
+    container_name: naser_backend_prod
+    restart: always
+    networks:
+      - naser_production
+    volumes:
+      - uploads:/var/www/html/public/uploads
+      - logs:/var/log
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ../../src/frontend
+      dockerfile: Dockerfile
+      target: production
+    image: naser-cms-frontend:prod
+    container_name: naser_frontend_prod
+    restart: always
+    networks:
+      - naser_production
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  database:
+    image: mysql:8.0
+    container_name: naser_db_prod
+    restart: always
+    networks:
+      - naser_production
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  naser_production:
+    external: true
+
+volumes:
+  db_data:
+  uploads:
+  logs:

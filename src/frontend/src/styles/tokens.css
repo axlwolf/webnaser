@@ -1,0 +1,230 @@
+/**
+ * Design Tokens - Grupo Naser CMS
+ * Sistema unificado de tokens de diseño basado en el sitio HTML original
+ * Versión actualizada con consistencia completa
+ */
+
+:root {
+  /* === COLORES PRINCIPALES === */
+  /* Basados exactamente en el diseño original de Grupo Naser */
+  --color-primary: #c8a97e;        /* Dorado Naser - color principal de marca */
+  --color-primary-dark: #1e2b4d;   /* Azul Oscuro - headers, botones principales */
+  --color-primary-light: #c8a97e;  /* Alias para mantener compatibilidad */
+  --color-secondary: #1e2b4d;      /* Azul Oscuro - alias */
+  --color-accent: #2a4176;         /* Azul Medio - elementos interactivos */
+  --color-tertiary: #8b6914;       /* Dorado Oscuro - estados hover */
+
+  /* === COLORES DE TEXTO === */
+  --color-text-primary: #000000;   /* Texto principal negro */
+  --color-text-secondary: #6a6a6a; /* Texto secundario gris */
+  --color-text-light: #ffffff;     /* Texto blanco para fondos oscuros */
+  --color-text-muted: #999999;     /* Texto deshabilitado/sutil */
+  --color-text-inverse: #ffffff;   /* Texto inverso - alias */
+
+  /* Colores de Fondo */
+  --color-background: #ffffff;
+  --color-background-alt: #f7f7f7;
+  --color-background-dark: #1e2b4d;
+  --color-background-section: #f8f9fa;
+  --color-overlay: rgba(0, 0, 0, 0.5);
+
+  /* Colores de Estado */
+  --color-success: #28a745;
+  --color-warning: #ffc107;
+  --color-error: #dc3545;
+  --color-info: #17a2b8;
+
+  /* Tipografía - Poppins como fuente principal */
+  --font-family-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-family-secondary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-family-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+
+  /* Tamaños de Fuente - Escala tipográfica consistente */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-md: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  --font-size-6xl: 3.75rem;   /* 60px */
+
+  /* Pesos de Fuente */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* Alturas de Línea */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Espaciado - Sistema de espaciado basado en 8px */
+  --spacing-0: 0;
+  --spacing-px: 1px;
+  --spacing-0-5: 0.125rem;  /* 2px */
+  --spacing-1: 0.25rem;     /* 4px */
+  --spacing-1-5: 0.375rem;  /* 6px */
+  --spacing-2: 0.5rem;      /* 8px */
+  --spacing-2-5: 0.625rem;  /* 10px */
+  --spacing-3: 0.75rem;     /* 12px */
+  --spacing-3-5: 0.875rem;  /* 14px */
+  --spacing-4: 1rem;        /* 16px */
+  --spacing-5: 1.25rem;     /* 20px */
+  --spacing-6: 1.5rem;      /* 24px */
+  --spacing-7: 1.75rem;     /* 28px */
+  --spacing-8: 2rem;        /* 32px */
+  --spacing-9: 2.25rem;     /* 36px */
+  --spacing-10: 2.5rem;     /* 40px */
+  --spacing-11: 2.75rem;    /* 44px */
+  --spacing-12: 3rem;       /* 48px */
+  --spacing-14: 3.5rem;     /* 56px */
+  --spacing-16: 4rem;       /* 64px */
+  --spacing-20: 5rem;       /* 80px */
+  --spacing-24: 6rem;       /* 96px */
+  --spacing-28: 7rem;       /* 112px */
+  --spacing-32: 8rem;       /* 128px */
+  --spacing-36: 9rem;       /* 144px */
+  --spacing-40: 10rem;      /* 160px */
+  --spacing-44: 11rem;      /* 176px */
+  --spacing-48: 12rem;      /* 192px */
+  --spacing-52: 13rem;      /* 208px */
+  --spacing-56: 14rem;      /* 224px */
+  --spacing-60: 15rem;      /* 240px */
+  --spacing-64: 16rem;      /* 256px */
+  --spacing-72: 18rem;      /* 288px */
+  --spacing-80: 20rem;      /* 320px */
+  --spacing-96: 24rem;      /* 384px */
+
+  /* Breakpoints - Mobile first approach */
+  --breakpoint-xs: 475px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* Container Max Widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+
+  /* Sombras - Sistema de sombras consistente */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-none: 0 0 #0000;
+
+  /* Bordes - Sistema de border-radius */
+  --border-radius-none: 0;
+  --border-radius-sm: 0.125rem;  /* 2px */
+  --border-radius-base: 0.25rem; /* 4px */
+  --border-radius-md: 0.375rem;  /* 6px */
+  --border-radius-lg: 0.5rem;    /* 8px */
+  --border-radius-xl: 0.75rem;   /* 12px */
+  --border-radius-2xl: 1rem;     /* 16px */
+  --border-radius-3xl: 1.5rem;   /* 24px */
+  --border-radius-full: 9999px;
+
+  /* Anchos de Borde */
+  --border-width-0: 0;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+  --border-width-8: 8px;
+
+  /* Transiciones - Sistema de animaciones */
+  --transition-none: none;
+  --transition-all: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-Index - Sistema de capas */
+  --z-index-hide: -1;
+  --z-index-auto: auto;
+  --z-index-base: 0;
+  --z-index-docked: 10;
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1100;
+  --z-index-banner: 1200;
+  --z-index-overlay: 1300;
+  --z-index-modal: 1400;
+  --z-index-popover: 1500;
+  --z-index-skipLink: 1600;
+  --z-index-toast: 1700;
+  --z-index-tooltip: 1800;
+
+  /* Opacidad */
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-25: 0.25;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-75: 0.75;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-95: 0.95;
+  --opacity-100: 1;
+
+  /* Específicos del sitio Naser */
+  --header-height: 80px;
+  --header-height-mobile: 70px;
+  --sub-header-height: 40px;
+  --footer-height: auto;
+  
+  /* Componentes específicos */
+  --hero-height: 600px;
+  --hero-height-mobile: 400px;
+  --card-padding: var(--spacing-6);
+  --button-padding-x: var(--spacing-6);
+  --button-padding-y: var(--spacing-3);
+  --input-padding-x: var(--spacing-4);
+  --input-padding-y: var(--spacing-3);
+}
+
+/* Media Queries para tokens responsive */
+@media (max-width: 768px) {
+  :root {
+    --font-size-4xl: 2rem;       /* 32px en móvil */
+    --font-size-3xl: 1.75rem;    /* 28px en móvil */
+    --font-size-2xl: 1.5rem;     /* 24px en móvil */
+    --spacing-section: var(--spacing-12); /* Menos espaciado en móvil */
+  }
+}
+
+@media (min-width: 769px) {
+  :root {
+    --spacing-section: var(--spacing-20); /* Más espaciado en desktop */
+  }
+}
+
+/* Variables CSS para temas (futuro dark mode) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #1a1a1a;
+    --color-background-alt: #2a2a2a;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #cccccc;
+  }
+}

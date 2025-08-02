@@ -1,0 +1,109 @@
+# Dockerfile optimizado para producción - Grupo Naser CMS
+FROM php:8.2-apache
+
+# Metadatos
+LABEL maintainer="Warp DevOps <devops@naser.com.mx>"
+LABEL description="Contenedor optimizado para producción del CMS Grupo Naser"
+LABEL version="1.0"
+
+# Variables de entorno para producción
+ENV DEBIAN_FRONTEND=noninteractive
+ENV APACHE_DOCUMENT_ROOT=/var/www/html
+ENV PHP_MEMORY_LIMIT=256M
+ENV PHP_MAX_EXECUTION_TIME=60
+ENV PHP_UPLOAD_MAX_FILESIZE=10M
+
+# Instalar dependencias optimizadas
+RUN apt-get update && apt-get install -y \
+    # Dependencias esenciales
+    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    # Cliente MySQL
+    default-mysql-client \
+    # Herramientas de optimización
+    jpegoptim \
+    optipng \
+    pngquant \
+    gifsicle \
+    # Limpieza
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/tmp/*
+
+# Configurar y instalar extensiones PHP optimizadas
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        mbstring \
+        zip \
+        gd \
+        xml \
+        bcmath \
+        opcache
+
+# Configurar OPcache para producción
+RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.memory_consumption=256" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.interned_strings_buffer=16" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.max_accelerated_files=10000" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.revalidate_freq=2" >> /usr/local/etc/php/conf.d/opcache.ini \
+    && echo "opcache.fast_shutdown=1" >> /usr/local/etc/php/conf.d/opcache.ini
+
+# Configurar PHP para producción
+RUN echo "memory_limit=$PHP_MEMORY_LIMIT" >> /usr/local/etc/php/conf.d/production.ini \
+    && echo "max_execution_time=$PHP_MAX_EXECUTION_TIME" >> /usr/local/etc/php/conf.d/production.ini \
+    && echo "upload_max_filesize=$PHP_UPLOAD_MAX_FILESIZE" >> /usr/local/etc/php/conf.d/production.ini \
+    && echo "post_max_size=12M" >> /usr/local/etc/php/conf.d/production.ini \
+    && echo "expose_php=Off" >> /usr/local/etc/php/conf.d/production.ini \
+    && echo "display_errors=Off" >> /usr/local/etc/php/conf.d/production.ini \
+    && echo "log_errors=On" >> /usr/local/etc/php/conf.d/production.ini \
+    && echo "error_log=/var/log/php_errors.log" >> /usr/local/etc/php/conf.d/production.ini
+
+# Instalar Composer
+COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+
+# Configurar Apache para producción
+RUN a2enmod rewrite headers deflate expires \
+    && echo "ServerTokens Prod" >> /etc/apache2/apache2.conf \
+    && echo "ServerSignature Off" >> /etc/apache2/apache2.conf
+
+# Crear usuario no-root para seguridad
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Establecer directorio de trabajo
+WORKDIR /var/www/html
+
+# Copiar archivos de configuración primero (para cache)
+COPY api/composer.json api/composer.lock ./api/
+
+# Instalar dependencias de producción
+RUN cd api && composer install --no-dev --optimize-autoloader --no-interaction
+
+# Copiar código fuente
+COPY --chown=www-data:www-data . .
+
+# Optimizar permisos
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html \
+    && chmod -R 775 /var/www/html/api/storage \
+    && chmod -R 775 /var/www/html/public/uploads
+
+# Configurar logs
+RUN mkdir -p /var/log/apache2 /var/log/php \
+    && touch /var/log/php_errors.log \
+    && chown www-data:www-data /var/log/php_errors.log
+
+# Healthcheck optimizado
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost/api/v1/health || exit 1
+
+# Exponer puerto
+EXPOSE 80
+
+# Comando de inicio optimizado
+CMD ["apache2-foreground"]

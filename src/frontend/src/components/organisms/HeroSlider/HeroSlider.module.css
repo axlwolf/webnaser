@@ -1,0 +1,483 @@
+/* Hero Slider - Implementación cinematográfica */
+.heroSlider {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  margin-top: 130px; /* Espacio para header fijo */
+}
+
+/* Background Images Container */
+.backgroundContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.backgroundSlide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: scale(1.1);
+  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.backgroundSlide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--overlay-color, rgba(0, 0, 0, 0.6));
+  z-index: 1;
+}
+
+.backgroundSlide.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Content Container */
+.contentContainer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.slideContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.textContent {
+  max-width: 600px;
+  color: white;
+  transform: translateY(30px);
+  opacity: 0;
+  animation: slideInUp 0.8s ease-out 0.3s forwards;
+}
+
+.textContent.transitioning {
+  transform: translateY(-30px);
+  opacity: 0;
+  animation: slideOutUp 0.3s ease-in forwards;
+}
+
+/* Typography */
+.subtitle {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--color-primary-light);
+  margin: 0 0 16px 0;
+  font-family: var(--font-family-primary);
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.5s forwards;
+}
+
+.title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 24px 0;
+  font-family: var(--font-family-primary);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.7s forwards;
+}
+
+.description {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 0 32px 0;
+  font-family: var(--font-family-secondary);
+  opacity: 0.95;
+  max-width: 500px;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.9s forwards;
+}
+
+/* Call to Action Button */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, var(--color-primary-light), #b8926b);
+  color: white;
+  padding: 16px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all var(--transition-normal);
+  box-shadow: 0 4px 15px rgba(200, 169, 126, 0.4);
+  border: 2px solid transparent;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 1.1s forwards;
+}
+
+.cta:hover {
+  background: linear-gradient(135deg, #b8926b, var(--color-primary-light));
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(200, 169, 126, 0.6);
+  text-decoration: none;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cta:active {
+  transform: translateY(-1px);
+}
+
+.cta i {
+  font-size: 14px;
+  transition: transform var(--transition-fast);
+}
+
+.cta:hover i {
+  transform: translateX(4px);
+}
+
+/* Navigation Controls */
+.controls {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.navButton {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.navButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.navButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.navButton i {
+  font-size: 16px;
+}
+
+/* Dots Navigation */
+.dotsContainer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.dot:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: scale(1.2);
+}
+
+.dot.active {
+  background: var(--color-primary-light);
+  transform: scale(1.3);
+}
+
+.dot.active::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid rgba(200, 169, 126, 0.5);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+/* Play/Pause Button */
+.playPauseButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+}
+
+.playPauseButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.playPauseButton i {
+  font-size: 12px;
+}
+
+/* Progress Bar */
+.progressBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 10;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary-light), #b8926b);
+  width: 0;
+  animation: progressAnimation 5s linear infinite;
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes progressAnimation {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .heroSlider {
+    height: 80vh;
+    min-height: 500px;
+    margin-top: 120px;
+  }
+  
+  .title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+  
+  .description {
+    font-size: 16px;
+  }
+  
+  .cta {
+    padding: 14px 28px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroSlider {
+    height: 70vh;
+    min-height: 450px;
+    margin-top: 100px;
+  }
+  
+  .contentContainer {
+    padding: 0 16px;
+  }
+  
+  .textContent {
+    max-width: 100%;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    margin-bottom: 20px;
+  }
+  
+  .description {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+  
+  .cta {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+  
+  .controls {
+    bottom: 20px;
+    gap: 16px;
+  }
+  
+  .navButton {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .navButton i {
+    font-size: 14px;
+  }
+  
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSlider {
+    height: 60vh;
+    min-height: 400px;
+    margin-top: 90px;
+  }
+  
+  .subtitle {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .title {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+    margin-bottom: 16px;
+  }
+  
+  .description {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .cta {
+    padding: 10px 20px;
+    font-size: 13px;
+    gap: 8px;
+  }
+  
+  .controls {
+    bottom: 15px;
+    gap: 12px;
+  }
+  
+  .navButton {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .dotsContainer {
+    gap: 8px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .backgroundSlide,
+  .textContent,
+  .cta,
+  .navButton,
+  .dot {
+    animation: none;
+    transition: none;
+  }
+  
+  .progressFill {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .backgroundSlide::before {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  .navButton,
+  .playPauseButton {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: white;
+  }
+  
+  .dot {
+    background: white;
+  }
+  
+  .dot.active {
+    background: var(--color-primary-light);
+  }
+}

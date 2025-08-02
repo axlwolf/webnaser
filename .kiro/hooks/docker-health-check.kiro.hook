@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "Docker Health Check",
+  "description": "Verifica el estado de los contenedores Docker cuando se modifica docker-compose.yml",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "docker-compose.yml",
+      "docker-compose.*.yml"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A docker-compose file has been modified. Please verify the status of all Docker containers, restart any failed services, and check connectivity between services. Provide a summary of container health and any issues found."
+  }
+}

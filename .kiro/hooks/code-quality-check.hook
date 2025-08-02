@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Code Quality Check",
+  "description": "Verifica la calidad del código cuando se guardan archivos importantes",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.php",
+      "**/*.tsx",
+      "**/*.ts",
+      "**/*.jsx",
+      "**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Se ha guardado un archivo de código. Por favor realiza una verificación de calidad:\n\n**Para archivos PHP:**\n1. Verifica sintaxis y estructura\n2. Revisa seguridad (SQL injection, XSS, validación de entrada)\n3. Confirma que sigue PSR-12 standards\n4. Verifica que tenga documentación PHPDoc\n\n**Para archivos React/TypeScript:**\n1. Verifica sintaxis y tipos TypeScript\n2. Revisa accesibilidad (ARIA labels, semantic HTML)\n3. Confirma que sigue React best practices\n4. Verifica que tenga tests correspondientes\n\n**Para todos los archivos:**\n1. Revisa naming conventions\n2. Verifica que no haya código duplicado\n3. Confirma que el código es legible y mantenible\n\nSolo sugiere mejoras si encuentras problemas reales. Si el código está bien, confirma que cumple con los estándares de calidad."
+  }
+}

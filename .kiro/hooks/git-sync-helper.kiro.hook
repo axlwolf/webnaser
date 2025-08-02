@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Git Sync Helper",
+  "description": "Ayuda con sincronización de Git para commits importantes - verifica estado del repositorio, prepara commits y ejecuta pre-commit checks",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      ".git/HEAD",
+      ".git/index",
+      ".gitignore",
+      "package.json",
+      "composer.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "I need help with Git synchronization for important commits. Please:\n\n1. Check the current repository status (git status)\n2. Review any staged/unstaged changes\n3. Verify that all important files are properly tracked\n4. Run pre-commit checks if available (lint, tests, etc.)\n5. Suggest appropriate commit messages based on the changes\n6. Help prepare the commit with proper staging\n\nFocus on ensuring code quality and proper version control practices for the Grupo Naser CMS project. Pay special attention to:\n- Frontend build files and dependencies\n- API changes and database migrations  \n- Configuration files and environment variables\n- Documentation updates\n\nProvide step-by-step guidance for a clean, well-documented commit."
+  }
+}

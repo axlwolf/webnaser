@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Test Backend on Save",
+  "description": "Ejecuta tests del backend automáticamente cuando se guarda un archivo PHP",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "api/**/*.php"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Un archivo PHP del backend ha sido guardado. Por favor:\n\n1. Ejecuta los tests del backend usando: `./scripts/test-docker.sh`\n2. Si hay errores, analízalos y sugiere correcciones\n3. Si los tests pasan, confirma que el código está funcionando correctamente\n4. Reporta el estado usando: `node .kiro/specs/auth-integration/update-status.js update-progress gemini \"backend-tests\" \"Tests ejecutados automáticamente\"`\n\nSolo ejecuta los comandos si es necesario. Si el archivo guardado es menor o no afecta la funcionalidad, simplemente confirma que está bien."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Session Close Detector",
+  "description": "Detecta commits de cierre de sesión y activa automáticamente el archivado de archivos PROMPT",
+  "version": "1",
+  "when": {
+    "type": "beforeCommit",
+    "patterns": [
+      "*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Detectando si este es un commit de cierre de sesión. Por favor:\n\n1. **Analiza el mensaje de commit** (si está disponible) buscando palabras clave como:\n   - 'sesión', 'session'\n   - 'final', 'end', 'close', 'cierre'\n   - 'día', 'day', 'jornada'\n   - 'resumen', 'summary'\n   - 'batch', 'lote'\n\n2. **Revisa los archivos modificados** para detectar:\n   - Archivos PROMPT-[agent]-BATCH-*.md en el directorio raíz\n   - Archivos de resumen o documentación de sesión\n   - Múltiples cambios que sugieren fin de jornada\n\n3. **Si detectas indicios de cierre de sesión:**\n   - Ejecuta el script: `./scripts/archive-prompts.sh`\n   - Verifica que los archivos PROMPT se movieron correctamente\n   - Actualiza el staging area con los cambios\n   - Sugiere un mensaje de commit apropiado\n\n4. **Genera un reporte** que incluya:\n   - ¿Se detectó cierre de sesión? (Sí/No)\n   - Archivos PROMPT encontrados\n   - Acciones realizadas\n   - Estado final del repositorio\n\n**Objetivo:** Automatizar la limpieza del directorio raíz al final de cada sesión de trabajo, manteniendo un historial organizado de los prompts utilizados.\n\n**Nota:** Este hook trabaja en conjunto con los otros hooks de archivado para mantener el proyecto organizado."
+  }
+}

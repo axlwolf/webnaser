@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Test Frontend on Save",
+  "description": "Ejecuta tests del frontend automáticamente cuando se guarda un archivo React",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/frontend/**/*.tsx",
+      "src/frontend/**/*.ts",
+      "src/frontend/**/*.jsx",
+      "src/frontend/**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A React file has been saved in the frontend. Please run the Jest test suite, perform linting checks, and report the results. Focus on:\n\n1. Running `npm test` or `yarn test` in the src/frontend directory\n2. Running ESLint to check for code quality issues\n3. Checking TypeScript compilation if applicable\n4. Providing a summary of test results, coverage, and any linting errors\n5. Suggesting fixes for any failing tests or linting issues\n\nPlease be concise but thorough in your reporting."
+  }
+}

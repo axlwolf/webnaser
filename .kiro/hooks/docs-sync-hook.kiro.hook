@@ -1,0 +1,26 @@
+{
+  "enabled": true,
+  "name": "Documentation Sync",
+  "description": "Monitors all source files in the repository and updates documentation when changes are detected",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "api/**/*.php",
+      "src/**/*.tsx",
+      "src/**/*.ts",
+      "src/**/*.jsx",
+      "src/**/*.js",
+      "contracts/**/*.ts",
+      "contracts/**/*.json",
+      "database/**/*.sql",
+      "*.md",
+      "package.json",
+      "composer.json"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Source files have been modified in this PHP/React CMS project. Please review the changes and update the documentation accordingly. Focus on:\n\n1. Update the README.md with any new features, API changes, or setup instructions\n2. If there's a /docs folder, update relevant documentation files there\n3. Ensure API documentation reflects any controller or service changes\n4. Update any architectural documentation if new patterns are introduced\n5. Keep the documentation aligned with the current project structure and business requirements\n\nThe project uses PHP backend with React frontend for Grupo Naser's funeral services website. Maintain consistency with the existing documentation style and ensure all changes are clearly documented for future developers and administrators."
+  }
+}

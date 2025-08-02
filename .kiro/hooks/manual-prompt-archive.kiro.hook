@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Manual PROMPT Archive",
+  "description": "Hook manual para archivar archivos PROMPT-[agent]-BATCH-*.md a docs/prompts-archive cuando se solicite explícitamente",
+  "version": "1",
+  "when": {
+    "type": "manual"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Ejecutando archivado manual de archivos PROMPT. Por favor:\n\n1. **Busca todos los archivos PROMPT-[agent]-BATCH-*.md** en el directorio raíz del proyecto\n\n2. **Para cada archivo encontrado:**\n   - Muévelo a docs/prompts-archive/\n   - Mantén el nombre original del archivo\n   - Verifica que el archivo se movió correctamente\n\n3. **Genera un timestamp** para documentar cuándo se realizó el archivado\n\n4. **Crea un resumen** que incluya:\n   - Lista de archivos movidos\n   - Fecha y hora del archivado\n   - Confirmación de que el directorio raíz está limpio\n\n5. **Prepara los cambios para commit** si es necesario\n\n**Patrones de archivos a procesar:**\n- PROMPT-CLAUDE-BATCH-*.md\n- PROMPT-GEMINI-BATCH-*.md\n- PROMPT-WARP-BATCH-*.md\n- Cualquier archivo que siga el patrón PROMPT-[agent]-BATCH-*.md\n\n**Directorio destino:** docs/prompts-archive/\n\nEste hook te permite limpiar manualmente el directorio raíz moviendo los archivos de prompts al archivo histórico."
+  }
+}

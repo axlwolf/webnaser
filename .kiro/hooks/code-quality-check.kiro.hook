@@ -1,0 +1,20 @@
+{
+  "enabled": true,
+  "name": "Code Quality Check",
+  "description": "Verifica la calidad del código cuando se guardan archivos importantes",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.php",
+      "**/*.tsx",
+      "**/*.ts",
+      "**/*.jsx",
+      "**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Please perform a comprehensive code quality check on the modified files. Analyze the following aspects:\n\n1. **Syntax Verification**: Check for syntax errors, proper formatting, and code structure\n2. **Security Analysis**: Look for potential security vulnerabilities, SQL injection risks, XSS vulnerabilities, and insecure coding practices\n3. **Code Standards**: Verify adherence to coding standards, naming conventions, and best practices for the respective language (PHP, TypeScript, JavaScript, React)\n4. **Testing Coverage**: Check if the changes require new tests or if existing tests need updates\n5. **Documentation**: Verify that code is properly documented with comments, JSDoc, or PHPDoc where appropriate\n\nFocus on:\n- PHP files: PSR standards, security best practices, proper error handling\n- React/TypeScript files: Component structure, type safety, performance considerations\n- JavaScript files: ES6+ standards, proper async handling\n\nProvide specific recommendations for improvements and highlight any critical issues that need immediate attention."
+  }
+}

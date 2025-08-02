@@ -1,0 +1,21 @@
+{
+  "enabled": true,
+  "name": "Gemini Changes Detector",
+  "description": "Detecta cuando Gemini completa tareas backend y actualiza seguimiento",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "api/models/**",
+      "api/repositories/**",
+      "api/services/**",
+      "api/controllers/**",
+      "tests/unit/backend/**",
+      "tests/integration/**"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the recent changes in the backend files. Detect completed tasks by examining:\n\n1. **Code Changes Analysis:**\n   - Review modifications in models, repositories, services, and controllers\n   - Identify new functionality, bug fixes, or improvements\n   - Check for proper PHP coding standards and patterns\n\n2. **Test Coverage Validation:**\n   - Examine unit and integration test changes\n   - Verify that new code has corresponding tests\n   - Check test execution results and coverage\n\n3. **Task Completion Detection:**\n   - Identify which backend tasks have been completed based on file changes\n   - Cross-reference with project requirements and specifications\n   - Update task tracking and progress documentation\n\n4. **Code Quality Assessment:**\n   - Validate PHP code follows project standards\n   - Check for proper error handling and security practices\n   - Ensure database interactions are optimized\n\nProvide a summary of detected completed tasks, code quality assessment, and any recommendations for next steps."
+  }
+}
